@@ -1,0 +1,50 @@
+\definefontfeature [default][default][protrusion=pure]
+\definefontfeature [latin-default][
+                    language=dflt,mode=node,
+                    %%swsh=yes,dlig=yes,halt=yes,
+                    lnum=yes,pnum=yes,tnum=no,
+                    kern=yes,case=yes,%cpsp=yes,
+                    calt=yes,locl=yes,pwid=yes,
+                    liga=yes,tlig=yes,trep=yes,]
+\definefontfeature [fallback-latin-default]        [latin-default]
+\definefontfeature [fallback-latin-slanted]        [fallback-latin-default] [slant=.2]
+\definefontfeature [fallback-latin-slanted-mono]                            [slant=.2]
+\definefontfeature [fallback-latin-smallcaps]      [smallcaps]              [mode=node]
+\definefontfeature [fallback-latin-smallcaps-mono] [cmcp=yes,c2sc=yes]
+
+% imingregular
+%\definefontfallback[fallback-serif][name:imingregular*fallback-default]
+%[0x06690,0x065DB,0x02015,0x09EB9,0x05095,0x05F67,0x090C3,
+% 0x06C3E,0x0770E,0x052CD,0x07CD2,0x060C7,0x08EA7,0x0558E,
+% 0x04F82,0x05F12,0x08129,0x06199,0x08BAC][force=yes]
+\definefontfallback[fallback-serif]           [texgyrepagellaregular*fallback-latin-default]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifbold]       [texgyrepagellabold*fallback-latin-default]           [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifitalic]     [texgyrepagellaitalic*fallback-latin-default]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifbolditalic] [texgyrepagellabolditalic*fallback-latin-default]     [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifslanted]    [texgyrepagellaregular*fallback-latin-slanted]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifboldslanted][texgyrepagellabold*fallback-latin-slanted]           [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifcaps]       [texgyrepagellaregular*fallback-latin-smallcaps]      [0x0000-0x0400][force=yes]
+
+\definefontfallback[fallback-sans]            [libertinussans-regular*fallback-latin-default]       [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sansbold]        [libertinussans-bold*fallback-latin-default]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sansitalic]      [libertinussans-italic*fallback-latin-default]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sansbolditalic]  [libertinussans-italic*fallback-latin-default]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sansslanted]     [libertinussans-regular*fallback-latin-slanted]       [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sansboldslanted] [libertinussans-bold*fallback-latin-slanted]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sanscaps]        [libertinussans-regular*fallback-latin-smallcaps]     [0x0000-0x0400][force=yes]
+
+\definefontfallback[fallback-mono]            [name:anonymouspro]                                   [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monobold]        [name:anonymousprobold]                               [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monoitalic]      [name:anonymousproitalic]                             [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monobolditalic]  [name:anonymousprobolditalic]                         [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monoslanted]     [name:anonymouspro*fallback-latin-slanted-mono]       [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monoboldslanted] [name:anonymousprobold*fallback-latin-slanted-mono]   [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monocaps]        [name:anonymouspro*fallback-latin-smallcaps-mono]     [0x0000-0x0400][force=yes,rscale=0.90]
+
+\definefontfallback[fallback-handw]           [texgyrepagellaregular*fallback-latin-default]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwbold]       [texgyrepagellabold*fallback-latin-default]           [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwitalic]     [texgyrepagellaitalic*fallback-latin-default]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwbolditalic] [texgyrepagellabolditalic*fallback-latin-default]     [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwslanted]    [texgyrepagellaregular*fallback-latin-slanted]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwboldslanted][texgyrepagellabold*fallback-latin-slanted]           [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwcaps]       [texgyrepagellaregular*fallback-latin-smallcaps]      [0x0000-0x0400][force=yes]

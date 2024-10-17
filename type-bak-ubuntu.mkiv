@@ -1,0 +1,39 @@
+\definefontfeature [default][default][protrusion=pure]
+\definefontfeature [latin-default][
+                    language=dflt,mode=node,
+                    %%swsh=yes,dlig=yes,halt=yes,
+                    lnum=yes,pnum=yes,tnum=no,
+                    kern=yes,case=yes,%cpsp=yes,
+                    calt=yes,locl=yes,pwid=yes,
+                    liga=yes,tlig=yes,trep=yes,]
+\definefontfeature [fallback-latin-default]        [latin-default]
+\definefontfeature [fallback-latin-slanted]        [fallback-latin-default] [slant=.2]
+\definefontfeature [fallback-latin-slanted-mono]                            [slant=.2]
+\definefontfeature [fallback-latin-smallcaps]      [smallcaps]              [mode=node]
+\definefontfeature [fallback-latin-smallcaps-mono] [cmcp=yes,c2sc=yes]
+
+\definefontfallback[fallback-serif]            [zillaslabregular*fallback-latin-default]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifbold]        [zillaslabmedium*fallback-latin-default]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifitalic]      [zillaslabitalic*fallback-latin-default]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifbolditalic]  [zillaslabmediumitalic*fallback-latin-default]    [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifslanted]     [zillaslabregular*fallback-latin-slanted]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifboldslanted] [zillaslabmedium*fallback-latin-slanted]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifcaps]        [zillaslabregular*fallback-latin-smallcaps]       [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-sans]             [file:Ubuntu-L*fallback-latin-default]            [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-sansbold]         [file:Ubuntu-R*fallback-latin-default]            [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-sansitalic]       [file:Ubuntu-LI*fallback-latin-default]           [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-sansbolditalic]   [file:Ubuntu-RI*fallback-latin-default]           [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-sansslanted]      [file:Ubuntu-L*fallback-latin-slanted]            [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-sansboldslanted]  [file:Ubuntu-R*fallback-latin-slanted]            [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-sanscaps]         [file:Ubuntu-L*fallback-latin-smallcaps]          [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-mono]             [file:UbuntuMono-R]                               [0x0000-0x0400][force=yes,rscale=0.95]
+\definefontfallback[fallback-monobold]         [file:UbuntuMono-B]                               [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-monoitalic]       [file:UbuntuMono-RI]                              [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-monobolditalic]   [file:UbuntuMono-BI]                              [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-monoslanted]      [file:UbuntuMono-R*fallback-latin-slanted-mono]   [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-monoboldslanted]  [file:UbuntuMono-B*fallback-latin-slanted-mono]   [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-monocaps]         [file:UbuntuMono-R*fallback-latin-smallcaps-mono] [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handw]            [zillaslabregular*fallback-latin-default]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwbold]        [zillaslabmedium*fallback-latin-default]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwitalic]      [zillaslabitalic*fallback-latin-default]          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwbolditalic]  [zillaslabmediumitalic*fallback-latin-default]    [0x0000-0x0400][force=yes]
