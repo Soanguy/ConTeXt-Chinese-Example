@@ -1,7 +1,3 @@
-# ConTeXt
-
-## ConTeXt 安裝指南
-
 # 打字集
 
 ## CJK 打字集
