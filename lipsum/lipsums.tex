@@ -1,0 +1,857 @@
+\startfrontmatter
+  \placeTOCs
+  \placelistoffigures
+  \title{Preface: 前言}
+  \subject{Lorem Ipsum}
+  \subject{Lorem Ipsum}
+\stopfrontmatter
+\startbodymatter
+\part{Lorem Ipsum\,: 乱数假文}
+\chapter[chap:1]{Lorem Ipsum\,: 乱数假文}
+
+\def\lipsumword{
+  {\language[en]"Neque porro quisquam est qui dolorem ipsum 
+       quia dolor sit amet, consectetur, adipisci velit..."}
+  "无人爱苦，亦无人寻之欲之，乃因其苦..."}
+\setwidthof{中中中中中中中中中}\to\TestHeadingTextWidth
+\def\TestWordsSize{{\setupbodyfont[8pt]\the\font}}
+\def\TestWords{\dosingleempty\doTestWords}
+\def\doTestWords[#1]{%
+    \iffirstargument
+    This is display of {#1}:\the\font\\%
+    \else
+    This is display of {\fontalternative}:\the\font\\%
+    \fi%
+    \vbox{\hbox{\hbox to \TestHeadingTextWidth{中文测试（简体）:\hfill} %
+                      天地玄黄，宇宙洪荒。日月盈昃，辰宿列张。\hfill}}\\%
+    \vbox{\hbox{\hbox to \TestHeadingTextWidth{中文測試（正體）:\hfill} %
+                      我心匪石，不可轉也。我心匪席，不可卷也。\hfill}}\\%
+    \vbox{\hbox{\hbox to \TestHeadingTextWidth{日本語テスト:\hfill}%
+                      限なく思ふ涙にそほちぬる袖はかわかしあはむ日まてに\hfill}}\\%
+    \vbox{\hbox{\hbox to \TestHeadingTextWidth{English Test:\hfill} %
+                      The quick brown fox jumps over the lazy dog.\hfill}}}
+\def\GatherTestWords{%
+  {       \TestWords}\\{\bf    \TestWords}\\
+  {\it    \TestWords}\\{\bi    \TestWords}\\
+  {\sl    \TestWords}\\{\sc    \TestWords[Small Caps]}\\
+}
+
+\def\TestWordsInfo{\fontclass:\fontalternative:\the\font: 天地玄黄 Quick あいうえお}
+\def\showiitestword{\noindent
+    {\tf\TestWordsInfo} \\
+    {\bf\TestWordsInfo} \\
+    {\bi\TestWordsInfo} \\
+    {\it\TestWordsInfo} \\
+    {\sc\TestWordsInfo}}
+\def\showtestword{\noindent
+    {\rm {\tfa Roman Style}\par
+    \showiitestword \\ \separator} \\
+    {\ss {\tfa Gothic Style}\par
+    \showiitestword \\ \separator} \\
+    {\tt {\tfa Monospace Style}\par
+    \showiitestword \\ \separator} \\
+    {\hw {\tfa Calligraphic Style}\par
+    \showiitestword}}
+
+\startbuffer
+\starttabulate[|c|c|c|c|]
+\FL
+\NC Head \NC Head \NC Head \NC Head \NR\ML
+\NC DH   \NC Test \NC Test \NC Test \NR\HL
+\NC DP   \NC Test \NC Test \NC Test \NR\HL
+\NC DC   \NC Test \NC Test \NC Test \NR\BL
+\stoptabulate
+\stopbuffer
+
+\section[sec:2]{什么是Lorem Ipsum？}
+Lorem Ipsum，也称\emph{乱数假文}或者哑元文本， 是印刷及排版领域所常用的虚拟文字。
+由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书，
+Lorem Ipsum从西元15世纪起就被作为此领域的标准文本使用。\footnote{\lipsumword}
+它不仅延续了五个世纪，还通过了电子排版的挑战，其雏形却依然保存至今\sidenote{sidenote\,: \lipsumword}。
+在1960年代，\quote{Leatraset}公司发布了印刷着Lorem Ipsum段落的纸张，从而广泛普及了它的使用。
+最近，计算机桌面出版软件\quote{Aldus PageMaker}也通过同样的方式使Lorem Ipsum落入大众的视野。
+
+\section{我们为何用它？}
+无可否认，当读者在浏览一个页面的排版时，难免会被可阅读的内容所分散注意力。
+Lorem Ipsum的目的就是为了保持字母多多少少标准及平均的分配，
+而不是\quote{此处有文本，此处有文本}，从而让内容更像可读的英语。
+如今，很多桌面排版软件以及网页编辑用Lorem Ipsum作为默认的示范文本，
+搜一搜\quote{Lorem Ipsum}就能找到这些网站的雏形\sidenote{sidenote\,: \lipsumword}。
+这些年来Lorem Ipsum演变出了各式各样的版本，有些出于偶然，有些则是故意的（刻意的幽默之类的）。
+
+\section{它起源于哪里？}
+恰恰与流行观念相反，Lorem Ipsum并不是简简单单的随机文本。
+它追溯于一篇公元前45年的经典拉丁著作，从而使它有着两千多年的岁数。
+弗吉尼亚州Hampden-Sydney大学拉丁系教授Richard McClintock曾在Lorem Ipsum段落中注意到一个涵义十分隐晦的拉丁词语，
+\quote{consectetur}，通过这个单词详细查阅跟其有关的经典文学著作原文，McClintock教授发掘了这个不容置疑的出处。
+Lorem Ipsum始于西塞罗(Cicero)在公元前45年作的\quote{de Finibus Bonorum et Malorum}
+（善恶之尽）里1.10.32 和1.10.33章节。这本书是一本关于道德理论的论述，\sidenote{sidenote\,: \lipsumword}
+曾在文艺复兴时期非常流行。Lorem Ipsum的第一行\quote{Lorem ipsum dolor sit amet..}节选于1.10.32章节。
+
+以下展示了自1500世纪以来使用的标准Lorem Ipsum段落，西塞罗笔下\quote{de Finibus Bonorum et Malorum}章节1.10.32，
+1.10.33的原著作，以及其1914年译自H. Rackham的英文版本。
+
+\section{我能从哪里获取？}
+如今互联网提供各种各样版本的Lorem Ipsum段落，但是大多数都多多少少出于刻意幽默或者其他随机插入的荒谬单词而被篡改过了。
+如果你想取用一段Lorem Ipsum，请确保段落中不含有令人尴尬的不恰当内容。
+所有网上的Lorem Ipsum生成器都倾向于在必要时重复预先准备的部分，然而这个生成器则是互联网上首个确切的生成器。
+它使用由超过200个拉丁单词所构造的词典，结合了几个模范句子结构，来生成看起来恰当的Lorem Ipsum。
+因此，生成出的结果无一例外免于重复，刻意的幽默，以及非典型的词汇等等\sidenote{sidenote\,: \lipsumword}。
+
+\chapter[chap:3]{乱数假文\,: PlaceFigure}
+
+\section{什么是Lorem Ipsum？}
+
+Lorem Ipsum，也称\emph{乱数假文}或者哑元文本， 是印刷及排版领域所常用的虚拟文字。
+由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书，
+Lorem Ipsum从西元15世纪起就被作为此领域的标准文本使用。\footnote{\lipsumword}
+它不仅延续了五个世纪，还通过了电子排版的挑战，其雏形却依然保存至今。
+在1960年代，\quote{Leatraset}公司发布了印刷着Lorem Ipsum段落的纸张，从而广泛普及了它的使用。
+最近，计算机桌面出版软件\quote{Aldus PageMaker}也通过同样的方式使Lorem Ipsum落入大众的视野。
+
+\startplacefullfig [title=fullwidth figure]
+  \externalfigure [][width=\dimexpr\textwidth+\rightmargintotal\relax,height=3\baselineskip]
+\stopplacefullfig
+
+\section{我们为何用它？}
+\movesidefloat[y=.3\baselineskip]
+\startplacefigure [location={none,left,high,low}]
+  \externalfigure [][height=6\baselineskip]
+\stopplacefigure
+无可否认，当读者在浏览一个页面的排版时，难免会被可阅读的内容所分散注意力。
+Lorem Ipsum的目的就是为了保持字母多多少少标准及平均的分配，
+而不是\quote{此处有文本，此处有文本}，从而让内容更像可读的英语。
+如今，很多桌面排版软件以及网页编辑用Lorem Ipsum作为默认的示范文本，
+搜一搜\quote{Lorem Ipsum}就能找到这些网站的雏形\sidenote{sidenote\,: \lipsumword}。
+这些年来Lorem Ipsum演变出了各式各样的版本，有些出于偶然，有些则是故意的（刻意的幽默之类的）。
+
+\section[sec:4]{它起源于哪里？}
+
+\startplacetextfig [title={text figure},location={high,low}]
+  \externalfigure [][height=4\baselineskip,width=1tw]
+\stopplacetextfig
+
+恰恰与流行观念相反，Lorem Ipsum并不是简简单单的随机文本。
+它追溯于一篇公元前45年的经典拉丁著作，从而使它有着两千多年的岁数。
+弗吉尼亚州Hampden-Sydney大学拉丁系教授Richard McClintock曾在Lorem Ipsum段落中注意到一个涵义十分隐晦的拉丁词语，
+\quote{consectetur}，通过这个单词详细查阅跟其有关的经典文学著作原文，McClintock教授发掘了这个不容置疑的出处。
+Lorem Ipsum始于西塞罗(Cicero)在公元前45年作的\quote{de Finibus Bonorum et Malorum}
+（善恶之尽）里1.10.32 和1.10.33章节。这本书是一本关于道德理论的论述，\sidenote{sidenote\,: \lipsumword}
+曾在文艺复兴时期非常流行。Lorem Ipsum的第一行\quote{Lorem ipsum dolor sit amet..}节选于1.10.32章节。
+
+\startplacefullfig [location=none]
+   \startsubfloatnumbering
+     \startfloatcombination [width=\dimexpr\textwidth+\rightmargintotal\relax,nx=3,distance=1mm,after=,inbetween=]
+       \startplacefigure [title=Left]   \externalfigure \stopplacefigure
+       \startplacefigure [title=Middle] \externalfigure \stopplacefigure
+       \startplacefigure [title=Right]  \externalfigure \stopplacefigure
+     \stopfloatcombination
+   \stopsubfloatnumbering
+\stopplacefullfig
+
+以下展示了自1500世纪以来使用的标准Lorem Ipsum段落，西塞罗笔下\quote{de Finibus Bonorum et Malorum}章节1.10.32，
+1.10.33的原著作，以及其1914年译自H. Rackham的英文版本。
+
+\section{我能从哪里获取？}
+
+\startplacemarginfig [title=margin figure,location={outermargin}]
+  \externalfigure [][width=\rightmarginwidth,height=5\baselineskip]
+\stopplacemarginfig
+
+如今互联网提供各种各样版本的Lorem Ipsum段落，但是大多数都多多少少出于刻意幽默或者其他随机插入的荒谬单词而被篡改过了。
+如果你想取用一段Lorem Ipsum，请确保段落中不含有令人尴尬的不恰当内容。
+所有网上的Lorem Ipsum生成器都倾向于在必要时重复预先准备的部分，然而这个生成器则是互联网上首个确切的生成器。
+它使用由超过200个拉丁单词所构造的词典，结合了几个模范句子结构，来生成看起来恰当的Lorem Ipsum。
+因此，生成出的结果无一例外免于重复，刻意的幽默，以及非典型的词汇等等\sidenote{sidenote\,: \lipsumword}。
+
+\chapter{乱数假文\,: PlaceTable}
+
+\section{什么是Lorem Ipsum？}
+
+Lorem Ipsum，也称\emph{乱数假文}或者哑元文本， 是印刷及排版领域所常用的虚拟文字。
+由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书，
+Lorem Ipsum从西元15世纪起就被作为此领域的标准文本使用。\footnote{\lipsumword}
+它不仅延续了五个世纪，还通过了电子排版的挑战，其雏形却依然保存至今。
+在1960年代，\quote{Leatraset}公司发布了印刷着Lorem Ipsum段落的纸张，从而广泛普及了它的使用。
+最近，计算机桌面出版软件\quote{Aldus PageMaker}也通过同样的方式使Lorem Ipsum落入大众的视野。
+
+\startplacefulltab [title=fullwidth table]
+  \starttabulate[|cw(.25tw)|cw(.25tw)|cw(.25tw)|cw(.25tw)|cw(.25tw)|][EQ={=}]
+  \FL
+  \NC Head \NC       \NC Head \NC Head \NC Head \NR\ML
+  \NC DH   \EQ \hphantom{3}3.90 \NC Test \NC Test \NC Test \NR\HL
+  \NC DP   \EQ 34.63 \NC Test \NC Test \NC Test \NR\HL
+  \NC DC   \EQ 41.73 \NC Test \NC Test \NC Test \NR\BL
+  \stoptabulate
+\stopplacefulltab
+
+\section[sec:5]{我们为何用它？}
+\movesidefloat[y=.3\baselineskip]
+\startplacetable [location={none,left,high,low}]
+  \getbuffer
+\stopplacetable
+无可否认，当读者在浏览一个页面的排版时，难免会被可阅读的内容所分散注意力。
+Lorem Ipsum的目的就是为了保持字母多多少少标准及平均的分配，
+而不是\quote{此处有文本，此处有文本}，从而让内容更像可读的英语。
+如今，很多桌面排版软件以及网页编辑用Lorem Ipsum作为默认的示范文本，
+搜一搜\quote{Lorem Ipsum}就能找到这些网站的雏形\sidenote{sidenote\,: \lipsumword}。
+这些年来Lorem Ipsum演变出了各式各样的版本，有些出于偶然，有些则是故意的（刻意的幽默之类的）。
+
+\section{它起源于哪里？}
+
+\startplacetexttab [title={text table},location={high,low,middle}]
+    \getbuffer
+\stopplacetexttab
+
+恰恰与流行观念相反，Lorem Ipsum并不是简简单单的随机文本。
+它追溯于一篇公元前45年的经典拉丁著作，从而使它有着两千多年的岁数。
+弗吉尼亚州Hampden-Sydney大学拉丁系教授Richard McClintock曾在Lorem Ipsum段落中注意到一个涵义十分隐晦的拉丁词语，
+\quote{consectetur}，通过这个单词详细查阅跟其有关的经典文学著作原文，McClintock教授发掘了这个不容置疑的出处。
+Lorem Ipsum始于西塞罗(Cicero)在公元前45年作的\quote{de Finibus Bonorum et Malorum}
+（善恶之尽）里1.10.32 和1.10.33章节。这本书是一本关于道德理论的论述，\sidenote{sidenote\,: \lipsumword}
+曾在文艺复兴时期非常流行。Lorem Ipsum的第一行\quote{Lorem ipsum dolor sit amet..}节选于1.10.32章节。
+
+\startplacefulltab [location=none]
+   \startsubfloatnumbering
+     \startfloatcombination [width=\dimexpr\textwidth+\rightmargintotal\relax,nx=3,distance=1mm,after=,inbetween=]
+       \startplacetable [title=Left]   \getbuffer \stopplacetable
+       \startplacetable [title=Middle] \getbuffer \stopplacetable
+       \startplacetable [title=Right]  \getbuffer \stopplacetable
+     \stopfloatcombination
+   \stopsubfloatnumbering
+\stopplacefulltab
+
+以下展示了自1500世纪以来使用的标准Lorem Ipsum段落，
+西塞罗笔下\quote{de Finibus Bonorum et Malorum}章节1.10.32，
+1.10.33的原著作，以及其1914年译自H. Rackham的英文版本。
+
+\section{我能从哪里获取？}
+
+\startplacemargintab [title=margin table,location={outermargin}]
+  \getbuffer
+\stopplacemargintab
+
+如今互联网提供各种各样版本的Lorem Ipsum段落，但是大多数都多多少少出于刻意幽默或者其他随机插入的荒谬单词而被篡改过了。
+如果你想取用一段Lorem Ipsum，请确保段落中不含有令人尴尬的不恰当内容。
+所有网上的Lorem Ipsum生成器都倾向于在必要时重复预先准备的部分，然而这个生成器则是互联网上首个确切的生成器。
+它使用由超过200个拉丁单词所构造的词典，结合了几个模范句子结构，来生成看起来恰当的Lorem Ipsum。
+因此，生成出的结果无一例外免于重复，刻意的幽默，以及非典型的词汇等等\sidenote{sidenote\,: \lipsumword}。
+
+\startplacetexttab[title=name of table]
+    \startlocalfootnotes
+    \startxtable
+      \startxrow
+        \startxcell 我走在命运为我规定的路上， 虽然我并不愿意走在这条路上， 
+                    但是我除了满腔悲愤的走在这条路上别无选择\footnote{First} \stopxcell
+        \startxcell 你今天是一个孤独的怪人，你离群索居，总有一天你会成为一个民族！\footnote{Second} \stopxcell
+      \stopxrow
+      \startxrow
+        \startxcell 受苦的人，没有悲观的权利。一个受苦的人，如果悲观了，就没有了面对现实的勇气，
+                    也没有了与苦难抗争的力量，结果是他将受到更大的苦。\footnote{Third} \stopxcell
+        \startxcell 所谓高贵的灵魂，即对自己怀有敬畏之心。\footnote{Fourth}  \stopxcell
+      \stopxrow
+    \stopxtable
+    {\placelocalfootnotes}
+\stoplocalfootnotes
+\stopplacetexttab
+
+\chapter{乱数假文\,: PlaceNote}
+
+老子者，\footnote{【正义】朱韬玉札及神仙传云：「老子，楚国苦县濑鄕曲仁里人。姓李，名耳，字伯阳，一名重耳，外字耼，身长八尺八寸，黄色美眉，长耳大目，广额疏齿，方口厚唇，额有三五达理，日角月悬，鼻有双柱，耳有三门，足蹈二五，手把十文。周时人，李母八十一年而生。」又玄妙内篇云：「李母怀胎八十一载，逍遥李树下，迺割左腋而生。」又云：「玄妙玉女梦流星入口而有娠，七十二年而生老子。」又上元经云：「李母昼夜见五色珠，大如弹丸，自天下，因吞之，即有娠。」张君相云：「老子者是号，非名。老，考也。子，孳也。考教众理，达成圣孳，乃孳生万理，善化济物无遗也。」}楚苦县厉鄕曲仁里人也，\footnote{【集解】地理志曰苦县属陈国。【索隐】按：地理志苦县属陈国者，误也。苦县本属陈，春秋时楚灭陈，而苦又属楚，故云楚苦县。至高帝十一年，立淮阳国，陈县、苦县皆属焉。裴氏所引不明，见苦县在陈县下，因云苦属陈。今检地理志，苦实属淮阳郡。苦音怙。【正义】按年表云淮阳国，景帝三年废。至天汉脩史之时，楚节王纯都彭城，相近。疑苦此时属楚国，故太史公书之。括地志云：「苦县在亳州谷阳县界。有老子宅及庙，庙中有九井尚存，在今亳州真源县也。」厉音赖。晋太康地记云：「苦县城东有濑鄕祠，老子所生地也。」}姓李氏，\footnote{【索隐】按：葛玄曰「李氏女所生，因母姓也。」又云「生而指李树，因以为姓」。}名耳，字耼，\footnote{【索隐】按：许慎云「耼，耳曼也」。故名耳，字耼。有本字伯阳，非正也。然老子号伯阳父，此传不称也。【正义】耼，耳漫无轮也。神仙传云：「外字曰耼。」按：字，号也。疑老子耳漫无轮，故世号曰耼。}周守藏室之史也。\footnote{【索隐】按：藏室史，周藏书室之史也。又张苍传「老子为柱下史」，盖即藏室之柱下，因以为官名。【正义】藏，在浪反。}
+
+孔子适周，将问礼于老子。\footnote{【索隐】大戴记亦云然。}老子曰：「子所言者，其人与骨皆已朽矣，独其言在耳。且君子得其时则驾，不得其时则蓬累而行。\footnote{【索隐】刘氏云：「蓬累犹扶持也。累音六水反。说者云头戴物，两手扶之而行，谓之蓬累也。」按：蓬者，盖也；累者，随也。以言若得明君则驾车服冕，不遭时则自覆盖相携随而去耳。【正义】蓬，沙碛上转蓬也。累，转行貌也。言君子得明主则驾车而事，不遭时则若蓬转流移而行，可止则止也。蓬，其状若皤蒿，细叶，蔓生于沙漠中，风吹则根断，随风转移也。皤蒿，江东呼为斜蒿云。}吾闻之，良贾深藏若虚，君子盛德容貌若愚。\footnote{【索隐】良贾谓善货卖之人。贾音古。深藏谓隐其宝货，不令人见，故云「若虚」。而君子之人，身有盛德，其容貌谦退有若愚鲁之人然。嵇康高士传亦载此语，文则小异，云「良贾深藏，外形若虚；君子盛德，容貌若不足」也。}去子之骄气与多欲，态色与淫志，\footnote{【正义】恣态之容色与淫欲之志皆无益于夫子，须去除也。}是皆无益于子之身。吾所以告子，若是而已。」孔子去，谓弟子曰：「鸟，吾知其能飞；鱼，吾知其能游；兽，吾知其能走。走者可以为罔，游者可以为纶，飞者可以为矰。至于龙，吾不能知其乘风云而上天。吾今日见老子，其犹龙邪！」
+
+老子脩道德，其学以自隐无名为务。居周久之，见周之衰，迺遂去。至关，\footnote{【索隐】李尤函谷关铭云「尹喜要老子留作二篇」，而崔浩以尹喜又为散关令是也。【正义】抱朴子云：「老子西游，遇关令尹喜于散关，为喜着道德经一卷，谓之老子。」或以为函谷关。括地志云：「散关在岐州陈仓县东南五十二里。函谷关在陕州桃林县西南十二里。」强，其两反。为于伪反。}关令尹喜曰：「子将隐矣，彊为我著书。」于是老子迺著书上下篇，言道德之意五千余言而去，莫知其所终。\footnote{【集解】列仙传曰：「关令尹喜者，周大夫也。善内学星宿，服精华，隐德行仁，时人莫知。老子西游，喜先见其气，知真人当过，候物色而迹之，果得老子。老子亦知其奇，为著书。与老子具之流沙之西，服臣胜实，莫知其所终。亦著书九篇，名关令子。」【索隐】列仙传是刘向所记。物色而迹之，谓视其气物有异色而寻迹之。又按：列仙传「老子西游，关令尹喜望见有紫气浮关，而老子果乘青牛而过也」。}
+
+或曰：老莱子亦楚人也，\footnote{【正义】太史公疑老子或是老莱子，故书之。列仙传云：「老莱子，楚人。当时世乱，逃世耕于蒙山之阳，莞葭为墙，蓬蒿为室，杖木为床，蓍艾为席，菹芰为食，垦山播种五谷。楚王至门迎之，遂去，至于江南而止。曰：『鸟兽之解毛可绩而衣，其遗粒足食也。』」}著书十五篇，言道家之用，与孔子同时云。
+
+盖老子百有六十余岁，或言二百余岁，\footnote{【索隐】此前古好事者据外传，以老子生年至孔子时，故百六十岁。或言二百余岁者，即以周太史儋为老子，故二百余岁也。【正义】盖，或，皆疑辞也。世不旳知，故言「盖」及「或」也。玉清云老子以周平王时见衰，于是去。孔子世家云孔子问礼于老子在周景王时，孔子盖年三十也，去平王十二王。此传云儋即老子也，秦献公与烈王同时，去平王二十一王。说者不一，不可知也。故葛仙公序云「老子体于自然，生乎大始之先，起乎无因，经历天地终始，不可称载」。}以其脩道而养寿也。
+
+自孔子死之后百二十九年，\footnote{【集解】徐广曰：「实百一十九年。」}而史记周太史儋见秦献公曰：「始秦与周合，合五百岁而离，离七十岁而霸王者出焉。」\footnote{【索隐】按：周秦二本纪并云「始周与秦国合而别，别五百载又合，合七十岁而霸王者出」。然与此传离合正反，寻其意义，亦并不相违也。}或曰儋即老子，或曰非也，世莫知其然否。老子，隐君子也。
+
+老子之子名宗，宗为魏将，封于段干。\footnote{【集解】此云封于段干，段干应是魏邑名也。而魏世家有段干木、段干子，田完世家有段干朋，疑此三人是姓段干也。本盖因邑为姓，左传所谓「邑亦如之」是也。风俗通氏姓注云姓段，名干木，恐或失之矣。天下自别有段姓，何必段干木邪！}宗子注，\footnote{【索隐】音铸。【正义】之树反。}注子宫，宫玄孙假，\footnote{【索隐】音古雅反。【正义】作「瑕」，音霞。}假仕于汉孝文帝。而假之子解为胶西王卬太傅，因家于齐焉。
+
+世之学老子者则绌儒学，\footnote{【索隐】按：绌音黜。黜，退而后之也。}儒学亦绌老子。「道不同不相为谋」，岂谓是邪？李耳无为自化，清静自正。\footnote{【索隐】此太史公因其行事，于当篇之末结以此言，亦是赞也。按：老子曰「我无为而民自化，我好静而民自正」，此是昔人所评老耼之德，故太史公于此引以记之。【正义】此都结老子之教也。言无所造为而自化，清净不挠而民自归正也。}
+
+如果我们整天满耳朵都是别人对我们的议论，如果我们甚至去推测别人心里对于我们的想法，那么，即使最坚强的人也将不能幸免于难！因为其他人，只有在他们强于我们的情况下，才能容许我们在他们身边生活；如果我 们超过了 他们，如果我 们哪怕仅仅是想要超过他们，他们就会不能容忍我们！总之，让我们以一种难得糊涂的精神和他们相处，对于他们关于我们的所有议论，赞扬，谴责，希望和期待都充耳不闻，连想也不去想。
+
+\useURL[bing]   [http://bing.com/]          [] [I prefer dog.]
+\useurl[mail]   [mailto:nobody@example.zzz] [] [visible@mailaddress.zzz]
+
+\startpoints
+  \item \hbox to 8em{GOTO LINK \hfil} \goto{Wiki}[url(http://wiki.contextgarden.net)]
+  \item \hbox to 8em{GOTO PAGE \hfil} \goto{Other page}[page(3)]
+  \item \hbox to 8em{URL       \hfil} \from[bing]
+  \item \hbox to 8em{MAIL      \hfil} \from[mail]
+\stoppoints
+
+\startpoints
+  \item \hbox to 8em{REF IN    \hfil} \in{chapter}[chap:1] :: \refin[chap:{1}]
+  \item \hbox to 8em{REF ABOUT \hfil} \about[chap:1]       :: \refabout[chap:1]
+  \item \hbox to 8em{REF AT    \hfil} \at{page}[chap:1]    :: \refat[chap:1]
+  \item \hbox to 8em{REF TEXT  \hfil}                      :: \reftext[chap:1]
+  \item \hbox to 8em{REF SIMP  \hfil}                      :: \refsimp[chap:1]
+\stoppoints
+
+\chapter{乱数假文\,: PlaceStructure}
+
+\section{Font Size}
+
+\begingroup
+\setupindenting[no]
+{\tfxx \TestWordsSize}\\{\tfx \TestWordsSize}\\
+{\tf   \TestWordsSize}\\
+{\tfa  \TestWordsSize}\\{\tfb \TestWordsSize}\\
+{\tfc  \TestWordsSize}\\{\tfd \TestWordsSize}\\
+\endgroup
+
+\section{Font Families}
+
+%\begingroup\setupindenting[no]
+%\rm{\bf Serif Family | 宋體 | 明朝體 }\\
+%\GatherTestWords\\
+%\ss{\bf Sans Family | 黑體 | 哥特體 }\\
+%\GatherTestWords\\
+%\tt{\bf Mono Family | 等款體（仿宋） | 等款體 }\\
+%\GatherTestWords\\
+%\hw{\bf Handwriting Family | 手寫體（楷書） | 手寫體 }\\
+%{\GatherTestWords}\\
+%\endgroup
+
+\def\test{Lorem Ipsum，也称乱数假文}
+\starttabulate[|l|l|l|l|l|]
+\NC     \NC RM           \NC SS           \NC TT           \NC HW    \NC\NR\HL
+\NC TF  \NC \rm\tf\test  \NC \ss\tf\test  \NC \tt\tf\test  \NC \hw\tf\test \NC\NR
+\NC IT  \NC \rm\it\test  \NC \ss\it\test  \NC \tt\it\test  \NC \hw\it\test \NC\NR
+\NC BF  \NC \rm\bf\test  \NC \ss\bf\test  \NC \tt\bf\test  \NC \hw\bf\test \NC\NR
+\NC BI  \NC \rm\bi\test  \NC \ss\bi\test  \NC \tt\bi\test  \NC \hw\bi\test \NC\NR
+\NC SL  \NC \rm\sl\test  \NC \ss\sl\test  \NC \tt\sl\test  \NC \hw\sl\test \NC\NR
+\NC BS  \NC \rm\bs\test  \NC \ss\bs\test  \NC \tt\bs\test  \NC \hw\bs\test \NC\NR
+\NC LF  \NC \rm\LF\test  \NC \ss\LF\test  \NC \tt\LF\test  \NC \hw\LF\test \NC\NR
+\NC LI  \NC \rm\LI\test  \NC \ss\LI\test  \NC \tt\LI\test  \NC \hw\LI\test \NC\NR
+\stoptabulate
+
+\section{Example for list}
+
+\startpoints
+\item 每一个不曾起舞的日子，都是对生命的辜负。
+\item 我感到难过，不是因为你欺骗了我，而是因为我再也不能相信你了。
+  \startpoints
+      \item 一个人知道自己为什么而活，就可以忍受任何一种生活。
+      \item 对待生命你不妨大胆冒险一点, 因为好歹你要失去它。
+           如果这世界上真有奇迹，那只是努力的另一个名字。
+           生命中最难的阶段不是没有人懂你，而是你不懂你自己。
+      \startpoints
+        \item 人生没有目的，只有过程，所谓的终极目的是虚无的。
+              人的情况和树相同。它愈想开向高处和明亮处，它的根愈要向下，向泥土，向黑暗处，向深处，向恶
+              千万不要忘记。我们飞翔得越高，我们在那些不能飞翔的人 眼中的形象 越是渺小。
+        \item 你遭受了痛苦，你也不要向人诉说，以求同情，因为一个有独特性的人，
+              连他的痛苦都是独特的，深刻的，不易被人了解，别人的同情只会解除你的痛苦的个人性，
+              使之降低为平庸的烦恼，同时也就使你的人格遭到贬值。
+      \stoppoints
+  \stoppoints
+\item 谁终将声震人间，必长久深自缄默；谁终将点燃闪电，必长久如云漂泊。
+\stoppoints
+
+\startlists
+\item 千万不要忘记：我们飞翔得越高，我们在那些不能飞翔的人眼中的形象越是渺小。
+\item 与怪物战斗的人，应当小心自己不要成为怪物。当你远远凝视深渊时，深渊也在凝视你。
+  \startlists
+      \item 一个人知道自己为什么而活，就可以忍受任何一种生活。
+      \item 对待生命你不妨大胆冒险一点, 因为好歹你要失去它。
+            如果这世界上真有奇迹，那只是努力的另一个名字。
+            生命中最难的阶段不是没有人懂你，而是你不懂你自己。
+      \startlists
+        \item 你要搞清楚自己人生的剧本——
+              不是你父母的续集，不是你子女的前传，更不是你朋友的外篇。
+              对待生命你不妨大胆冒险一点，因为好歹你要失去它。
+              如果这世界上真有奇迹，那只是努力的另一个名字。
+              生命中最难的阶段 不是没有 人懂你，而是 你不懂你自己。
+        \item 人的精神有三种境界：骆驼、狮子和婴儿。
+              第一境界骆驼，忍辱负重，被动地听命于别人或命运的安排；
+              第二境界狮子，把被动变成主动，由“你应该”到“我要”，一切由我主动争取，主动负起人生责任；
+              第三境界婴儿，这是一种 “我是”的 状态，活在当下，享受现在的一切。
+      \stoplists
+  \stoplists
+\item 白昼的光，如何能够了解夜晚黑暗的深度呢？
+\stoplists
+
+\definedescription[descr][headstyle=bold, style=normal, align=flushleft, alternative=hanging, width=broad, margin=2em]
+\startdescr{道德的谱系}
+高贵的价值则是相反，它产生发展的模式是自发，
+它去寻找对立面只是出于更加肯定自己的需要，
+积极的概念渗透在他生命的基本概念中，
+消极的概念只是模糊的对照。
+    \startdescr{不合时宜的考察}
+    假使有神，我怎能忍受我不是那神，所以没有神！ ——尼采
+    世界弥漫着焦躁不安的气息，因为每一个人都急于从自己的枷锁中解放出来。
+    \stopdescr
+\stopdescr
+\startdescr{人性，太人性的}
+人类的生命，不能以时间长短来衡量，心中充满爱时，刹那即为永恒！ ——尼采
+完全不谈自己是一种甚为高贵的虚伪。 
+\stopdescr
+
+\starthangdescr{Description}
+\input knuthmath
+\stophangdescr
+
+\starttopdescr{Description}
+\input knuthmath
+\stoptopdescr
+
+\startremark
+\input knuthmath
+\stopremark
+
+\startlists[circlednum][start=12]
+  \item  came to the conclusion that 
+         the designer of a new system 
+         must not only be the implementer 
+         and first large- scale user
+\stoplists
+\startlists[negativecirclednum][start=12]
+  \item  came to the conclusion that 
+         the designer of a new system 
+         must not only be the implementer 
+         and first large- scale user
+\stoplists
+\startlists[roundsquarednum][start=12]
+  \item  came to the conclusion that 
+         the designer of a new system 
+         must not only be the implementer 
+         and first large- scale user
+\stoplists
+\startlists[negativeroundsquarednum][start=12]
+  \item  came to the conclusion that 
+         the designer of a new system 
+         must not only be the implementer 
+         and first large- scale user
+\stoplists
+\startlists[squarednum][start=12]
+  \item  came to the conclusion that 
+         the designer of a new system 
+         must not only be the implementer 
+         and first large- scale user
+\stoplists
+\startlists[negativesquarednum][start=12]
+  \item  came to the conclusion that 
+         the designer of a new system 
+         must not only be the implementer 
+         and first large- scale user
+\stoplists
+
+\part{乱数假文\,: Lorem Ipsum}
+\startsectionlevel[title=乱数假文\,: Lorem Ipsum]
+  \startsectionlevel[title=乱数假文\,: Lorem Ipsum]
+    \startsectionlevel[title=乱数假文\,: Lorem Ipsum]
+      \startsectionlevel[title=乱数假文\,: Lorem Ipsum]
+        \startsectionlevel[title=乱数假文\,: Lorem Ipsum]
+          \startsectionlevel[title=乱数假文\,: Lorem Ipsum]
+            
+            \input lipsum
+          
+%\startshowbreakpoints[option=margin,offset=\dimexpr{.5\emwidth-\rightskip}]
+%黃帝者，\warichu{〔集解〕徐廣曰：「號有熊。」〔索隱〕案：有土德之瑞，土色黃，故稱黃帝，猶神農火德王而稱炎帝然也。此以黃帝爲五帝之首，蓋依大戴禮五帝德。又譙周、宋均亦以爲然。而孔安國、皇甫謐帝王代紀及孫氏注系本並以伏犧、神農、黃帝爲三皇，少昊、高陽、高辛、唐、虞爲五帝。注「號有熊」者，以其本是有熊國君之子故也。亦號軒轅氏。皇甫謐云：「居軒轅之丘，因以爲名，又以爲號。」又據左傳，亦號帝鴻氏也。〔正義〕輿地志云：「涿鹿本名彭城，黃帝初都，遷有熊也。」案：黃帝有熊國君，乃少典國君之次子，號曰有熊氏，又曰縉雲氏，又曰帝鴻氏，亦曰帝軒氏。母曰附寶，之祁野，見大電繞北斗樞星，感而懷孕，二十四月而生黃帝於壽丘。壽丘在魯東門之北，今在兗州曲阜縣東北六里。生日角龍顏，有景雲之瑞，以土德王，故曰黃帝。封泰山，禪亭亭。亭亭在牟陰。}少典之子，\warichu{〔集解〕譙周曰：「有熊國君，少典之子也。」皇甫謐曰：「有熊，今河南新鄭是也。」〔索隱〕少典者，諸侯國號，非人名也。又案：國語云「少典娶有蟜氏女，生黃帝、炎帝」。然則炎帝亦少典之子。炎黃二帝雖則相承，如帝王代紀中閒凡隔八帝，五百餘年。若以少典是其父名，豈黃帝經五百餘年而始代炎帝後爲天子乎？何其年之長也！又案：秦本紀云「顓頊氏之裔孫曰女脩，吞鳥之卵而生大業，大業娶少典氏而生柏翳」。明少典是國號，非人名也。黃帝卽少典氏後代之子孫，賈逵亦謂然，故左傳「高陽氏有才子八人」，亦謂其後代子孫而稱爲子是也。譙周字允南，蜀人，魏散騎常侍徵，不拜。此注所引者，是其人所著古史考之說也。皇甫謐字士安，晉人，號玄晏先生。今所引者，是其所作帝王代紀也。}姓公孫，名曰軒轅。\warichu{〔索隱〕案：皇甫謐云「黃帝生於壽丘，長於姬水，因以爲姓。居軒轅之丘，因以爲名，又以爲號」。是本姓公孫，長居姬水，因改姓姬。}生而神靈，弱而能言，\warichu{〔索隱〕弱謂幼弱時也。蓋未合能言之時而黃帝卽言，所以爲神異也。潘岳有哀弱子篇，其子未七旬曰弱。〔正義〕言神異也。易曰「陰陽不測之謂神」，書云「人惟萬物之靈」，故謂之神靈也。}幼而徇齊，\warichu{〔集解〕徐廣曰：「墨子『年踰十五，則聰明心慮無不徇通矣』。」駰案：徇，疾；齊，速也。言聖德幼而疾速也。〔索隱〕斯文未是。今案：徇，齊，皆德也。書曰「聰明齊聖」，左傳曰「子雖齊聖」，謂聖德齊肅也。又案：孔子家語及大戴禮並作「叡齊」，一本作「慧齊」。叡，慧，皆智也。太史公採大戴禮而爲此紀，今彼文無作「徇」者。史記舊本亦有作「濬齊」。蓋古字假借「徇」爲「濬」，濬，深也，義亦並通。爾雅「齊」「速」俱訓爲疾。尚書大傳曰「多聞而齊給」。鄭注云「齊，疾也」。今裴氏注云徇亦訓疾，未見所出。或當讀「徇」爲「迅」，迅於爾雅與齊俱訓疾，則迅濬雖異字，而音同也。又爾雅曰「宣，徇，遍也。濬，通也」。是「遍」之與「通」義亦相近。言黃帝幼而才智周徧，且辯給也。故墨子亦云「年踰五十，則聰明心慮不徇通矣」。俗本作「十五」，非是。案：謂年老踰五十不聰明，何得云「十五」？}長而敦敏，成而聰明。\warichu{〔正義〕成謂二十冠，成人也。聰明，聞見明辯也。此以上至「軒轅」，皆大戴禮文。}
+%\stopshowbreakpoints
+%\showbreakpoints[n=1]
+          
+          \stopsectionlevel
+        \stopsectionlevel
+      \stopsectionlevel
+    \stopsectionlevel
+  \stopsectionlevel
+\stopsectionlevel
+\stopbodymatter
+
+\startappendices
+
+\chapter{NNNN}
+
+\input knuth
+
+some symbol \hrulefill  some symbol \par
+some symbol \spacefill  some symbol \par
+some symbol \widthfill  some symbol \par
+some symbol \dotfill    some symbol \par
+some symbol \cdotfill   some symbol \par
+some symbol \fancybreak some symbol \par
+
+\startverbatim
+    \underbar{put you code here}
+    and will {\bf   show result}
+\stopverbatim
+
+\startGetCode
+    \underbar{put you code here}
+    and will {\bf   show result}
+\stopGetCode
+
+\startGetWideCode
+    \underbar{put you code here}
+    and will {\bf   show result}
+\stopGetWideCode
+
+\startlmverbatim
+  \unexpanded\def\usepath[#path]{\clf_usepath{#path}}
+  \unexpanded\def\usesubpath[#path]{\clf_usesubpath{#path}}
+  \unexpanded\def\pushpath[#path]{\clf_pushpath{#path}}
+  \unexpanded\def\poppath{\clf_poppath}
+\stoplmverbatim
+
+\chapter{NNNN}
+
+\startFrame[title=MPFrame,background=MPFrameCircle]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameDiamond]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameTriangle]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameChar]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameX]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameXX]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameXXX]
+\input knuthmath
+\stopFrame
+
+\startFrame[title=MPFrame,background=MPFrameXXXX]
+\input knuthmath
+\stopFrame
+
+\startshadowed[align=flushleft,background=MPFrameShadow]
+\input knuthmath 
+\stopshadowed
+
+%\chardef\kindofpagetextareas\plusone
+\startexcursus[title={A Knuth extract}]
+\input knuthmath 
+\stopexcursus
+
+\starttheoremFrame
+  \useexternalfigure[ctanlion]
+  [http://www.ctan.org/lion/ctan_lion_350x350.png][width=5cm]
+  \placefigure[here,right,none]{}{\externalfigure[ctanlion]}
+  \input knuth
+\stoptheoremFrame
+
+\chapter{NNNN}
+\protected\def\colorshowtemp#1{
+  {\framed[foregroundcolor=#1,width=local, frame=off]
+           {#1}}}
+
+\protected\def\bgcolorshowtemp#1{
+  {\framed[foregroundcolor=white, background=color, backgroundcolor=#1,
+           width=local, frame=off]
+           {#1}}}
+
+\startbuffer[showcoloridiom]
+\startxtable[split=yes,width=.2\dimexpr\textwidth+\rightmarginwidth\relax]
+	\startxrow%red
+		\startxcell \colorshowtemp {softred} \stopxcell
+		\startxcell \colorshowtemp {lightred} \stopxcell
+		\startxcell \colorshowtemp {red} \stopxcell
+		\startxcell \colorshowtemp {darkred} \stopxcell
+		\startxcell \colorshowtemp {deepred} \stopxcell
+	\stopxrow
+
+	\startxrow%blue
+		\startxcell \colorshowtemp {softblue} \stopxcell
+		\startxcell \colorshowtemp {lightblue} \stopxcell
+		\startxcell \colorshowtemp {blue} \stopxcell
+		\startxcell \colorshowtemp {darkblue} \stopxcell
+		\startxcell \colorshowtemp {deepblue} \stopxcell
+	\stopxrow
+
+	\startxrow%yellow
+		\startxcell \colorshowtemp {softyellow} \stopxcell
+		\startxcell \colorshowtemp {lightyellow} \stopxcell
+		\startxcell \colorshowtemp {yellow} \stopxcell
+		\startxcell \colorshowtemp {darkyellow} \stopxcell
+		\startxcell \colorshowtemp {deepyellow} \stopxcell
+	\stopxrow
+
+	\startxrow%green
+		\startxcell \colorshowtemp {softgreen} \stopxcell
+		\startxcell \colorshowtemp {lightgreen} \stopxcell
+		\startxcell \colorshowtemp {green} \stopxcell
+		\startxcell \colorshowtemp {darkgreen} \stopxcell
+		\startxcell \colorshowtemp {deepgreen} \stopxcell
+	\stopxrow
+
+	\startxrow%black
+		\startxcell \colorshowtemp {softblack} \stopxcell
+		\startxcell \colorshowtemp {lightblack} \stopxcell
+		\startxcell \colorshowtemp {black} \stopxcell
+		\startxcell \colorshowtemp {darkblack} \stopxcell
+		\startxcell \colorshowtemp {deepblack} \stopxcell
+	\stopxrow
+
+	\startxrow%white
+		\startxcell \colorshowtemp {softwhite} \stopxcell
+		\startxcell \colorshowtemp {lightwhite} \stopxcell
+		\startxcell \colorshowtemp {white} \stopxcell
+		\startxcell \colorshowtemp {darkwhite} \stopxcell
+		\startxcell \colorshowtemp {deepwhite} \stopxcell
+	\stopxrow
+
+	\startxrow%cyan
+		\startxcell \colorshowtemp {softcyan} \stopxcell
+		\startxcell \colorshowtemp {lightcyan} \stopxcell
+		\startxcell \colorshowtemp {cyan} \stopxcell
+		\startxcell \colorshowtemp {darkcyan} \stopxcell
+		\startxcell \colorshowtemp {deepcyan} \stopxcell
+	\stopxrow
+
+	\startxrow%orange
+		\startxcell \colorshowtemp {softorange} \stopxcell
+		\startxcell \colorshowtemp {lightorange} \stopxcell
+		\startxcell \colorshowtemp {orange} \stopxcell
+		\startxcell \colorshowtemp {darkorange} \stopxcell
+		\startxcell \colorshowtemp {deeporange} \stopxcell
+	\stopxrow
+
+	\startxrow%purple
+		\startxcell \colorshowtemp {softpurple} \stopxcell
+		\startxcell \colorshowtemp {lightpurple} \stopxcell
+		\startxcell \colorshowtemp {purple} \stopxcell
+		\startxcell \colorshowtemp {darkpurple} \stopxcell
+		\startxcell \colorshowtemp {deeppurple} \stopxcell
+	\stopxrow
+
+	\startxrow%pink
+		\startxcell \colorshowtemp {softpink} \stopxcell
+		\startxcell \colorshowtemp {lightpink} \stopxcell
+		\startxcell \colorshowtemp {pink} \stopxcell
+		\startxcell \colorshowtemp {darkpink} \stopxcell
+		\startxcell \colorshowtemp {deeppink} \stopxcell
+	\stopxrow
+
+	\startxrow%gray
+		\startxcell \colorshowtemp {softgray} \stopxcell
+		\startxcell \colorshowtemp {lightgray} \stopxcell
+		\startxcell \colorshowtemp {gray} \stopxcell
+		\startxcell \colorshowtemp {darkgray} \stopxcell
+		\startxcell \colorshowtemp {deepgray} \stopxcell
+	\stopxrow
+	\stopxtable
+\stopbuffer
+
+\startbuffer[showbgcoloridiom]
+	\startxtable[split=yes,width=.2\dimexpr\textwidth+\rightmarginwidth\relax]
+	\startxrow%red
+		\startxcell \bgcolorshowtemp {softred} \stopxcell
+		\startxcell \bgcolorshowtemp {lightred} \stopxcell
+		\startxcell \bgcolorshowtemp {red} \stopxcell
+		\startxcell \bgcolorshowtemp {darkred} \stopxcell
+		\startxcell \bgcolorshowtemp {deepred} \stopxcell
+	\stopxrow
+
+	\startxrow%blue
+		\startxcell \bgcolorshowtemp {softblue} \stopxcell
+		\startxcell \bgcolorshowtemp {lightblue} \stopxcell
+		\startxcell \bgcolorshowtemp {blue} \stopxcell
+		\startxcell \bgcolorshowtemp {darkblue} \stopxcell
+		\startxcell \bgcolorshowtemp {deepblue} \stopxcell
+	\stopxrow
+
+	\startxrow%yellow
+		\startxcell \bgcolorshowtemp {softyellow} \stopxcell
+		\startxcell \bgcolorshowtemp {lightyellow} \stopxcell
+		\startxcell \bgcolorshowtemp {yellow} \stopxcell
+		\startxcell \bgcolorshowtemp {darkyellow} \stopxcell
+		\startxcell \bgcolorshowtemp {deepyellow} \stopxcell
+	\stopxrow
+
+	\startxrow%green
+		\startxcell \bgcolorshowtemp {softgreen} \stopxcell
+		\startxcell \bgcolorshowtemp {lightgreen} \stopxcell
+		\startxcell \bgcolorshowtemp {green} \stopxcell
+		\startxcell \bgcolorshowtemp {darkgreen} \stopxcell
+		\startxcell \bgcolorshowtemp {deepgreen} \stopxcell
+	\stopxrow
+
+	\startxrow%black
+		\startxcell \bgcolorshowtemp {softblack} \stopxcell
+		\startxcell \bgcolorshowtemp {lightblack} \stopxcell
+		\startxcell \bgcolorshowtemp {black} \stopxcell
+		\startxcell \bgcolorshowtemp {darkblack} \stopxcell
+		\startxcell \bgcolorshowtemp {deepblack} \stopxcell
+	\stopxrow
+
+	\startxrow%white
+		\startxcell \bgcolorshowtemp {softwhite} \stopxcell
+		\startxcell \bgcolorshowtemp {lightwhite} \stopxcell
+		\startxcell \bgcolorshowtemp {white} \stopxcell
+		\startxcell \bgcolorshowtemp {darkwhite} \stopxcell
+		\startxcell \bgcolorshowtemp {deepwhite} \stopxcell
+	\stopxrow
+
+	\startxrow%cyan
+		\startxcell \bgcolorshowtemp {softcyan} \stopxcell
+		\startxcell \bgcolorshowtemp {lightcyan} \stopxcell
+		\startxcell \bgcolorshowtemp {cyan} \stopxcell
+		\startxcell \bgcolorshowtemp {darkcyan} \stopxcell
+		\startxcell \bgcolorshowtemp {deepcyan} \stopxcell
+	\stopxrow
+
+	\startxrow%orange
+		\startxcell \bgcolorshowtemp {softorange} \stopxcell
+		\startxcell \bgcolorshowtemp {lightorange} \stopxcell
+		\startxcell \bgcolorshowtemp {orange} \stopxcell
+		\startxcell \bgcolorshowtemp {darkorange} \stopxcell
+		\startxcell \bgcolorshowtemp {deeporange} \stopxcell
+	\stopxrow
+
+	\startxrow%purple
+		\startxcell \bgcolorshowtemp {softpurple} \stopxcell
+		\startxcell \bgcolorshowtemp {lightpurple} \stopxcell
+		\startxcell \bgcolorshowtemp {purple} \stopxcell
+		\startxcell \bgcolorshowtemp {darkpurple} \stopxcell
+		\startxcell \bgcolorshowtemp {deeppurple} \stopxcell
+	\stopxrow
+
+	\startxrow%pink
+		\startxcell \bgcolorshowtemp {softpink} \stopxcell
+		\startxcell \bgcolorshowtemp {lightpink} \stopxcell
+		\startxcell \bgcolorshowtemp {pink} \stopxcell
+		\startxcell \bgcolorshowtemp {darkpink} \stopxcell
+		\startxcell \bgcolorshowtemp {deeppink} \stopxcell
+	\stopxrow
+
+	\startxrow%gray
+		\startxcell \bgcolorshowtemp {softgray} \stopxcell
+		\startxcell \bgcolorshowtemp {lightgray} \stopxcell
+		\startxcell \bgcolorshowtemp {gray} \stopxcell
+		\startxcell \bgcolorshowtemp {darkgray} \stopxcell
+		\startxcell \bgcolorshowtemp {deepgray} \stopxcell
+	\stopxrow
+\stopxtable
+\stopbuffer
+
+\startbuffer[showcolorpaletidiom]
+\startxtable[split=yes,width=.2\dimexpr\textwidth+\rightmarginwidth\relax]
+	\startxrow
+        \startxcell \colorshowtemp {themecolor} \stopxcell
+        \startxcell \colorshowtemp {altcolori} \stopxcell
+        \startxcell \colorshowtemp {altcolorii} \stopxcell
+        \startxcell \colorshowtemp {altcoloriii} \stopxcell
+        \startxcell \colorshowtemp {altcoloriv} \stopxcell
+     \stopxrow\startxrow
+        \startxcell \colorshowtemp {altcolorv} \stopxcell
+        \startxcell \colorshowtemp {altcolorvi} \stopxcell
+        \startxcell \colorshowtemp {mainbackcolor} \stopxcell
+        \startxcell \colorshowtemp {secondarybackcolor} \stopxcell
+        \startxcell \colorshowtemp {titlecolor} \stopxcell
+     \stopxrow\startxrow
+%        \startxcell \colorshowtemp {textcolor} \stopxcellblack
+        \startxcell \colorshowtemp {codecolor} \stopxcell
+        \startxcell \colorshowtemp {captioncolor} \stopxcell
+        \startxcell \colorshowtemp {sidenotecolor} \stopxcell
+        \startxcell \colorshowtemp {footnotecolor} \stopxcell
+        \startxcell \colorshowtemp {linkcolor} \stopxcell
+     \stopxrow\startxrow
+        \startxcell \colorshowtemp {toclinkcolor} \stopxcell
+        \startxcell \colorshowtemp {framecolor} \stopxcell
+        \startxcell \colorshowtemp {referencecolor} \stopxcell
+        \startxcell \colorshowtemp { } \stopxcell
+        \startxcell \colorshowtemp { } \stopxcell
+	\stopxrow
+	\startxrow
+        \startxcell \bgcolorshowtemp {themecolor} \stopxcell
+        \startxcell \bgcolorshowtemp {altcolori} \stopxcell
+        \startxcell \bgcolorshowtemp {altcolorii} \stopxcell
+        \startxcell \bgcolorshowtemp {altcoloriii} \stopxcell
+        \startxcell \bgcolorshowtemp {altcoloriv} \stopxcell
+     \stopxrow\startxrow
+        \startxcell \bgcolorshowtemp {altcolorv} \stopxcell
+        \startxcell \bgcolorshowtemp {altcolorvi} \stopxcell
+        \startxcell \bgcolorshowtemp {mainbackcolor} \stopxcell
+        \startxcell \bgcolorshowtemp {secondarybackcolor} \stopxcell
+        \startxcell \bgcolorshowtemp {titlecolor} \stopxcell
+     \stopxrow\startxrow
+%        \startxcell \bgcolorshowtemp {textcolor} \stopxcellblack
+        \startxcell \bgcolorshowtemp {codecolor} \stopxcell
+        \startxcell \bgcolorshowtemp {captioncolor} \stopxcell
+        \startxcell \bgcolorshowtemp {sidenotecolor} \stopxcell
+        \startxcell \bgcolorshowtemp {footnotecolor} \stopxcell
+        \startxcell \bgcolorshowtemp {linkcolor} \stopxcell
+     \stopxrow\startxrow
+        \startxcell \bgcolorshowtemp {toclinkcolor} \stopxcell
+        \startxcell \bgcolorshowtemp {framecolor} \stopxcell
+        \startxcell \bgcolorshowtemp {referencecolor} \stopxcell
+        \startxcell \bgcolorshowtemp { } \stopxcell
+        \startxcell \bgcolorshowtemp { } \stopxcell
+	\stopxrow
+\stopxtable
+\stopbuffer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓%%
+%%┃                         Contents Start                                  ┃%%
+%%┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Predefined Colorset}
+\section{Prededined Color Collection}
+\startwidenfloat\getbuffer[showcoloridiom]\stopwidenfloat\page
+\startwidenfloat\getbuffer[showbgcoloridiom]\stopwidenfloat\page
+
+\section{Prededined Color Collection}
+\subsection{innocence}
+\setuppalet [innocence]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat
+
+\subsection{passion}
+\setuppalet [passion]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat \page
+
+\subsection{serene}
+\setuppalet [serene]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat
+
+\subsection{optimism}
+\setuppalet [optimism]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat \page
+
+\subsection{harmony}
+\setuppalet [harmony]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat
+
+\subsection{formality}
+\setuppalet [formality]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat \page
+
+\subsection{magic}
+\setuppalet [magic]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat
+
+\subsection{adventure}
+\setuppalet [adventure]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat \page
+
+\subsection{romance}
+\setuppalet [romance]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat
+
+\subsection{creativity}
+\setuppalet [romance]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat \page
+
+\subsection{creativity}
+\setuppalet [creativity]
+\startwidenfloat\getbuffer[showcolorpaletidiom]\stopwidenfloat
+
+\stopappendices
