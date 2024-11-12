@@ -22,7 +22,7 @@
 %D \NC layout       \NC: narrow      \NC propiorroot       \NC propiorgplden \NC\NR
 %D \NC              \NC: moderate    \NC moderatecomments  \NC sidemirror    \NC\NR
 %D \NC              \NC: wide        \NC moderatecommentsii\NC gridneeds     \NC\NR
-%D \NC              \NC: exotic      \NC ipad              \NC kindle        \NC\NR
+%D \NC              \NC: exotic      \NC ipad              \NC kindle        \NC\NR hermes
 %D \NC design       \NS[2]: set papersize and layout at sametime             \NC\NR
 %D \NC              \NC: exotic      \NC ipad              \NC kindle        \NC\NR
 %D \NC language     \NS[2]: lang with inherit from mainlanguage              \NC\NR
@@ -223,29 +223,6 @@
            none=>\relax,
      \v!default=>\hdr_sty_booktrue,
      \v!unknown=>\errorparameter{hdrstyle},]
-%D \start\hans
-%D 特別的，draft 模式下會開啟字符缺失檢查
-%D 但可能會導致未知錯誤，包括目錄、引用等無法生成
-%D \type{\enabledirectives[logs.errors=missing characters]}
-%D 命令檢查字符是否缺失，如果有則停止繼續打印。
-%D 需要注意的是，開啟 draft 和 moresize 模式會拖慢生成文件的速度。
-%D \stop
-\startmode[draft]
-  \overfullrule=10pt%
-  \let\infofont\relax
-  \let\infofont\ttxx
-  \version[temporary]
-  \enabletrackers[builders.hpack.quality]
-  \enabletrackers[builders.hpack.overflow]
-  \enabletrackers[fonts.missing]
-  \replacemissingcharacters
-\stopmode
-\startmode[print]
-%
-\stopmode
-\startmode[kindle]
-    \setupmodule   [fontsize=14pt,papersize=kindle,layout=kindle]
-\stopmode
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setupcolors            [state=start,pagecolormodel=auto,textcolor=textcolor,]
 \setupinteraction       [state=start,
@@ -645,7 +622,7 @@
 \startmode[*hant]
     \setglobalscript [hanzi]
     \setupindenting  [first,always,2em]
-    \setuplanguage  [hant] [date={year:cn-d,年,month:cn-d,day:cn-d,日},
+    \setuplanguage  [hant] [date={\v!year,年,mm,月,dd,日},
                      spacing=packed,       patterns={zh,en},
                 leftsentence=——,      rightsentence=——,
              leftsubsentence=——,   rightsubsentence=——,
@@ -689,6 +666,29 @@
                     wednesday:mnem={水},  thursday:mnem={木},
                        friday:mnem={金},  saturday:mnem={土},
                        sunday:mnem={日}]
+\stopmode
+%D \start\hans
+%D 特別的，draft 模式下會開啟字符缺失檢查
+%D 但可能會導致未知錯誤，包括目錄、引用等無法生成
+%D \type{\enabledirectives[logs.errors=missing characters]}
+%D 命令檢查字符是否缺失，如果有則停止繼續打印。
+%D 需要注意的是，開啟 draft 和 moresize 模式會拖慢生成文件的速度。
+%D \stop
+\startmode[draft]
+  \overfullrule=10pt%
+  \let\infofont\relax
+  \let\infofont\ttxx
+  \version[temporary]
+  \enabletrackers[builders.hpack.quality]
+  \enabletrackers[builders.hpack.overflow]
+  \enabletrackers[fonts.missing]
+  \replacemissingcharacters
+\stopmode
+\startmode[print]
+%
+\stopmode
+\startmode[kindle]
+    \setupmodule   [fontsize=14pt,papersize=kindle,layout=kindle]
 \stopmode
 %%%%%%%%%%%%%%%
 \startluacode
@@ -2149,6 +2149,7 @@ StopPage ;
 \setupheader [state=start]
 \startsetups [header:leftpage]
      \startalignment[flushouter]\setscript[hanzi]
+     \kern-\leftmarginwidth\relax
      \prefixedpagenumber
      \quad% \undepthed
      {\blackrule
@@ -2169,11 +2170,12 @@ StopPage ;
           %depth=\dimexpr\headerheight+\topspace\relax,
      \quad
      \prefixedpagenumber
+      \kern-\rightmarginwidth\relax
      \stopalignment
 \stopsetups
 \setuppagenumbering [alternative=doublesided,]
 \setupheadertexts[]
-\setupheadertexts[margin]
+\setupheadertexts[text]
      [] [\directsetup{header:rightpage}]
         [\directsetup{header:leftpage}] []
 \fi
@@ -3326,7 +3328,6 @@ end
 \setupverse [\c!source][\c!align=flushright,\c!style=it,\c!skip=\v!both]
 
 \def\c_verse_skip{%
- \ifx\verse_skip\v!none\relax\fi
  \ifx\verse_skip\v!left\leftskip\d_temp_leftskip\relax\fi
  \ifx\verse_skip\v!right\rightskip\d_temp_leftskip\relax\fi
  \ifx\verse_skip\v!both
@@ -3351,16 +3352,19 @@ end
 {\begingroup\parindent0pt\relax\let\\\par
  \iffirstargument\setupverse[#1]\fi
  \edef\verse_skip{\verseparameter\c!skip}
+ \ifx\verse_skip\v!none\relax\else
  \setwidthof{\verseparameter\c!sample}\to\d_temp_maxwidth%
  \d_temp_leftskip=\dimexpr.5\textwidth-.5\d_temp_maxwidth\relax%
- \c_verse_skip%
+ \c_verse_skip\fi%
  \verseparameter\c!before
  \verse_element\c!title
  \verse_element\c!author
  \useversestyleandcolor\c!style\c!color
-}
+ \ifx\verse_skip\v!none
+ \startalignment[\verseparameter\c!align]\fi}
 
-\def\stopverse{\par\leftskip0pt\rightskip\leftskip\relax
+\def\stopverse{\par\ifx\verse_skip\v!none\stopalignment\fi
+  \leftskip0pt\rightskip\leftskip\relax
   \verse_element\c!source\verseparameter\c!after\endgroup}
 
 %\setupverse [\c!sample={一二三四五六七},\c!skip=\v!left,
@@ -3720,7 +3724,7 @@ end
     \starttextbackground [cover:#1]%
     \doifemptyelsex{\namedcoverparameter\currentcover{before#1}}{}%
     \doifemptyelsex{\namedcoverparameter\currentcover{#1style}}{}%
-    \doifemptyelsex{\namedcoverparameter\currentcover{#1color}}{}%
+    \expandafter\begincsname\namedcoverparameter\currentcover{#1color}\endcsname%
     \doifemptyelsex{\namedcoverparameter\currentcover{#1}}%
                    {\writestatus{module exam}{warning: #1 is empty ! please input #1.
                         or maybe you have some value is undefined.}}%

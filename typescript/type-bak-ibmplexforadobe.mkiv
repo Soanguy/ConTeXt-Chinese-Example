@@ -1,0 +1,89 @@
+\definefontfeature [default][default][protrusion=pure]
+\definefontfeature [latin-default][
+                    language=dflt,mode=node,
+                    %%swsh=yes,dlig=yes,halt=yes,
+                    lnum=yes,pnum=yes,tnum=no,
+                    kern=yes,case=yes,%cpsp=yes,
+                    calt=yes,locl=yes,pwid=yes,
+                    liga=yes,tlig=yes,trep=yes,]
+\definefontfeature [fallback-latin-default]        [latin-default]
+\definefontfeature [fallback-latin-slanted]        [fallback-latin-default] [slant=.2]
+\definefontfeature [fallback-latin-slanted-mono]                            [slant=.2]
+\definefontfeature [fallback-latin-smallcaps]      [smallcaps]              [mode=node]
+\definefontfeature [fallback-latin-smallcaps-mono] [cmcp=yes,c2sc=yes]
+%\definefontfamilypreset
+%  [range:CJK]
+%  [\c!range={cjkcompatibilityforms,
+%             cjkcompatibilityideographs,
+%             cjkcompatibilityideographssupplement,
+%             cjkradicalssupplement,
+%             cjkstrokes,
+%             cjksymbolsandpunctuation,
+%             cjkunifiedideographs,
+%             cjkunifiedideographsextensiona,
+%             cjkunifiedideographsextensionb,
+%             halfwidthandfullwidthforms,
+%             verticalforms,
+%             bopomofo,
+%             bopomofoextended,
+%             hiragana,
+%             katakana,
+%%             hangulcompatibilityjamo,
+%%             hanguljamo,
+%%             hanguljamoextendeda,
+%%             hanguljamoextendedb,
+%%             hangulsyllables,
+%             }]
+
+% 需要注意，ibmplex 並沒有 smcp 特性。無法通過定義
+% fontfeature 來設定。可是通過 偽小寫 來實現。
+
+\definefontfallback[fallback-serifextralight]       [ibmplexserifthin*fallback-latin-default]             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifextralightitalic] [ibmplexserifthinitalic*fallback-latin-default]       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-seriflight]            [ibmplexserifextralight*fallback-latin-default]       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-seriflightitalic]      [ibmplexserifextralightitalic*fallback-latin-default] [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serif]                 [ibmplexseriflight*fallback-latin-default]            [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifitalic]           [ibmplexseriflightitalic*fallback-latin-default]      [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifmedium]           [ibmplexserifmedium*fallback-latin-default]           [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifmediumitalic]     [ibmplexserifmediumitalic*fallback-latin-default]     [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifbold]             [ibmplexserifsemibold*fallback-latin-default]         [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifbolditalic]       [ibmplexserifsemibolditalic*fallback-latin-default]   [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifslanted]          [ibmplexserifthin*fallback-latin-slanted]             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifboldslanted]      [ibmplexserifsemibold*fallback-latin-slanted]         [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-serifcaps]             [lmromancaps10-regular]                               [0x0000-0x0400] [force=yes,rscale=1.00]
+
+\definefontfallback[fallback-sansextralight]        [ibmplexsansextralight*fallback-latin-default]       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansextralightitalic]  [ibmplexsansextralightitalic*fallback-latin-default] [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sanslight]             [ibmplexsanslight*fallback-latin-default]            [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sanslightitalic]       [ibmplexsanslightitalic*fallback-latin-default]      [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sans]                  [ibmplexsanstext*fallback-latin-default]             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansitalic]            [ibmplexsanstextitalic*fallback-latin-default]       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansmedium]            [ibmplexsansmedium*fallback-latin-default]           [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansmediumitalic]      [ibmplexsansmediumitalic*fallback-latin-default]     [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansbold]              [ibmplexsanssemibold*fallback-latin-default]         [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansbolditalic]        [ibmplexsanssemibolditalic*fallback-latin-default]   [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansslanted]           [ibmplexsanstext*fallback-latin-slanted]             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sansboldslanted]       [ibmplexsanssemibold*fallback-latin-slanted]         [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback[fallback-sanscaps]              [lmsans10-regular*fallback-latin-smallcaps]          [0x0000-0x0400] [force=yes,rscale=1.00]
+
+\definefontfallback [fallback-monoextralight]       [IBMPlexMono-Thin]                                   [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monoextralightitalic] [IBMPlexMono-ThinItalic]                             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monolight]            [IBMPlexMono-ExtraLight]                             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monolightitalic]      [IBMPlexMono-ExtraLightItalic]                       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-mono]                 [IBMPlexMono-Light]                                  [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monoitalic]           [IBMPlexMono-LightItalic]                            [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monomedium]           [IBMPlexMono-Medium]                                 [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monomediumitalic]     [IBMPlexMono-MediumItalic]                           [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monobold]             [IBMPlexMono-Bold]                                   [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monobolditalic]       [IBMPlexMono-BoldItalic]                             [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monoslanted]          [IBMPlexMono-Text*fallback-latin-slanted-mono]       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monoboldslanted]      [IBMPlexMono-Bold*fallback-latin-slanted-mono]       [0x0000-0x0400] [force=yes,rscale=1.00]
+\definefontfallback [fallback-monocaps]             [lmmonocaps10-regular]                               [0x0000-0x0400] [force=yes,rscale=1.00]
+
+\definefontfallback[fallback-handw]                 [ibmplexseriftext*fallback-latin-default]            [0x0000-0x0400] [force=yes,rscale=0.925]
+\definefontfallback[fallback-handwbold]             [ibmplexserifsemibold*fallback-latin-default]        [0x0000-0x0400] [force=yes,rscale=0.925]
+\definefontfallback[fallback-handwitalic]           [ibmplexseriftextitalic*fallback-latin-default]      [0x0000-0x0400] [force=yes,rscale=0.925]
+\definefontfallback[fallback-handwbolditalic]       [ibmplexserifsemibolditalic*fallback-latin-default]  [0x0000-0x0400] [force=yes,rscale=0.925]
+\definefontfallback[fallback-handwslanted]          [ibmplexseriftext*fallback-latin-slanted]            [0x0000-0x0400] [force=yes,rscale=0.925]
+\definefontfallback[fallback-handwboldslanted]      [ibmplexserifsemibold*fallback-latin-slanted]        [0x0000-0x0400] [force=yes,rscale=0.925]
+\definefontfallback[fallback-handwcaps]             [lmromancaps10-regular]                              [0x0000-0x0400] [force=yes,rscale=0.925]

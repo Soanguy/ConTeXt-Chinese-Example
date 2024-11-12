@@ -1,12 +1,9 @@
 \definefontfeature [simplified-chinese] [default]
-                   [%language=cn,kern=yes
-                    pwid=yes,halt=yes]
+                   %[language=cn,kern=yes,pwid=yes,halt=yes]
 \definefontfeature [traditional-chinese][default]
-                   [%language=zht,kern=yes
-                    pwid=yes,halt=yes]
+                   %[language=zht,kern=yes,pwid=yes,halt=yes]
 \definefontfeature [japanese]           [default]
-                   [%language=jan,
-                    pwid=yes,halt=yes,kern=yes]
+                   %[language=jan,pwid=yes,halt=yes,kern=yes]
 \definefontfeature [chinese][simplified-chinese]
 
 \definefontfeature [boldslanted]        [default]
@@ -37,7 +34,56 @@
   \definetypescriptprefix [f:adobehant]            [traditional-chinese]
   \definetypescriptprefix [f:kozuka]               [japanese]
 
-  \starttypescript [\s!serif,\s!sans,\s!mono] [adobehans,adobehant,sonyhant] [\s!name]
+  \definetypescriptprefix [n:adobehansserifcaption]        [adobesongstd]
+  \definetypescriptprefix [n:adobehansserifcaption]        [adobeheitistd]
+  \definetypescriptprefix [n:adobehansmonocaption]         [adobefangsongstd]
+  \definetypescriptprefix [n:adobehanshandwritingcaption]  [adobekaitistd]
+
+  \definetypescriptprefix [n:adobehantserifcaption]        [adobemingstd]
+  \definetypescriptprefix [n:adobehantserifcaption]        [adobefanheitistdbold]
+  \definetypescriptprefix [n:adobehantmonocaption]         [adobefangsongstd]
+  \definetypescriptprefix [n:adobehanthandwritingcaption]  [adobekaitistd]
+
+  \definetypescriptprefix [n:sonyhantserifcaption]         [sonyreaderming]
+  \definetypescriptprefix [n:sonyhantserifcaption]         [sonyreaderhei]
+  \definetypescriptprefix [n:sonyhantmonocaption]          [sonyreaderli]
+  \definetypescriptprefix [n:sonyhanthandwritingcaption]   [sonyreaderkai]
+
+  \definetypescriptprefix [n:adobehansserifsubhead]        [adobesongstd]
+  \definetypescriptprefix [n:adobehansserifsubhead]        [adobeheitistd]
+  \definetypescriptprefix [n:adobehansmonosubhead]         [adobefangsongstd]
+  \definetypescriptprefix [n:adobehanshandwritingsubhead]  [adobekaitistd]
+
+  \definetypescriptprefix [n:adobehantserifsubhead]        [adobemingstd]
+  \definetypescriptprefix [n:adobehantserifsubhead]        [adobefanheitistdbold]
+  \definetypescriptprefix [n:adobehantmonosubhead]         [adobefangsongstd]
+  \definetypescriptprefix [n:adobehanthandwritingsubhead]  [adobekaitistd]
+
+  \definetypescriptprefix [n:sonyhantserifsubhead]         [sonyreaderming]
+  \definetypescriptprefix [n:sonyhantserifsubhead]         [sonyreaderhei]
+  \definetypescriptprefix [n:sonyhantmonosubhead]          [sonyreaderli]
+  \definetypescriptprefix [n:sonyhanthandwritingsubhead]   [sonyreaderkai]
+
+  \definetypescriptprefix [n:adobehansserifdisplay]        [adobesongstd]
+  \definetypescriptprefix [n:adobehansserifdisplay]        [adobeheitistd]
+  \definetypescriptprefix [n:adobehansmonodisplay]         [adobefangsongstd]
+  \definetypescriptprefix [n:adobehanshandwritingdisplay]  [adobekaitistd]
+
+  \definetypescriptprefix [n:adobehantserifdisplay]        [adobemingstd]
+  \definetypescriptprefix [n:adobehantserifdisplay]        [adobefanheitistdbold]
+  \definetypescriptprefix [n:adobehantmonodisplay]         [adobefangsongstd]
+  \definetypescriptprefix [n:adobehanthandwritingdisplay]  [adobekaitistd]
+
+  \definetypescriptprefix [n:sonyhantserifdisplay]         [sonyreaderming]
+  \definetypescriptprefix [n:sonyhantserifdisplay]         [sonyreaderhei]
+  \definetypescriptprefix [n:sonyhantmonodisplay]          [sonyreaderli]
+  \definetypescriptprefix [n:sonyhanthandwritingdisplay]   [sonyreaderkai]
+
+  \starttypescript [\s!serif,\s!sans,\s!mono,%
+                    SerifCaption,SerifSubhead,SerifDisplay,%
+                    SansCaption,SansSubhead,SansDisplay,%
+                    MonoCaption,MonoSubhead,MonoDisplay,]
+                  [adobehans,adobehant,sonyhant] [\s!name]
     \setups[\s!font:\s!fallback:\typescriptone]
       \edefinefontsynonym [\typescriptprefix\typescriptone]
                           [\s!name:\typescriptprefix{n:\typescripttwo\typescriptone}]
@@ -92,7 +138,9 @@
                          [\typescriptprefix\typescriptone BoldItalic]
                          [\s!fallbacks=fallback-\typescriptone heavyitalic]
   \stoptypescript
-  \starttypescript [\s!handwriting] [adobehans,adobehant,sonyhant] [\s!name]
+  \starttypescript [\s!handwriting,
+                    HandwritingCaption,HandwritingSubhead,HandwritingDisplay]
+                   [adobehans,adobehant,sonyhant] [\s!name]
     \setups[\s!font:\s!fallback:\typescriptone]
       \edefinefontsynonym [Handwriting]
                          [\s!name:\typescriptprefix{n:\typescripttwo\typescriptone}]
@@ -345,7 +393,7 @@
   \definebodyfont [default] [rm]
      [LF=SerifLight        sa 1,
       LI=SerifLightItalic  sa 1,
-      tf=Serif             sa 1,
+      tf=Serif             sa 1,% or you can set Serif*boldened-15 sa 1
       it=SerifItalic       sa 1,
       MF=SerifMedium       sa 1,
       MI=SerifMediumItalic sa 1,
@@ -370,29 +418,29 @@
       sc=SansCaps          sa 1]
 
   \definebodyfont [default] [tt]
-     [LF=MonoLight         sa 0.9,
-      LI=MonoLightItalic   sa 0.9,
-      tf=Mono              sa 0.9,
-      it=MonoItalic        sa 0.9,
-      MF=MonoMedium        sa 0.9,
-      MI=MonoMediumItalic  sa 0.9,
-      bf=MonoBold          sa 0.9,
-      bi=MonoBoldItalic    sa 0.9,
-      sl=MonoSlanted       sa 0.9,
-      bs=MonoBoldSlanted   sa 0.9,
-      sc=MonoCaps          sa 0.9]
+     [LF=MonoLight         sa 1,
+      LI=MonoLightItalic   sa 1,
+      tf=Mono              sa 1,
+      it=MonoItalic        sa 1,
+      MF=MonoMedium        sa 1,
+      MI=MonoMediumItalic  sa 1,
+      bf=MonoBold          sa 1,
+      bi=MonoBoldItalic    sa 1,
+      sl=MonoSlanted       sa 1,
+      bs=MonoBoldSlanted   sa 1,
+      sc=MonoCaps          sa 1]
 
   \definebodyfont [default] [hw]
-     [LF=HandwritingLight        sa 1,
-      LI=HandwritingLightItalic  sa 1,
-      tf=Handwriting             sa 1,
-      it=HandwritingItalic       sa 1,
-      MF=HandwritingMedium       sa 1,
-      MI=HandwritingMediumItalic sa 1,
-      bf=HandwritingBold         sa 1,
-      bi=HandwritingBoldItalic   sa 1,
-      sl=HandwritingSlanted      sa 1,
-      bs=HandwritingBoldSlanted  sa 1,
-      sc=HandwritingCaps         sa 1]
+     [LF=HandwritingLight        sa 1.08,
+      LI=HandwritingLightItalic  sa 1.08,
+      tf=Handwriting             sa 1.08,
+      it=HandwritingItalic       sa 1.08,
+      MF=HandwritingMedium       sa 1.08,
+      MI=HandwritingMediumItalic sa 1.08,
+      bf=HandwritingBold         sa 1.08,
+      bi=HandwritingBoldItalic   sa 1.08,
+      sl=HandwritingSlanted      sa 1.08,
+      bs=HandwritingBoldSlanted  sa 1.08,
+      sc=HandwritingCaps         sa 1.08]
 
 \stoptypescriptcollection

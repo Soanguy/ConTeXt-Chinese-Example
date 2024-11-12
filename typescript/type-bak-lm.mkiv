@@ -1,0 +1,50 @@
+\definefontfeature [default][default][protrusion=pure]
+\definefontfeature [latin-default][
+                    language=dflt,mode=node,
+                    %%swsh=yes,dlig=yes,halt=yes,
+                    lnum=yes,pnum=yes,tnum=no,
+                    kern=yes,case=yes,%cpsp=yes,
+                    calt=yes,locl=yes,pwid=yes,
+                    liga=yes,tlig=yes,trep=yes,]
+\definefontfeature [fallback-latin-default]        [latin-default]
+\definefontfeature [fallback-latin-slanted]        [fallback-latin-default] [slant=.2]
+\definefontfeature [fallback-latin-slanted-mono]                            [slant=.2]
+\definefontfeature [fallback-latin-smallcaps]      [smallcaps]              [mode=node]
+\definefontfeature [fallback-latin-smallcaps-mono] [cmcp=yes,c2sc=yes]
+
+% imingregular
+%\definefontfallback[fallback-serif][name:imingregular*fallback-default]
+%[0x06690,0x065DB,0x02015,0x09EB9,0x05095,0x05F67,0x090C3,
+% 0x06C3E,0x0770E,0x052CD,0x07CD2,0x060C7,0x08EA7,0x0558E,
+% 0x04F82,0x05F12,0x08129,0x06199,0x08BAC][force=yes]
+\definefontfallback[fallback-serif]           [lmroman10regular*fallback-latin-default]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifbold]       [lmroman10bold*fallback-latin-default]           [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifitalic]     [lmroman10italic*fallback-latin-default]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifbolditalic] [lmroman10bolditalic*fallback-latin-default]     [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifslanted]    [lmromanslant10regular]                          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifboldslanted][lmromanslant10bold]                             [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-serifcaps]       [lmromancaps10regular]                           [0x0000-0x0400][force=yes]
+
+\definefontfallback[fallback-sans]            [lmsans10regular*fallback-latin-default]         [0x0000-0x0400][force=yes,rscale=1.05]
+\definefontfallback[fallback-sansbold]        [lmsans10bold*fallback-latin-default]            [0x0000-0x0400][force=yes,rscale=1.05]
+\definefontfallback[fallback-sansitalic]      [lmsans10oblique*fallback-latin-default]         [0x0000-0x0400][force=yes,rscale=1.05]
+\definefontfallback[fallback-sansbolditalic]  [lmsans10boldoblique*fallback-latin-default]     [0x0000-0x0400][force=yes,rscale=1.05]
+\definefontfallback[fallback-sansslanted]     [lmsans10oblique]                                [0x0000-0x0400][force=yes,rscale=1.05]
+\definefontfallback[fallback-sansboldslanted] [lmsans10boldoblique]                            [0x0000-0x0400][force=yes,rscale=1.05]
+\definefontfallback[fallback-sanscaps]        [lmsans10regular*fallback-latin-smallcaps]       [0x0000-0x0400][force=yes,rscale=1.05]
+
+\definefontfallback[fallback-mono]            [lmmono10regular]                                [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monobold]        [lmmonolt10bold]                                 [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monoitalic]      [lmmonoslant10regular]                           [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monobolditalic]  [lmmonolt10boldoblique]                          [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monoslanted]     [lmmonoslant10regular]                           [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monoboldslanted] [lmmonolt10boldoblique]                          [0x0000-0x0400][force=yes,rscale=0.90]
+\definefontfallback[fallback-monocaps]        [lmmonocaps10]                                   [0x0000-0x0400][force=yes,rscale=0.90]
+
+\definefontfallback[fallback-handw]           [lmroman10regular*fallback-latin-default]        [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwbold]       [lmroman10bold*fallback-latin-default]           [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwitalic]     [lmroman10italic*fallback-latin-default]         [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwbolditalic] [lmroman10bolditalic*fallback-latin-default]     [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwslanted]    [lmromanslant10regular]                          [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwboldslanted][lmromanslant10bold]                             [0x0000-0x0400][force=yes]
+\definefontfallback[fallback-handwcaps]       [lmromancaps10regular]                           [0x0000-0x0400][force=yes]
