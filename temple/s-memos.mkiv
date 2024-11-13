@@ -72,6 +72,7 @@
               lineheight=,
               typescript=, latinfontname=,    fontname=,
               fontstyle=rm,    fontsize=11pt,
+              textcount=35, heightcount=0, margincount=0,
               chapterstyle=,   hdrstyle=,     background=,
               tocsstyle=,      themecolor=,
               kindle-cn-fontname=dyna-hansb,
@@ -227,9 +228,8 @@
 \setupcolors            [state=start,pagecolormodel=auto,textcolor=textcolor,]
 \setupinteraction       [state=start,
                          author={商無辛・Soanguy},
-                         style=,
-                         color=linkcolor,
-                         contrastcolor=themecolor]
+                         style=,color=linkcolor,contrastcolor=themecolor
+                         ]
 \setupurl               [color=linkcolor,style={\tt}]
 \setupcombinedlist      [content] [interaction=all,color=toclinkcolor]
 \setupinteractionscreen [option=bookmark]
@@ -538,7 +538,7 @@
     indenting={yes,always,2em},
     whitespace=none,]
 \startmode[*hans,*hant,*ja]
-    \setupalign[bottom,hanging,justified]
+    \setupalign[height,hanging,justified]
 %    \setupwhitespace[halfline]
     \setupinterlinespace[line=\doifelse{\moduleparameter{memos}{lineheight}}{}%
                       {1.5\bodyfontsize}{\moduleparameter{memos}{lineheight}}]
@@ -613,7 +613,7 @@
                       figure={图 },          figures={图 },
                      graphic={插图},        graphics={插图},
                 marginfigure={边图 },           text={参见 :\,},
-                     preface={前言},
+                     preface={前言},       totalpage={共,页},
                  monday:mnem={星期一},  tuesday:mnem={星期二},
               wednesday:mnem={星期三}, thursday:mnem={星期四},
                  friday:mnem={星期五}, saturday:mnem={星期六},
@@ -634,7 +634,8 @@
                        table={表 },           tables={表 },
                       figure={圖 },          figures={圖 },
                      graphic={插圖},        graphics={插圖},
-                marginfigure={邊圖 },        preface={前言},
+                marginfigure={邊圖 },      totalpage={共,頁},
+                     preface={前言},
                  monday:mnem={星期一},  tuesday:mnem={星期二},
               wednesday:mnem={星期三}, thursday:mnem={星期四},
                  friday:mnem={星期五}, saturday:mnem={星期六},
@@ -655,6 +656,7 @@
                             figure={図 },       figures={図 },
                            graphic={図 },      graphics={図 },
                       marginfigure={図 },       preface={前書き},
+                         totalpage={共,ページ},
 %                             month={月},          MONTH={月},
                            january={一月},     february={二月},
                              march={三月},        april={四月},
@@ -751,122 +753,42 @@
 
   nodes.tasks.appendaction("processors", "after", "Thirddata.processmystuff")
 \stopluacode
-%\startluacode
-%local punctuation = {
-%    ['。'] = true, ['？'] = true, ['！'] = true, ['，'] = true,
-%    ['、'] = true, ['；'] = true, ['：'] = true, ['……'] = true,
-%    ['“']  = true, ['”']  = true, ['（'] = true, ['）'] = true,
-%    ['【'] = true, ['】'] = true, ['《'] = true, ['》'] = true,
-%    ['〈'] = true, ['〉'] = true, ['‘']  = true, ['’']  = true,
-%    ['「'] = true, ['」'] = true, ['『'] = true, ['』'] = true
-%}
-%
-%local glyph_id = node.id('glyph')
-%local glue_id = node.id('glue')
-%local default_glue_width = tex.sp('0.5em')
-%local compression_glue_width = tex.sp('0.1em')
-%local is_compression_enabled = false
-%
-%-- 插入空白节点
-%local function insert_glue(head, node, width)
-%    local glue = node.new(glue_id)
-%    glue.width = width
-%    head = node.insert_before(head, node, glue)
-%    return glue
-%end
-%
-%-- 调整标点符号间距
-%local function adjust_spacing(head)
-%    local prev = nil
-%    local current_glue_width = is_compression_enabled and compression_glue_width or default_glue_width
-%
-%    for n in node.traverse_id(glyph_id, head) do
-%        local char = unicode.utf8.char(n.char)
-%        if punctuation[char] then
-%            local next = node.next(n)
-%            local add_glue = function()
-%                if prev and prev.id == glue_id then
-%                    prev.width = prev.width + current_glue_width
-%                else
-%                    insert_glue(head, n, current_glue_width)
-%                end
-%            end
-%
-%            -- 避免标点符号出现在行尾
-%            if not next or next.id == glue_id or (next.id == glyph_id and punctuation[unicode.utf8.char(next.char)]) then
-%                add_glue()
-%            end
-%
-%            -- 避免标点符号出现在行首
-%            if not prev or prev.id == glue_id or (prev.id == glyph_id and punctuation[unicode.utf8.char(prev.char)]) then
-%                add_glue()
-%            end
-%        end
-%        prev = n
-%    end
-%    return head
-%end
-%
-%callback.register('pre_linebreak_filter', adjust_spacing)
-%
-%-- 确保is_compression_enabled被正确定义和访问
-%function toggle_compression(state)
-%    is_compression_enabled = (state == "true")
-%end
-%
-%-- 定义TeX命令来启用或禁用标点压缩
-%interfaces.implement {
-%    name = "toggle_compression",
-%    actions = function(state)
-%        toggle_compression(state)
-%    end,
-%    arguments = "string"
-%}
-%\stopluacode
-%% TeX命令来控制标点压缩
-%\def\enablecompression{\ctxlua{toggle_compression("true")}}
-%\def\disablecompression{\ctxlua{toggle_compression("false")}}
-%\def\addpunctuation#1{\directlua{add_punctuation('#1')}}
-%\def\removepunctuation#1{\directlua{remove_punctuation('#1')}}
-%% 添加标点符号
-%\addpunctuation{【}
-%% 移除标点符号
-%\removepunctuation{。}
+
 \startprotectedcolors
   \definecolor [transparent] [r=1,t=0,a=1]
-  \definecolor [softred]     [x=F7CDBC]\definecolor [softblue]    [x=81D4FA]
-  \definecolor [softyellow]  [x=F7DA94]\definecolor [softgreen]   [x=BFD8A5]
-  \definecolor [softcyan]    [x=B9DEC9]\definecolor [softorange]  [x=FFF4E5]
-  \definecolor [softpurple]  [x=4CC3FF]\definecolor [softpink]    [x=F5CEBE]
-  \definecolor [softgray]    [x=F2FDFF]\definecolor [softblack]   [x=758A99]
-  \definecolor [softwhite]   [x=FFFFFF]\definecolor [lightred]    [x=F9906F]
-  \definecolor [lightblue]   [x=2983BB]\definecolor [lightyellow] [x=FFC773]
-  \definecolor [lightgreen]  [x=96C24E]\definecolor [lightcyan]   [x=55BB8A]
-  \definecolor [lightorange] [x=FFD699]\definecolor [lightpurple] [x=065279]
-  \definecolor [lightpink]   [x=EDC3AE]\definecolor [lightgray]   [x=C2CCD0]
-  \definecolor [lightblack]  [x=3D3B4F]\definecolor [lightwhite]  [x=FFFFFF]
-  \definecolor [red]         [x=D70C19]\definecolor [blue]        [x=2D69AF]
-  \definecolor [yellow]      [x=FBB612]\definecolor [green]       [x=7FB24C]
-  \definecolor [cyan]        [x=3C9566]\definecolor [orange]      [x=FBA414]
-  \definecolor [purple]      [x=4A4266]\definecolor [pink]        [x=F9906F]
-  \definecolor [gray]        [x=808080]\definecolor [black]       [x=000000]
-  \definecolor [white]       [x=FFFFFF]\definecolor [darkred]     [x=B1000F]
-  \definecolor [darkblue]    [x=15559A]\definecolor [darkyellow]  [x=F28E16]
-  \definecolor [darkgreen]   [x=4C6B2D]\definecolor [darkcyan]    [x=497568]
-  \definecolor [darkorange]  [x=CC8410]\definecolor [darkpurple]  [x=37314C]
-  \definecolor [darkpink]    [x=F35336]\definecolor [darkgray]    [x=3F3F3F]
-  \definecolor [darkblack]   [x=000000]\definecolor [darkwhite]   [x=F3F9F1]
-  \definecolor [deepred]     [x=5C1E19]\definecolor [deepblue]    [x=1C2938]
-  \definecolor [deepyellow]  [x=60281E]\definecolor [deepgreen]   [x=2B312C]
-  \definecolor [deepcyan]    [x=1A3B32]\definecolor [deeporange]  [x=7F5500]
-  \definecolor [deeppurple]  [x=152637]\definecolor [deeppink]    [x=4D1919]
-  \definecolor [deepgray]    [x=242628]\definecolor [deepblack]   [x=000000]
-  \definecolor [deepwhite]   [x=F2ECDE]\definecolor [blackred]    [x=2D0C13]
-  \definecolor [blackblue]   [x=012030]\definecolor [blackyellow] [x=241D00]
-  \definecolor [blackgreen]  [x=141E1B]\definecolor [blackcyan]   [x=061711]
-  \definecolor [blackorange] [x=140D00]\definecolor [blackpurple] [x=1C0D1A]
-  \definecolor [blackpink]   [x=1C0909]\definecolor [blackgray]   [x=2D2E36]
-  \definecolor [blackblack]  [x=000000]\definecolor [blackwhite]  [x=DBD6CA]
+  \definecolor [softred]     [x=F7CDBC]  \definecolor [softblue]    [x=81D4FA]
+  \definecolor [softyellow]  [x=F7DA94]  \definecolor [softgreen]   [x=BFD8A5]
+  \definecolor [softcyan]    [x=B9DEC9]  \definecolor [softorange]  [x=FFF4E5]
+  \definecolor [softpurple]  [x=4CC3FF]  \definecolor [softpink]    [x=F5CEBE]
+  \definecolor [softgray]    [x=F2FDFF]  \definecolor [softblack]   [x=758A99]
+  \definecolor [softwhite]   [x=FFFFFF]  \definecolor [lightred]    [x=F9906F]
+  \definecolor [lightblue]   [x=2983BB]  \definecolor [lightyellow] [x=FFC773]
+  \definecolor [lightgreen]  [x=96C24E]  \definecolor [lightcyan]   [x=55BB8A]
+  \definecolor [lightorange] [x=FFD699]  \definecolor [lightpurple] [x=065279]
+  \definecolor [lightpink]   [x=EDC3AE]  \definecolor [lightgray]   [x=C2CCD0]
+  \definecolor [lightblack]  [x=3D3B4F]  \definecolor [lightwhite]  [x=FFFFFF]
+  \definecolor [red]         [x=D70C19]  \definecolor [blue]        [x=2D69AF]
+  \definecolor [yellow]      [x=FBB612]  \definecolor [green]       [x=7FB24C]
+  \definecolor [cyan]        [x=3C9566]  \definecolor [orange]      [x=FBA414]
+  \definecolor [purple]      [x=4A4266]  \definecolor [pink]        [x=F9906F]
+  \definecolor [gray]        [x=808080]  \definecolor [black]       [x=000000]
+  \definecolor [white]       [x=FFFFFF]  \definecolor [darkred]     [x=B1000F]
+  \definecolor [darkblue]    [x=15559A]  \definecolor [darkyellow]  [x=F28E16]
+  \definecolor [darkgreen]   [x=4C6B2D]  \definecolor [darkcyan]    [x=497568]
+  \definecolor [darkorange]  [x=CC8410]  \definecolor [darkpurple]  [x=37314C]
+  \definecolor [darkpink]    [x=F35336]  \definecolor [darkgray]    [x=3F3F3F]
+  \definecolor [darkblack]   [x=000000]  \definecolor [darkwhite]   [x=F3F9F1]
+  \definecolor [deepred]     [x=5C1E19]  \definecolor [deepblue]    [x=1C2938]
+  \definecolor [deepyellow]  [x=60281E]  \definecolor [deepgreen]   [x=2B312C]
+  \definecolor [deepcyan]    [x=1A3B32]  \definecolor [deeporange]  [x=7F5500]
+  \definecolor [deeppurple]  [x=152637]  \definecolor [deeppink]    [x=4D1919]
+  \definecolor [deepgray]    [x=242628]  \definecolor [deepblack]   [x=000000]
+  \definecolor [deepwhite]   [x=F2ECDE]  \definecolor [blackred]    [x=2D0C13]
+  \definecolor [blackblue]   [x=012030]  \definecolor [blackyellow] [x=241D00]
+  \definecolor [blackgreen]  [x=141E1B]  \definecolor [blackcyan]   [x=061711]
+  \definecolor [blackorange] [x=140D00]  \definecolor [blackpurple] [x=1C0D1A]
+  \definecolor [blackpink]   [x=1C0909]  \definecolor [blackgray]   [x=2D2E36]
+  \definecolor [blackblack]  [x=000000]  \definecolor [blackwhite]  [x=DBD6CA]
 \stopprotectedcolors
 \definepalet [serene]    [themecolor=blue,% bluetheme 1
                            altcolori=softblue,          altcolorii=lightblue,
@@ -990,6 +912,9 @@
 \ifcolor_palet_pink    \setuppalet[romance]    \fi
 \ifcolor_palet_gray    \setuppalet[reliable]   \fi
 \ifcolor_palet_cyan    \setuppalet[creativity] \fi
+%D \section{layout}
+%D 注意，\CONTEXT\ 設置的正文高度包括了頁眉頁腳。
+%D 特別地，herms 只關心 正文寬度、高度和邊注的寬度。其他的依照 1 : √2 設定。
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                      頁面設置                                         %%%%%%
 %%%%%% paperwidth  = leftedge + leftmargin + width +                       %%%%%%
@@ -1138,22 +1063,105 @@
                 header=12.45mm,    headerdistance=0mm,
                 footer=35.0mm,     footerdistance=0mm,
                      width=fit,            height=fit,]
-\newdimen\currentbodyfontxsize
-\newdimen\topbotheight
-\currentbodyfontxsize=.8\bodyfontsize
-\topbotheight=\dimexpr\paperheight-(40\lineheight-\strutheight+\topskip+
-        5mm+\headerheight+5mm+\footerheight)\relax
-\definelayout[hermes][
-  width=33\bodyfontsize,rightmargin=15\currentbodyfontxsize,
-  headerdistance=5mm,footerdistance=5mm,
-  lines=40,topspace=.5\topbotheight,bottomspace=.5\topspace,]
 
 \setuppapersize  [\moduleparameter{memos}{papersize}]
+%% must load font first,then can get real text fontsize(1em)
+% 只關心每行寬度每列高度和邊注寬度。其他的依照 1:√2 的比例切割（只是粗略）
+\newcount\c_textcount\c_textcount=\moduleparameter{memos}{textcount}\relax
+\newcount\c_heightcount\c_heightcount=\moduleparameter{memos}{heightcount}\relax
+\newcount\c_margincount\c_margincount=\moduleparameter{memos}{margincount}\relax
+\newdimen\d_textfontsize\d_textfontsize=\fontdimen6\font\relax
+\newdimen\d_textlineheight\d_textlineheight=
+         \dimexpr\lineheight*\c_heightcount-\lineheight+
+         \ifdim\topskip<\ht\strutbox\topskip\else\ht\strutbox\fi\relax
+\newdimen\d_marginwidth\d_marginwidth=\dimexpr\fontdimen6\font*\c_margincount\relax
+
+\startluacode
+  local todimen
+  local pw = tex.getdimen("paperwidth")
+  local ph = tex.getdimen("paperheight")
+  local pr = tex.dimen.paperheight / tex.dimen.paperwidth
+  local tc = tex.getcount("c_textcount")
+  local hc = tex.getcount("c_heightcount")
+  local mc = tex.getcount("c_margincount")
+  local bs = tex.getdimen("d_textfontsize")
+  local hh = tex.getdimen("d_textlineheight")
+  local mw = tex.getdimen("d_marginwidth")
+  local twr = tc * bs -- 每行字數是必要設置
+
+  if    hc == 0 then  -- 如果沒有設置頁面高度數
+        thr = twr * pr
+  else
+        thr = hh
+  end
+
+  local lmt = (pw - twr) / (1 + pr) -- left total
+  local rmt = pw - lmt - twr        -- right total
+
+  if    mc == 0 then
+        rmm = pr * rmt / (1 + pr)   -- margin text width
+  else
+        rmm = mw
+  end
+  local rmd = (rmt - rmm) / (1 + pr)-- margin distance
+  local red = rmt - rmm - rmd       -- edge distance
+
+  local tpt = (ph - thr) / (1 + pr) -- top total
+  local bpt = ph - tpt - thr        -- bot total
+  local tmm = pr * bpt / (1 + pr)   -- header height
+  local tmd = (tpt - tmm) / (1 + pr)-- header distance
+  local ted = tpt - tmm - tmd       -- top distance
+  local bmd = bpt / 10
+  local fmd = bpt - bmd
+
+  textwidth  = tostring(twr/65536) .. "pt"
+  textheight = ph - ted -- textheight 是 頁面(ph) - 頂部(ted) - 尾部(0)
+  textheight = tostring(textheight/65536) .. "pt"
+
+  backspace  = tostring(lmt/65536) .. "pt"
+  rightmargin= tostring(rmm/65536) .. "pt"
+  rightmargindistance = tostring(rmd/65536) .. "pt"
+  rightedgedistance = tostring(red/65536) .. "pt"
+  header     = tostring(tmm/65536) .. "pt"
+  headerdistance=tostring(tmd/65536) .. "pt"
+  topdistance=tostring(ted/65536) .. "pt"
+  footer= tostring(fmd/65536) .. "pt"
+  footerdistance =tostring(bmd/65536) .. "pt"
+
+  -- context(ph/65536)context.par()
+  -- context(tpt/65536)context.par()
+  -- context(ted/65536)context.par()
+  -- context(tmm/65536)context.par()
+  -- context(tmd/65536)context.par()
+  -- context(fmd/65536)context.par()
+  -- context(bmd/65536)context.par()
+  -- context(bpt/65536)context.par()
+  -- context(thr/65536)context.par()
+  -- context(textheight)context.par()
+
+context.definelayout(
+  { "hermes" },
+  {
+    width=textwidth,
+    backspace=backspace,
+    rightmargin=rightmargin,
+    rightmargindistance=rightmargindistance,
+    rightedgedistance=rightedgedistance,
+    header=header,
+    headerdistance=headerdistance,
+    topspace=topdistance,
+    footer=footer,
+    footerdistance=footerdistance,
+    height=textheight,
+    bottomspace="0pt",
+  }
+)
+\stopluacode
+
 \setuplayout     [\moduleparameter{memos}{layout}]
 \definelayout    [default][\moduleparameter{memos}{layout}]
-\def\resetlayout{\setuplayout[\moduleparameter{memos}{layout}]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%                                結構相關設置                            %%%%%%
+%%%%%%                                結構相關設置                         %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \startsectionblockenvironment[frontpart]
   \setcounter [userpage] [1]
@@ -1191,9 +1199,6 @@
 %subject{\bf My title!}
 %\dontleavehmode% only used when after unnumbered title
 %\writetolist[DEFINED_LIST_NAME]{NUMBER_OF_TITLE}{REAL_CONTENTS}
-% or
-%section{Sec 1}
-%\writetolist[Reprints]{1.}{List entry A}%
 %and you can write something else into toc by [writebetweenlist]
 %section{Hotels in Hasselt}
 %\writebetweenlist[section]{\blank}
@@ -1239,6 +1244,7 @@
                       distance=.5em,label=no,style=\rm\itx,
                       pagestyle={\feature[+][tabularnumbers]},#1]
   \outermargin[#1]{\placecombinedlist[marginlist]}}
+% \section{TOC: style}
 \define[1]\parenpage{\hskip-.5\emwidth\relax(#1)}
 \define[1]\partlabel{{\sc\color[themecolor]{\tx Part}\ }}
 \iftocs_sty_default
@@ -2645,13 +2651,14 @@ endgroup;
 \def\stopGetCode{{%
   \setuplocalinterlinespace[line=1.5ex]\blank
   \setuptabulate[split=no]
+  \vbox\bgroup
   \starttabulate[|lp(.5tw)|lp(.5tw)|]
   \FL
   \CC[blue] \centeraligned{\white{SourceCode}}
   \CC[blue] \centeraligned{\white{Result}} \NC\NR\HL
-  \NC \typeGetCode[style={\ttx}]
-  \VL \getGetCode                          \NC\NR\LL
-  \stoptabulate%
+  \NC {\typeGetCode[style={\ttx}]}
+  \VL {\tfx\getGetCode}                          \NC\NR\LL
+  \stoptabulate\egroup%
 }}
 
 \definebuffer[GetWideCode]
@@ -3118,7 +3125,6 @@ end
 %
 %\stoptext
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \section{ruby macro}
 \newdimen\autojustify_width
 \def\addhfil#1{#1\hfill}
 \def\autojustify{\dosingleempty\doautojustify}
@@ -3126,182 +3132,8 @@ end
  \doifsomethingelse{#1}{\autojustify_width=#1}{\autojustify_width=3em}%
  \relax\simplealignedbox{\autojustify_width}{flushleft}{\processisolatedchars{#2}\addhfil\unskip}%
 }
-
 \def\hiden#1{\hiddenbar{#1}}
-\definefontfamily[kozukax][rm][kozukaminchopr6n]
-                 [tf=name:kozminpr6nregular,
-                  it=name:utrilloprom,
-                  bf=name:kozminpr6nbold,
-                  bi=name:utrilloprodb,]
-\definefontfamily[kozukax][ss][kozukagothicpr6n]
-                 [tf=name:kozgopr6nregular,
-                  it=name:utrilloprom,
-                  bf=name:kozgopr6nbold,
-                  bi=name:utrilloprodb,]
-\definefontfamily[kozukax][tt][fottsukuardgothicstd]
-                 [tf=name:tsukuardgothicstdr,
-                  it=name:tsukuardgothicstdr,
-                  bf=name:tsukuardgothicstdb,
-                  bi=name:tsukuardgothicstdb,]
-\definefontfamily[kozukax][hw][fotutrillopro]
-                 [tf=name:utrilloprom,
-                  it=name:utrilloprom,
-                  bf=name:utrilloprodb,
-                  bi=name:utrilloprodb,]
-
 \def\rubyx#1#2{{#1{\low{\hwx#2}}}}
-
-\installnamespace {warichu}
-\installsimplecommandhandler \????warichu {warichu} \????warichu
-\setupwarichu[style=tfxx,
-              voffset=-1.5pt,
-              distance=1pt plus 1pt,
-              left={},right={},
-              reference=,
-              page=,% manually set odd or even page
-              mode=]%checkmode]% will show info of related warichu width
-\definepagestate[warichu]
-\newif\ifcheckmode
-\newcount\c_warichu_n
-\newdimen\d_textwd_warichu   \newdimen\d_restwd_warichu%
-\newdimen\d_oddpos_warichu   \newdimen\d_evenpos_warichu%
-\newdimen\d_autopos_warichu  \newdimen\d_curline_warichu%
-\newdimen\d_temp_leftskip    \newdimen\d_temp_rightskip%
-\newdimen\d_temp_textwd      \newdimen\d_temp_avbhsize%
-\newdimen\d_temp_lastline
-\def\check_page%
-  {\dontleavehmode%
-   \autosetpagestate{warichu}%
-   \ifodd0\autopagestaterealpage{warichu}%
-          ODD Page \else EVEN Page\fi}
-\def\ShowMode%
-  {\ifcheckmode
-    \ininnermargin[style=ttxx,color=red]{
-    \the\c_warichu_n:\conditional_level::
-    \ifhmode \ifinner inner \fi hmode
-    \else\ifvmode \ifinner inner \fi vmode
-    \else\ifmmode \ifinner inner \fi mmode
-    \else \ifinner inner \fi unset
-    \fi\fi\fi}
-  \else\relax\fi}
-\def\get_split_box#1{%
-    \setbox\scratchboxone\hbox{\hsplit\scratchbox width #1}
-    %shrinkcriterium  0%stretchcriterium 0%
-    \parindent=0pt\relax%
-    \unhbox\scratchboxone\unskip\unskip\unpenalty%
-    \par\allowbreak%
-    }
-\tolerant\def\rawwarichu[#1]#:#2{\begingroup%
-  \let\par\endgraf\let\\\endgraf%
-  \def\last_linewidth_warichu{}
-  \dontleavehmode\unskip\unskip\unpenalty%
-  \d_oddpos_warichu =\dimexpr+\backspace+\textwidth-\rightskip
-                 \ifnum\hangafter<\zerocount
-                 \ifdim\hangindent>\zeropoint-\else+\fi
-                 \hangindent\fi\relax
-  \d_evenpos_warichu=\dimexpr+\paperwidth-\backspace-\rightskip
-                 \ifnum\hangafter<\zerocount
-                 \ifdim\hangindent>\zeropoint-\else+\fi
-                 \hangindent\fi\relax
-  \global\advance\c_warichu_n by 1\relax
-  \setupwarichu[#1]%
-  \hskip\warichuparameter\c!distance\relax\warichuparameter\c!left
-  %must put before xypos and will not influences box splitting.
-  \doif{\warichuparameter{mode}}{checkmode}{\checkmodetrue}%
-  \doif{\warichuparameter{mode}}{}         {\checkmodefalse}%
-  \edef\xpos_warichu{warichu:\number\c_warichu_n}%
-  \edef\xpos_prev_warichu{warichu:\dimexpr\c_warichu_n-1\relax}%
-  \edef\xpos_next_warichu{warichu:\dimexpr\c_warichu_n+1\relax}%
-  \xypos\xpos_warichu% 定義起始點
-  \d_curline_warichu=\dimexpr\MPx\xpos_warichu\relax%
-  \reference[\warichuparameter\c!reference]{\warichuparameter\c!reference}%
-  \autosetpagestate{warichu}% 獲取當前正文終點寬度
-  \if\relax\warichuparameter{page}\relax%
-      \ifdoublesided%
-          \ifodd0\autopagestaterealpage{warichu}%
-               \d_autopos_warichu=\d_oddpos_warichu%
-          \else\d_autopos_warichu=\d_evenpos_warichu\fi%
-      \else    \d_autopos_warichu=\d_oddpos_warichu \fi%
-  \else \doifelse{\warichuparameter{page}}{odd}%
-              {\d_autopos_warichu=\d_oddpos_warichu}%
-              {\d_autopos_warichu=\d_evenpos_warichu}%
-  \fi\relax%
-  \d_restwd_warichu=\doifelse{\warichuparameter{restwidth}}{}
-      {\ifdim% 獲取當前行可用長度
-       \dimexpr\d_autopos_warichu-\d_curline_warichu\relax<1em 0pt\else%
-       \dimexpr\d_autopos_warichu-\d_curline_warichu\relax\fi}
-      {\warichuparameter{restwidth}}%
-  \setbox\scratchbox\hbox{\setnostrut%
-         \usewarichustyleandcolor\c!style\c!color #2\relax}%
-  \d_textwd_warichu=\wd\scratchbox%dimen belowed is for checkmode
-  \d_temp_leftskip =\leftskip        \relax
-  \d_temp_rightskip=\rightskip       \relax
-  \d_temp_avbhsize =\availablehsize  \relax
-  \d_temp_textwd   =\d_textwd_warichu\relax
-  %如果剩餘為 0 換行並重置剩餘為行長
-  \ifdim\d_restwd_warichu = 0pt\break\d_restwd_warichu=\availablehsize\fi%
-  \ifdim\d_restwd_warichu > \dimexpr\d_textwd_warichu/2+2pt\relax% 第一層 if
-    \ifdim\d_textwd_warichu  < 16pt\relax% 過小的盒子不處理
-      \def\conditional_level{box  < 16pt}\ShowMode%
-      \vbox{\hsize\wd\scratchbox\box\scratchbox}%
-    \else%剩餘寬度可以容納盒子
-      \def\conditional_level{rest > box/2}\ShowMode%
-      \raise\warichuparameter\c!voffset%
-      \vbox{\offinterlineskip%
-            \hsize\dimexpr\wd\scratchbox/2+1pt\relax
-            \get_split_box{\dimexpr\wd\scratchbox/2+1pt\relax}%
-            \get_split_box{\dimexpr\wd\scratchbox+1pt\relax}}%
-    \fi%
-  \else% 第一層 else
-      \def\conditional_level{rest < box/2}\ShowMode%
-      \raise\warichuparameter\c!voffset%
-      \vbox{\offinterlineskip%
-            \hsize\dimexpr\d_restwd_warichu\relax%
-            \get_split_box{\dimexpr\hsize\relax}%
-            \get_split_box{\dimexpr\hsize\relax}}\break%
-      \doloop{\ifdim\wd\scratchbox>\dimexpr\availablehsize*2-1pt\relax%
-                  \def\conditional_level{loop:box > avhsize*2}\ShowMode%
-                  \raise\warichuparameter\c!voffset%
-                  \vbox{\offinterlineskip%
-                        \hsize\availablehsize%
-                        \get_split_box{\dimexpr\hsize\relax}%
-                        \get_split_box{\dimexpr\hsize\relax}}\break%
-              \else%\availablehsize will fit narrower environment
-                  \def\conditional_level{loop:laststep}\ShowMode%
-                  \d_temp_lastline=\dimexpr\wd\scratchbox/2+1pt\relax
-                  \edef\last_linewidth_warichu{\the\d_temp_lastline}%
-                  \raise\warichuparameter\c!voffset%
-                  \vbox{\offinterlineskip%
-                        \hsize\dimexpr\wd\scratchbox/2+1pt\relax%
-                        \get_split_box{\dimexpr\hsize\relax}%
-                        \get_split_box{\dimexpr\wd\scratchbox+1pt\relax}}%
-                  \ifdim\dimexpr-\d_temp_lastline+\d_temp_avbhsize\relax<1.1em%
-                        \break\fi%if rest width of last line <= 1em break line.
-              \exitloop\fi}%
-  \fi\allowbreak\unskip\unskip\unpenalty% 第一層 fi
-  \warichuparameter\c!right\hskip\warichuparameter\c!distance\relax%
-  \ifcheckmode%
-  \inoutermargin[stack=yes,voffset=-\baselineskip]
-  {\ttxx\setuplocalinterlinespace[line=1pt]
-  \starttabulate[|l|l|]
-      \NC wd_warichubox     \NC \the\d_textwd_warichu  \NC\NR
-      \NC d_oddpos_warichu  \NC \the\d_oddpos_warichu  \NC\NR
-      \NC d_evenpos_warichu \NC \the\d_evenpos_warichu \NC\NR
-      \NC d_autopos_warichu \NC \the\d_autopos_warichu \NC\NR
-      \NC d_curline_warichu \NC \the\d_curline_warichu \NC\NR
-      \NC d_restwd_warichu  \NC \the\d_restwd_warichu  \NC\NR
-      \NC textwidth         \NC \the\textwidth         \NC\NR
-      \NC availablehsize    \NC \the\d_temp_avbhsize   \NC\NR
-      \NC leftskip          \NC \the\d_temp_leftskip   \NC\NR
-      \NC rightskip         \NC \the\d_temp_rightskip  \NC\NR
-      \NC pageno            \NC \the\pageno            \NC\NR
-      \NC page state        \NC \check_page            \NC\NR
-      \NC warichu count     \NC \the\c_warichu_n       \NC\NR
-      \NC conditional_level \NC \conditional_level     \NC\NR
-      \NC last_linewidth    \NC \last_linewidth_warichu\NC\NR
-  \stoptabulate}\fi%
-  \endgroup}
-\tolerant\def\warichu[#1]#:#2{\bgroup\setupwarichu[#1]\processlist├┤{==}\rawwarichu├#2┤\egroup}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Verse}
