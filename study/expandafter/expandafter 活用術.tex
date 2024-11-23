@@ -1,0 +1,1216 @@
+\usemodule[memos][
+    themecolor=cyan,
+    mainlanguage=ja,
+    typescript=adobe,
+    latinfontname=ibmplex,
+    fontname=kozuka,
+    layout=moderate,
+    hdrstyle=foemarginalt,
+    fontstyle=ss,
+    fontsize=10pt,
+    lineheight=1.75\bodyfontsize, ]
+\useexternalfigure[sushi_3d][outCollection/sushi_3d.png]
+\setuphead[title][before=]
+\setupframedtext[FrameText]
+                [title={\ssa\convertedcounter[FrameCounter]},
+                 style=tt]
+\def\SUSHI{\externalfigure[sushi_3d][width=1em,height=1em]}
+\def\ZVRULE{\vrule width 0pt\relax}
+\starttext
+
+%https://qiita.com/zr_tex8r/items/342bf5c500c35fedb58d
+%https://qiita.com/zr_tex8r/items/d39a1902b7231b3d8912
+
+%%%%%%%%%%%%%%
+%% \section{徹底解説 \tex{expandafter}  活用術（ホンキ編）}
+%%%%%%%%%%%%%%
+
+\title{徹底解説！ \\ \verb{\expandafter} 活用術（キホン編）}
+
+\subject{\verb{\expandafter} is 何}
+
+\verb{\expandafter} は\TeX\ 言語のプリミティブの一種ですが、
+\TeX\ 言語のコードを書くときに限らず、
+(La)\TeX\ 者の日常生活における様々な場面で利用されています。
+
+\startlists
+  \item お酒のネタにする（例）
+  \item （特に\TeX\ 関連の）会議におけるノベルティグッズの意匠にする（例）
+  \item 絵を描く際のモチーフにする（例1・例2）
+  \item 独自の健康法のモチーフにする（例）
+  \item 独自の体操のモチーフにする（例1・例2）
+  \item とにかく連呼する（例1・例2）
+  \item \TeX\ 言語のプログラムにおいて、展開制御のために書く
+\stoplists
+
+このうち、最初の6つに関しては、特に難しく考えることは何もありません。単に本能の赴くがままに \verb{\expandafter} の名を叫べばよいわけですから\footnote{\verb{\expandafter} の読み方について特に決まりごとはありません。「エクスパンドアフター」でも「エキスパンドアフター」でも「エｰｸｽペｧｧｧーﾝデｧｰﾌトｩｩ!!!!!」でも好きなように叫んでください。 }。
+
+これに対して、最後の「展開制御のために書く」についてはそう簡単にはいきません。\TeX\ 言語の学習が進んである程度複雑なプログラムを書く段階に至ると、「展開の順番を変えたい」と思って \verb{\expandafter} を試す人は多いようです。しかし、この「展開制御」というのは\TeX\ 言語特有の概念であるため、数多くのプログラム言語を制覇した強者であっても、マトモな理解を得るのはなかなか容易ではありません\footnote{下手に自分の知っているプログラミング言語の概念で\quotation{近似}して先に急いで進もうとすると、本来の定義とのズレのために後々になって頭を抱えることになりかねません。} 。
+
+世の中には \verb{\expandafter} の挙動を理解するための\quotation{チョット変わったアプローチ}を提唱している人もいます。しかし、この記事では特に奇をてらうことなく、\verb{\expandafter} の素朴な定義にホンキで取り組むことでその理解を目指します。
+
+% チョット変わったアプローチ : http://www.slideshare.net/bd_gfngfn/texconf2014
+
+前書きの最後に、念のため、コレを書いておきましょう。
+
+\ZVRULE{\SUSHI} \TeX\ 言語注意！
+
+\subject{Before \verb{\expandafter}}
+
+そもそも「展開制御」が何かの役に立つためには「展開」についての理解が不可欠です。
+すなわち、\TeX\ 言語の「展開」の仕様、
+またその前提となる「字句解析（トークン化）」の仕様について十分に理解していない間は、
+\verb{\expandafter} などの「展開制御」に手を出すべきでないのは当然でしょう。
+
+そこで、まずは「\verb{\expandafter} 以前」の理解確認のため、
+簡単なクイズをやってみましょう。
+
+【クイズ1】次の\TeX\ のソースを字句解析すると何個のトークン\footnote{本記事では、\TeX\ の用語の\quotation{token}の訳語に「トークン」を用いることにします。 }からなると見なされるか。
+ただし、カテゴリコードの設定はLa\TeX\ の通常通りであると仮定する。
+
+\startverbatim
+  \someproc A  {B C\relax  } {`\\}\nil %?
+\stopverbatim
+
+【クイズ2】次のコードが予め実行されていたとする。
+
+\startverbatim
+  \def\foo#1{foo}
+\stopverbatim
+
+この場合、次のトークン列を（先頭で）一回展開した結果のトークン列はどうなるか。
+
+\startverbatim
+  \csname\foo\foo\endcsname\foo\foo\relax
+\stopverbatim
+
+自信をもって答えを出せたならば合格です
+\footnote{チョット気になる人のために正解を書いておきます。
+         【クイズ1】15個です。
+         【クイズ2】「\type{\foo\foo\foo\relax}」となります。}。
+\verb{\expandafter} をホンキで理解したい人にとっては楽勝でしたね！
+
+\subject{表記のおやくそく}
+
+展開制御は、字句解析された結果のトークン列に対して行われるものです\footnote{もちろん、実際の\TeX\ 処理系においては字句解析と展開は同時進行で処理されます（参考記事）。それでも、展開に関する議論を行う場合は、\quotation{字句解析に関するヤヤコシイ話}が絡むのを避けるために、敢えて\quotation{字句解析が済んだ後のトークン列}を前提にする方が適切でしょう。（特に、展開だけが行われている状況では、字句解析に影響を与える\quotation{カテゴリコードの変更}が起こらないことに注意しましょう。） }。そのため、トークン列を曖昧さなく示すために、
+本記事では次のような「トークン列の記法」を使うことにします。
+% 参考記事 https://blog.wtsnjp.com/2016/11/24/tex-by-topic1/
+
+\startpoints
+  \item 制御綴\footnote{本記事では、\TeX\ の用語の\quotation{control sequence}の訳語を「制御綴」とします。他文献では「コントロール・シーケンス」と呼ばれることもあります。 }のトークンを \verb{\csname}、文字トークンを A のように等幅フォントで書きます。特に空白文字トークンを {␣} と書きます。
+  \item 見やすさのため、トークン列は \verb{a b c} のように間を空けて書きます。間に空白文字トークンがあるわけではないことに注意してください。空白文字トークンは常に {␣} で表されます。
+  \item トークンを表す変数として A、B、\ldots などの英大文字を使います。さらに、トークン列を A\ldots のように表すことにします。
+  \item 「トークン列 A\ldots を一回展開すると B\ldots になる」という言明を「A\ldots \Longrightarrow B\ldots」と表記します。
+\stoplists
+
+例えば、
+\startverbatim
+  \someproc A {B C\relax } {`\\}\nil %?
+\stopverbatim
+（先の問題に出てきたもの）を字句解析した結果のトークン列は次のようになります。
+
+\startverbatim
+\someprocA␣{B␣C\relax}␣{​`​\\}\nil
+\stopverbatim
+
+※本記事では一貫して「La\TeX\ 上の\TeX\ 言語プログラミング」を取り扱います。
+また、特に断りがない限り、「La\TeX\ の \verb{\makeatletter} の状態」のカテゴリコード設定を仮定します。
+
+\subject{\verb{\expandafter} のキホン}
+
+\subsubject{\verb{\expandafter}、コワクナイヨー}
+
+一般に難解といわれる \verb{\expandafter} ですが、
+実はその定義は、次の示す通り、いたって単純なものです。
+
+\startFrame
+B\ldots \Longrightarrow B'\ldots\\
+であるとき\\
+\verb{\expandafter}A B\ldots \Longrightarrow A B'\ldots
+\stopFrame
+
+これだけです。しかし、単純だからこそ、その確実な理解が大事なわけです。
+
+\subsubject{\verb{\expandafter} はなぜ動くのか}
+
+簡単な例で調べてみましょう。
+
+\startverbatim
+\def\csAA{\csA\csA}
+\def\csBB{\csB\csB}
+\stopverbatim
+
+このようにマクロが定義されているとします。
+この時、トークン列 \verb{\csAA\csBB} を一回展開するとどうなるでしょうか？
+
+\startFrame
+\verb{\csAA\csBB}\\
+\Longrightarrow \verb{\csA\csA\csBB}
+\stopFrame
+
+これは当たり前ですね。ではこの先頭に \verb{\expandafter} を付けたものを考えましょう。
+これの一回展開はどうなるでしょうか？
+
+\verb{\expandafter\csAA\csBB}
+
+定義に戻って考えましょう。
+今の場合、A に相当するのが \verb{\csAA}、B\ldots に相当するのが \verb{\csBB} です。
+\verb{\expandafter} の定義に従うと、その展開結果を知るためには、
+B\ldots の一回展開の結果である B'\ldots を知る必要があります。
+
+\startFrame
+\verb{\csBB} （←これが B\ldots）\\
+\Longrightarrow \verb{\csB\csB} （←これが B'\ldots）
+\stopFrame
+
+\verb{\expandafter} の展開結果は A B'\ldots ですから、
+結局 \verb{\csAA\csB\csB} となります。以上の結果を改めて整理してみましょう。
+
+\startFrame
+\verb{\expandafter}\verb{\csAA\csBB}\\
+　　[\verb{\csBB} \Longrightarrow \verb{\csB\csB}]\\
+\Longrightarrow \verb{\csAA\csB\csB}
+\stopFrame
+
+結局 \verb{\expandafter} の追加により、A が展開される前に B が展開されたことになります。
+
+\subsubject{\verb{\expandafter} のガイドライン}
+
+以上の結果を「どういう場合に \verb{\expandafter} を使うべきか」という観点で改めて整理してみます。
+
+\startpoints
+  \item A B\ldots のようなトークン列があり、このままでは A が実行（展開）される。
+  \item しかし、A の実行（展開）の前に B\ldots を展開したい。
+  \item その場合、A B\ldots の直前に \verb{\expandafter} を置けばよい。
+\stoppoints
+
+以下ではこれを「\verb{\expandafter} のガイドライン」と呼ぶことにします。
+
+\subsubject{例題：はじめての \verb{\expandafter}}
+
+定義が解ったところで、さっそく \verb{\expandafter} を利用したコードを書いてみましょう。
+
+【例題1】\TeX\ のプログラム中に、以下のような \verb{\let} 文があった。
+
+\startverbatim
+  % \xName に結果(\xResult)を格納する
+  \let\xName\xResult
+\stopverbatim
+
+ところが、プログラムの改修で、
+letのコピー先の制御綴（\verb{\xName}）を可変にする必要が生じた。
+このため、コピー先の制御綴を指定するためのマクロ \verb{\xTargetCs} を用意した。
+
+\startverbatim
+  % 結果を格納する変数(マクロ名)
+  \def\xTargetCs{\xName}%
+\stopverbatim
+
+このとき、「\verb{\xTargetCs} の内容\footnote{この記事では、引数無しのマクロについて、一回展開した結果のトークン列のことを便宜的に「内容」と呼ぶことにします。 }の制御綴（上例の場合は \verb{\xName}）
+に \verb{\xResult} をコピー（\verb{\let}）する」というコードを書け。
+
+もちろん以下のコードは正しくありません。
+
+\startverbatim
+\let\xTargetCs\xResult % ダメ
+\stopverbatim
+
+これでは（\verb{\xTargetCs} の内容である）\verb{\xName} ではなく 
+\verb{\xTargetCs} そのものが書き換えられてしまいます。
+この状況を先程の「\verb{\expandafter} のガイドライン」と照合してみましょう。
+
+\startpoints
+  \item \verb{\let\xTargetCs} というトークン列があり、
+        このままでは \verb{\let} が先に実行される。
+  \item しかし、\verb{\let} の実行の前に \verb{\xTargetCs} を展開したい。
+  \item その場合、\verb{\let\xTargetCs} の直前に \verb{\expandafter} を置けばよい。
+\stoppoints
+
+ピタリと当てはまりました。つまり、次のようにすればよいわけです。
+
+\startverbatim
+% 例題1の解答
+\verb{\expandafter}\let\xTargetCs\xResult
+\stopverbatim
+
+期待通りに動くかどうか、\ruby{シミュレート}{simulate}してみましょう。
+
+\startFrame
+\verb{\expandafter}\verb{\let\xTargetCs\xResult}\\
+　　[\verb{\xTargetCs} \Longrightarrow \verb{\xName}]\\
+\Longrightarrow \verb{\let\xName\xResult}
+\stopFrame
+
+大丈夫ですね。
+
+\subsubject{例題：引数を完全展開したい話}
+
+\verb{\expandafter} の最もキホン的な使い方を心得たので、もう少し応用してみましょう。
+
+【例題2】次のように、\verb{\includegraphics} に渡すべき引数がマクロとして与えられている。
+
+\startverbatim
+  \def\xImageOpt{\xImageSysOpt,\xImageUserOpt}% \includegraphics のオプション
+  \def\xImageSysOpt{width=.8\linewidth}
+  \def\xImageUserOpt{pagebox=artbox}
+  \def\xImageFile{image-1.pdf}% \includegraphics の対象のファイル名
+\stopverbatim
+
+次のような形の \verb{\includegraphics} 文を実行したいが、
+引数がマクロのままでは正しく処理されない\footnote{一般的に、key-value形式の引数について、\quotation{key=value}全体がマクロになっているとそれは正常にパーズされません。 }。
+
+\startverbatim
+  % 引数のマクロを展開しないとダメ
+  \includegraphics[\xImageOpt]{\xImageFile}
+\stopverbatim
+
+「引数（だけ）を完全展開してから \verb{\includegraphics} を実行する」ようにするコードを書け。
+
+引数の部分\quotation{\verb{[\xImageOpt]{\xImageFile}}}を完全展開したいわけなので、
+まずそこに \verb{\edef} を適用することを考えます。
+
+※トークン列の完全展開（full expansion）を得るには \verb{\edef} が必要です。
+\verb{\expandafter} では対処できません。
+
+\startverbatim
+% 引数の部分を完全展開する
+\edef\xArgs{[\xImageOpt]{\xImageFile}}
+% これで \xArgs ⇒ [width=.8\linewidth,pagebox=artbox]{image-1.pdf} となる
+\stopverbatim
+
+この \verb{\xArgs} を \verb{\includegraphics} 文のしかるべき位置に置きます。
+
+\startverbatim
+% 未完成 \xArgs は"引数"である
+\includegraphics\xArgs
+\stopverbatim
+
+ここで再び「\verb{\expandafter} のガイドライン」を思い起こしましょう。
+
+\startpoints
+  \item \verb{\includegraphics\xArgs} というトークン列があり、
+        このままでは \verb{\includegraphics} が先に実行される。
+  \item しかし、\verb{\includegraphics} の実行の前に \verb{\xArgs} を展開したい。
+  \item その場合、\verb{\includegraphics\xArgs} の直前に \verb{\expandafter} を置けばよい。
+\stoppoints
+
+というわけで答えは次のようになります。（最初の \verb{\edef} から書いておきます。）
+
+\startverbatim
+% 例題2の解答
+\edef\xArgs{[\xImageOpt]{\xImageFile}}
+\verb{\expandafter}\includegraphics\xArgs
+\stopverbatim
+
+この「引数を \verb{\edef} する → \verb{\expandafter}」のコンボは応用範囲が広いので、
+ぜひ身につけておきましょう。
+
+\subsubsubject{補足：\verb{\expandafter} しない方法}
+
+先ほどの例題2ですが、次のように \verb{\noexpand} を使っても解決できます。
+
+\startverbatim
+% 例題2の別解
+\edef\xNext{\noexpand\includegraphics[\xImageOpt]{\xImageFile}}
+\xNext
+\stopverbatim
+
+これは「次に実行すべき文の正しいトークン列を \verb{\edef} と展開抑止を組み合わせて作る」
+というパターンです。これも応用が効くので覚えておくといいでしょう。
+
+\subject{チョット注意}
+
+\subsubject{トークンとはトークンである}
+
+ここでまたクイズです。次のようなコードを考えます。
+
+\startverbatim
+\everypar\verb{\expandafter}{\the\everypar\xSomething}\xAnother
+\stopverbatim
+
+これを実行すると、\verb{\everypar} の実行\footnote{\verb{\everypar} トークンの実行により、「\verb{\everypar} パラメタに対する代入文」が開始されます。 }の後に \verb{\expandafter} が展開されますが、
+この時に（定義における）A に相当する部分は何でしょうか？
+
+\verb{\expandafter} の直後にあるトークンが A です。
+なので、この場合は \verb*{*（開き波括弧）となります。これが正解です。
+
+特に難しい話ではないはずですが、ここで\TeX\ 言語初心者がよくやる間違いは、
+\quotation{A の部分}を「\verb*{\the\everypar\xSomething}*」だと考えてしまうことです。
+そもそも A は単一のトークンを表す変数であり、
+それが複数のトークンからなる列 \verb*{\the\everypar\xSomething}* を表すことは絶対にありえません。
+\TeX\ 言語の文法では \verb*{...}* で囲まれた「グループ」を一体のものとして扱う場面がよくありますが、この「グループ」自体は決してトークンではないことに注意してください。
+
+ちなみに、今の場合の \verb{\expandafter} の展開過程は以下のようになります。
+ただしトークン列パラメタ \verb{\everypar} の現在の値を\quotation{\verb{\xFooBar}}とします
+\footnote{先頭にあった \type{\everypar} は \type{\expandafter} の展開時には
+          既に\quotation{実行されてしまっている}ため入力バッファ上にはありません。
+          （このため図では〈 〉に入れて示しました。）この後 {\tt\letterrightbrace} まで読んだところで、
+          \quotation{\type{\everypar} の代入文}
+          として「\type{\everypar{\xFooBar\xSomething}}」が完成することになります。 }。
+
+\startFrame
+\verb{〈\everypar〉\expandafter {\the\everypar\xSomething}\xAnother}\\
+　　[\verb{\the\everypar} \Longrightarrow \verb{\xFooBar}]\\
+\Longrightarrow \verb{〈\everypar〉{\xFooBar\xSomething}\xAnother}
+\stopFrame
+
+\subsubject{展開不能トークンで \verb{\expandafter} する件}
+
+\verb{\expandafter}A B\ldots の展開の際には B が展開されるわけですが、
+この時もし B が展開不能なトークンだったらどうなるでしょうか？
+
+\startverbatim
+% この場合Bは'{'であり展開不能
+\verb{\expandafter}\begin{array}\xArgs
+\stopverbatim
+
+この場合は、便宜的に「B は B 自身に展開される」と解釈されます。
+
+\startFrame
+\verb{\expandafter\begin{array}\xArgs}\\
+　　[\verb*{* \Longrightarrow \verb*{*]（と見なす）\\
+\Longrightarrow \verb{\begin{array}\xArgs}
+\stopFrame
+
+つまり、B が展開不能な場合は \verb{\expandafter} は全くの無駄、ということになります。
+
+それでは、A が展開不能な場合の \verb{\expandafter} はどうでしょうか？ 
+一見すると、こちらも同様に無駄であるようにも見えますが、実は違います。
+現に、最初の例題の正解のコードにおいて、
+A に相当するのは展開不能なプリミティブである \verb{\let} ですが、
+それでも \verb{\expandafter} は有意義でした。
+
+\startverbatim
+% Aは'\let'であり展開不能
+\verb{\expandafter}\let\xTargetCs\xResult
+\stopverbatim
+
+この \verb{\expandafter} がなぜ意味をもつかというと、
+それは「一旦 \verb{\let} が実行されると、
+let文が完成するまで展開が抑止される」という性質があるからです。
+
+［\verb{\expandafter}がない場合
+\footnote{ここの図の中の\quotation{→}は（\quotation{\Longrightarrow}とは異なり）
+         「実行の1ステップ」を表します。
+          また〈 〉は「既に実行されてバッファ上にないトークン」を表します。
+          「実行」とは何か、についてはあまり深く考えずに直感的に把握しましょう。（えっ） }］
+
+\startFrame
+\verb{\let\xTargetCs\xResult}\\
+\longrightarrow \verb{〈\let〉\xTargetCs\xResult}　　（let文開始）\\
+\longrightarrow \verb{〈\let\xTargetCs〉\xResult}　　（展開されない）
+\stopFrame
+
+［\verb{\expandafter}がある場合］
+
+\startFrame
+\verb{\expandafter\let\xTargetCs\xResult}\\
+　　[\verb{\xTargetCs} \Longrightarrow \verb{\xName}]（展開される）\\
+\Longrightarrow \verb{\let\xName\xResult}\\
+\longrightarrow \verb{〈\let〉\xName\xResult}　　（let文開始）\\
+\longrightarrow \verb{〈\let\xName〉\xResult}
+\stopFrame
+
+このように、構文上で展開抑止が起こる箇所では「A が展開不能」であっても 
+\verb{\expandafter} は必ずしも無駄にならないのです
+\footnote{もう一つ例を挙げます。
+          先の「\verb{\everypar} の代入文」のケース（\verb{everypar\expandafter{...}}）では、
+          トークン列パラメタの代入文の文法規則として、 {\tt \letterleftbrace} を実行してから 
+          {\tt \letterrightbrace} を読むまでの間に展開抑止が起こります。
+          従って、（展開不能な）{\tt \letterleftbrace} の前の \verb{\expandafter} が意味をもつわけです。 }。
+
+\subsubject{プリミティブで \verb{\expandafter} する件}
+
+「展開不能なトークン」に関してよくある誤解は「プリミティブは展開不能である」というものです。
+確かにプリミティブの多く（\verb{\let} 等）は展開不能ですが、
+実際には展開可能なプリミティブ（\verb{\the} 等）もあります。
+例えば、先ほどの \verb{\everypar} の例では 
+\verb{\the\everypar} \Longrightarrow \verb{\xFooBar} という展開を扱いました。
+
+参考として、\TeX\ 言語の展開可能なプリミティブのうち重要なものを列挙しておきます。
+
+\startpoints
+  \item 制御綴構成：      \verb{\csname}
+  \item 値取得・文字列化： \verb{\the} \verb{\string} 
+                        \verb{\meaning} \verb{\number} \verb{\romannumeral}
+  \item 条件分岐： 各種 if トークン（\verb{\ifnum} 等） \verb{\else} \verb{\fi}
+  \item 展開制御：        \verb{\noexpand} \verb{\expandafter}
+\stoppoints
+
+これらは展開可能であるため、\verb{\expandafter} の定義における B の位置に来る場合があります。
+
+\subsubject{例題：\verb{\csname} で \verb{\expandafter} する件}
+
+これらの展開可能プリミティブのうち、
+\verb{\expandafter} と絡んでよく使われるのが \verb{\csname} です。
+なので、これについて詳しく考えましょう。
+
+【例題3】例題1では、コピー先の制御綴を可変にするために、
+その制御綴そのものを入れたマクロ \verb{\xTargetCs} を用意した。
+
+\startverbatim
+  \def\xTargetCs{\xName}
+\stopverbatim
+
+これを少し変えて、次のように\quotation{制御綴の名前}
+\footnote{\TeX\ 言語において、制御綴 \type{\foo} の名前とは、
+          先頭のエスケープ文字（{\tt \letterbackslash}）を除いた\quotation{foo}のことを指します。
+          ちなみに、La\TeX\ において「命令の名前」という場合はエスケープ文字を含めた
+          \quotation{\type{\foo}}を指すのが一般的です。 }
+を内容に持たせる仕様にしたい。
+
+\startverbatim
+  \def\xTargetCsName{xName}% コピー先の制御綴の*名前*
+\stopverbatim
+
+では「\verb{\xTargetCsName} の内容の文字列を名前とする制御綴に \verb{\xResult} をコピー（\verb{\let}）する」というコードを書け。
+
+\verb{\xTargetCsName}（の内容）の名前をもつ制御綴を作るために
+\verb{\csname\xTargetCsName\endcsname} としましょう。
+ここで問題なのは「これの一回展開はどうなるか」ということです。
+一回展開しただけで目的の制御綴（\verb{\xName}）になるのでしょうか？
+
+答えはYesです。つまり \verb{\csname}～\verb{\endcsname} の一回展開は
+\quotation{～}の部分の名前をもつ単一の制御綴となります
+\footnote{結果の制御綴はそれ以上展開されません。
+          つまり、今の場合、\type{\xName} が展開可能であったとしても、
+          \type{\csname}\ldots の一回展開は飽くまで \type{\xName} となります。 }。
+この際に\quotation{～}の部分は完全展開されるという規則になっています。
+
+\startFrame
+\verb{\csname\xTargetCsName\endcsname}\\
+　　[\verb{\xTargetCsName} ―(完全展開)→ \verb{x N a m e}]\\
+\Longrightarrow \verb{\xName}
+\stopFrame
+
+一回展開で十分なことが判れば、あとは簡単ですね。
+\verb{\let} の実行より先に \verb{\csname} を一回展開すればよいので以下のようになります。
+
+\startverbatim
+% 例題3の解答
+\verb{\expandafter}\let\csname\xTargetCsName\endcsname\xResult
+\stopverbatim
+
+\startFrame
+\verb{\expandafter\let\csname\xTargetCsName\endcsname\xResult}\\
+　　[\verb{\csname\xTargetCsName\endcsname} \Longrightarrow \verb{\xName}]\\
+\Longrightarrow \verb{\let\xName\xResult}
+\stopFrame
+
+\subject{練習問題（キホン編）}
+
+以上で、\verb{\expandafter} の最も基本的な使い方
+（単発の \verb{\expandafter}）についての解説は終わりです。
+ここまでの内容をちゃんと理解できたかを確認するため、キホン的な練習問題に挑戦してみましょう。
+
+※ここの練習問題において、カテゴリコードの設定はLa\TeX\ の \verb{\makeatletter} の状態を仮定します。
+また、\verb{my@} で始まる名前の制御綴（例えば \verb{\my@val}）は未定義であり自由に使ってよいものとします。
+
+\subsubject{問題1：\verb{\expandafter} を展開する話}
+
+次のようなマクロが定義されているとする。
+
+\startverbatim
+  \def\gobble#1{}
+  \def\twice#1{#1#1}
+\stopverbatim
+
+この時、次のトークン列を一回展開した結果はどうなるか。
+
+\startverbatim
+\expandafter\gobble\twice\gobble\twice\twice\gobble
+\stopverbatim
+
+\subsubject{問題2：\verb{\@​namedef} を自作する話}
+
+La\TeX\ には「制御綴の代わりに制御綴の名前を指定してマクロを定義する」ための \verb{\@namedef} という内部マクロが存在する。例えば、次の2つの文は等価な動作を行う。
+
+\startverbatim
+% \@namedef{<名前>}<パラメタテキスト>{<置換テキスト>}
+\@namedef{Hoge}#1#2{\message{#1 and #2}}
+
+% ↑は↓と同等な動作をする
+\def\Hoge#1#2{\message{#1 and #2}}
+\stopverbatim
+
+では、この機能をもつ \verb{\@namedef} を自分で実装せよ。
+
+\subsubject{問題3：ドライブレターの有無を判定する話}
+
+次の機能をもつマクロ \verb{\hasdrivespec} を実装せよ。
+
+\startpoints
+  \item \verb{\hasdrivespec{<文字列>}} ： 引数のトークン列を完全展開して得られる文字列について、その2文字目が \verb{:} であるか（つまりWindowsのドライブレター付きの絶対パス名であるか）否かを判定し、その結果をスイッチ
+\footnote{\type{\newif} により作成される 
+          \type{\if}-トークンのことをスイッチ（switch）といいます。 } 
+\verb{\if@tempswa} に返す。
+  \startpoints
+    \item スイッチ \verb{\if@tempswa} はLa\TeX\ では予め定義されている。
+    \item 引数は「完全展開すると\quotation{普通の文字列}（カテゴリコード11か12の文字トークンの列）になる」ことを仮定してよい。
+  \stoppoints
+\stoppoints
+
+以下に \verb{\hasdrivespec} の使用例を示す。
+
+\startverbatim
+\def\xOneDir{C:/tmp/tex}
+\def\xOneFile{advent.txt}
+\def\xOnePath{\xOneDir/\xOneFile}
+
+\hasdrivespec{D:/fonts}\if@tempswa Yes\else No\fi
+%→ "Yes"と出力
+\hasdrivespec{\xOneFile}\if@tempswa Yes\else No\fi
+%→ "No"と出力
+\hasdrivespec{\xOnePath}\if@tempswa Yes\else No\fi
+%→ "Yes"と出力
+\stopverbatim
+
+\subsubject{問題4：制御綴を得る話}
+
+次の機能をもつマクロ \verb{\makecs} を実装せよ。
+
+\startpoints
+  \item \verb{\makecs\制御綴A{<名前>}} ： \verb{\制御綴A} を、
+        内容が「名前が \verb{<名前>} である制御綴」であるマクロとして定義する。
+  \startpoints
+    \item 引数は「完全展開すると文字トークンの列になる」ことを仮定してよい。
+  \stoppoints
+\stoppoints
+
+以下に \verb{\makecs} の使用例を示す。
+
+\startverbatim
+\makecs\xTest{space}
+% \xTest \Longrightarrow \space となる
+\def\&{and}
+\makecs\xTest{exp\&after}
+% \xTest \Longrightarrow \verb{\expandafter} となる
+\stopverbatim
+
+\subsubject{問題5：一回展開を調べる話}
+
+e-\TeX\ 拡張をもつ \TeX\ エンジン\footnote{今時のLa\TeX\ は全て、e-\TeX\ 拡張をもつエンジンの上で動作しています。}は \verb{\showtokens} というプリミティブを持つ。
+\verb{\showtokens{<トークン列>}} を実行すると、\verb{\show} と同様の情報表示の様式で、
+引数のトークン列が（展開されずに）端末にそのまま表示される。
+
+\startverbatim
+% latex の対話モード
+*\showtokens{\foo\bar\verb{\expandafter}}    %←'*'はプロンプト
+> \foo \bar \verb{\expandafter} .            %←引数がそのまま出る
+<*> \showtokens{\foo\bar\verb{\expandafter}}
+
+?                                            %←入力待ちになる
+\stopverbatim
+
+では、この \verb{\showtokens} プリミティブを用いて「与えられたトークン列の一回展開がどうなるか」
+を調べる手順を構成せよ。そしてその手順を利用して問題1に対する自分の解答が正しいことを確認せよ。
+
+\subject{まとめ}
+
+\verb{\expandafrer} は単なる\TeX\ のプリミティブです。コワくありません！
+
+「\verb{\expandafter} のガイドライン」を活用して思う存分 \verb{\expandafter} しましょう！
+
+\startpoints
+  \item A B\ldots のようなトークン列があり、このままでは A が実行（展開）される。
+  \item しかし、A の実行（展開）の前に B\ldots を展開したい。
+  \item その場合、A B\ldots の直前に \verb{\expandafter} を置けばよい。
+\stoppoints
+
+\verb{\expandafter} のホンキが見たい人はこちらへ ------ 
+徹底解説！ \verb{\expandafter} 活用術\paren{ホンキ編}
+
+%%%%%%%%%%%%%%
+%% \section{徹底解説 \tex{expandafter}  活用術（ホンキ編）}
+%%%%%%%%%%%%%%
+
+\title{徹底解説！ \\ \tex{expandafter}  活用術（ホンキ編）}
+
+本記事は「徹底解説！\tex{expandafter} 活用術（キホン編）」の続きにあたります。
+「キホン編」では単発の \tex{expandafter} の使い方を学びましたが、
+この「ホンキ編」では \tex{expandafter} を自在に使いこなすのに不可欠な
+「\tex{expandafter} の鎖」について解説します。めざせ \tex{expandafter} マスター！
+
+※「キホン編」で用いた表記や用語をこの記事でも踏襲します。
+
+\subject{\tex{expandafter} の\quotation{鎖則}}
+
+「キホン編」の最後で「展開可能プリミティブの一覧」を載せましたが、
+その中には他ならぬ \tex{expandafter} が含まれています。
+\tex{expandafter} が展開可能なのはある意味当然で、
+なぜなら最初に挙げた「\tex{expandafter} の定義」は
+「\tex{expandafter} プリミティブの展開の規則」そのものだからです。
+
+\subsubject{\tex{expandafter} で \tex{expandafter} する件}
+
+それでは、\tex{expandafter} の定義の B の位置に \tex{expandafter} がある場合、
+つまり \quotation{\tex{expandafter} A \tex{expandafter}}を展開するとどうなるか、
+考えてみましょう。\tex{expandafter} がある場合、
+その先に最低 2つのトークンがあるはずですので、次の形を考えます。
+
+\startFrame
+\tex{expandafter} A\low{1}\tex{expandafter} A\low{2} B\ldots\\
+ただし B\ldots \Longrightarrow B'\ldots とする
+\stopFrame
+
+「定義」の中の\quotation{B\ldots}に相当する部分がここでは
+\tex{expandafter} A\low{2} B\ldots なので、
+いつもの図式で考えると以下のようになるでしょう。
+
+\startFrame
+\tex{expandafter} A\low{1}\tex{expandafter} A\low{2} B\ldots\\
+\quad[\tex{expandafter} A\low{2} B\ldots \Longrightarrow ???]\\
+\Longrightarrow A\low{1} ???
+\stopFrame
+
+??? の部分は何でしょう。これは \tex{expandafter} の単純な展開です。
+
+\startFrame
+\tex{expandafter} A\low{2} B\ldots\\
+\quad\[B\ldots \Longrightarrow B'\ldots\]\\
+\Longrightarrow A\low{2} B'\ldots
+\stopFrame
+
+この結果をそのまま当てはめると、以下のようになります。
+
+\startFrame
+\tex{expandafter} A\low{1}\tex{expandafter} A\low{2} B\ldots\\
+\quad\[\tex{expandafter} A\low{2} B\ldots\\
+\quad\quad\[B\ldots \Longrightarrow B'\ldots\]\\
+\quad\Longrightarrow A\low{2} B'\ldots\]\\
+\Longrightarrow A\low{1} A\low{2} B'\ldots
+\stopFrame
+
+つまり、A\low{1} や A\low{2} は変化せずに B が展開される、という結果になりました。
+
+\subsubject{もっと \tex{expandafter} を \tex{expandafter} してみる}
+
+では、ここで B がまた \tex{expandafter} だったらどうなるでしょうか。
+先と同様に考えると、結果は以下のようになります。
+
+\startFrame
+\tex{expandafter} A\low{1}\tex{expandafter} A\low{2}\tex{expandafter} A\low{3} B\ldots\\
+\quad[\tex{expandafter} A\low{2}\tex{expandafter} A\low{3} B\ldots\\
+\quad\quad\[\tex{expandafter} A\low{3} B\ldots\\
+\quad\quad\quad\[B\ldots \Longrightarrow B'\ldots\]\\
+\quad\quad\Longrightarrow A\low{3} B'\ldots\]\\
+\quad\Longrightarrow A\low{2} A\low{3} B'\ldots\]\\
+\Longrightarrow A\low{1} A\low{2} A\low{3} B'\ldots
+\stopFrame
+
+最終的な結果だけ見ると、以下の式が成り立ちます。
+
+\startpoints
+  \item \tex{expandafter} A\low{1}\tex{expandafter} A\low{2} B\ldots
+        \Longrightarrow A\low{1} A\low{2} B'\ldots
+  \item \tex{expandafter} A\low{1}\tex{expandafter} A\low{2}\tex{expandafter}
+        A\low{3} B\ldots \Longrightarrow A\low{1} A\low{2} A\low{3} B'\ldots
+\stoppoints
+
+\subsubject{素敵な表記のおやくそく}
+
+さて、もっと先に進みたいわけですが、そうすると、ただでも長い \tex{expandafter}
+という制御綴が大量に並ぶことになって、煩わしいことこの上ありません。
+そこで次のような、チョット素敵な表記規則を設けましょう。
+
+\startpoints
+  \item \tex{expandafter} の略記として {\SUSHI}~と書く。
+\stoppoints
+
+この表記法を取り入れると、先の展開規則は次のように書けます。
+
+\startpoints
+  \item {\SUSHI}~A\low{1} {\SUSHI}~A\low{2} B\ldots
+        \Longrightarrow A\low{1} A\low{2} B'\ldots
+  \item {\SUSHI}~A\low{1} {\SUSHI}~A\low{2} {\SUSHI}~A\low{3} B\ldots
+        \Longrightarrow A\low{1} A\low{2} A\low{3} B'\ldots
+\stoppoints
+
+チョット素敵になりましたね！\footnote{なんだ、結局奇をてらっているじゃん……。 }
+
+\subsubject{\quotation{\tex{expandfater} の鎖}の法則}
+
+本題に戻りましょう。先ほど行った、「B を \tex{expandafter} A\low{i} B に置き換えて、
+全体の展開を考える」という操作は何度でも繰り返すことができます。
+この方法で \tex{expandafter} を増やすことで次のような一連の規則を導き出せます。
+（興味がある人は実際に導出してみてください。）
+
+\startpoints
+  \item {\SUSHI}~A\low{1} {\SUSHI}~A\low{2} B\ldots
+        \Longrightarrow A\low{1} A\low{2} B'\ldots
+  \item {\SUSHI}~A\low{1} {\SUSHI}~A\low{2} {\SUSHI}~A\low{3} B\ldots
+        \Longrightarrow A\low{1} A\low{2} A\low{3} B'\ldots
+  \item {\SUSHI}~A\low{1} {\SUSHI}~A\low{2} {\SUSHI}~A\low{3} {\SUSHI}~A\low{4}
+        B\ldots \Longrightarrow A\low{1} A\low{2} A\low{3} A\low{4} B'\ldots
+  \item {\SUSHI}~A\low{1} {\SUSHI}~A\low{2} {\SUSHI}~A\low{3} {\SUSHI}~A\low{4}
+        {\SUSHI}~A\low{5} B\ldots
+        \Longrightarrow A\low{1} A\low{2} A\low{3} A\low{4} A\low{5} B'\ldots
+\stoppoints
+
+これを一般化して\footnote{一般の自然数nについての言明の証明には数学的帰納法を利用します。}
+得られるのが、次に示す「\tex{expandafter} の鎖則」です。
+
+\startFrame
+B\ldots \Longrightarrow B'\ldots\\
+であるとき\\
+\ZVRULE{\SUSHI}~A\low{1} {\SUSHI}~A\low{2} \ldots\ldots {\SUSHI}~A\low{n} B\ldots
+                \Longrightarrow A\low{1} A\low{2} \ldots\ldots A\low{n} B'\ldots
+\stopFrame
+
+「\tex{expandafter} が連なってできた鎖がトークン列に\quotation{絡まっている}\;」
+ように見えるため「鎖則（chain law）」の名前がついています。
+
+単発の \tex{expandafter} を使うと「先頭にある A」が展開される前に
+「その次にある B」を展開することができたのですが、
+「\tex{expandafter} の鎖」を使うと「もっと後ろにある B」
+を先に展開することができるわけです。
+
+\subsubject{\tex{expandafter} の鎖則のガイドライン}
+
+「\tex{expandafter} のガイドライン」にならって、
+「どういう場合に \tex{expandafter} の鎖を使うべきか」という観点で整理した
+「\tex{expandafter} の鎖則のガイドライン」を用意しました。
+
+\startpoints
+  \item A\ldots B\ldots のようなトークン列があり、このままでは A が実行される。
+  \item しかし、A の実行の前に B\ldots を展開したい。
+  \item その場合、A\ldots の部分にある全てのトークンの直前に \tex{expandafter} を置けばよい。
+\stoppoints
+
+\subsubject{例題：マクロの内容に追加する話}
+
+【例題4】引数無しのマクロ（内容は可変）\tex{xParHook} が定義されている。
+
+\startverbatim
+% 例えば
+\def\xParHook{\scsnowman[muffler=red]\relax}
+\stopverbatim
+
+このとき、「\tex{xParHook} の内容の末尾に \tex{xMyHook} というトークンを追加する」コードを書け。
+
+（上記の例の場合、\tex{xParHook} の一回展開が~\verb{\scsnowman[muffler=red]\relax\xMyHook} となるべき。）
+
+まずは「\tex{xParHook} の後に \tex{xMyHook} を追加したもので \tex{xParHook} を再定義する」
+と考えて次のような\quotation{原型}を作ってみます。
+
+\startverbatim
+% 未完成 あくまでも原型
+\def\xParHook{\xParHook\xMyHook}
+\stopverbatim
+
+もちろんこのままでは \tex{xParHook} が無限ループになってしまいます。ここで必要なのは
+「\tex{def} が実行される前に（後ろの）\tex{xParHook} を展開する」ことです。
+この状況を「ガイドライン」を当てはめてみましょう。
+
+\startpoints
+  \item \tex{def}\ldots \tex{xParHook}\ldots というトークン列があり、
+        このままでは \tex{def} が実行される。
+  \item しかし、\tex{def} の実行の前に \tex{xParHook} を展開したい。
+  \item その場合、\tex{def}\ldots の部分にある全てのトークンの直前に \tex{expandafter} を置けばよい。
+\stoppoints
+
+今の場合、「\tex{def}\ldots の部分」のトークン列とは「\verb{\def\xParHook\}\verb*{*」です。
+従って、この部分に\tex{expandafter} の鎖を絡ませればよいわけです。つまり以下のようになります。
+
+\startverbatim
+% 例題4の解答
+\expandafter\def\expandafter\xParHook\expandafter{%
+  \xParHook\xMyHook}
+\stopverbatim
+
+\subsubject{例題：キレイキレイにする話}
+
+【例題5】制御綴の列を内容にもつマクロ \tex{xGarbageList} がある。
+
+\startverbatim
+% "消したい"制御綴を入れておく
+  \def\xGarbageList{\rm\sf\tt\bf\it\sl\sc}
+\stopverbatim
+
+このとき、LaTeXの内部命令 \tex{@tfor} を利用して「\tex{xGarbageList}
+の内容に含まれる各々の制御綴の定義を消去する（未定義に戻す）」コードを書け。
+
+先ほどと同様に、ますは原型となるコードを作って、それから \tex{expandafter} を加えていきます。
+
+\startverbatim
+% 未完成
+\@tfor\x:=\xGarbageList\do{%
+  \let\x\@undefined}% \@undefined は未定義の制御綴
+\stopverbatim
+
+まずループの中ですが、このままでは \tex{x} 自体に代入されてしまいます。「\tex{let} の実行の前に
+ \tex{x} を展開したい」ので \tex{let} の前に\tex{expandafter} を置きます。
+
+\startverbatim
+\expandafter\let\x\@undefined
+\stopverbatim
+
+次に \tex{xGarbaseList} の展開についてですが、「\tex{@tfor} の実行の前に \tex{xGarbaseList}
+を展開したい」ということなので、ガイドラインに従うと、
+「\verb{\@tfor\x:=}」の部分に\tex{expandafter} の鎖を絡ませればよいわけです。
+
+\startverbatim
+%例題5の解答
+\expandafter\@tfor\expandafter\x\expandafter:\expandafter=%
+  \xGarbageList\do{\expandafter\let\x\@undefined}
+\stopverbatim
+
+\subsubject{\tex{expandafter} の鎖に潜む罠}
+
+「\tex{expandafter} の鎖」は応用範囲がとても広くて便利なのですが、重大な欠点があります。
+それは「コード中の鎖が\quotation{絡んでいる}部分の可読性が著しく損なわれる」ということです。
+例えば、先ほどの例題の解答のコードを改めて見返してください。
+「\verb{\@tfor\x:=...\do}」というループ構造を示す外見が、ほとんど視認できなくなってしまっています。
+後で\quotation{絡んでいる}部分のコードを改修しようとしても、その作業は困難を極めることになるでしょう。
+
+この場合、鎖が\quotation{絡んでいる}部分の「\verb{\@tfor\x:=}」を一度マクロにすると、
+単発の\tex{expandafter} で済ませられます。
+
+\startverbatim
+%例題5の解答
+\def\xTforXIn{\@tfor\x:=}
+\expandafter\xTforXIn\xGarbageList\do{%
+  \expandafter\let\x\@undefined}
+\stopverbatim
+
+まだまだ解り難さは残っていますが、少なくとも実際に実行されるコードが「見えて」いるため、
+将来の改修に対応することができるでしょう。
+
+\subsubsubject{\tex{expandafter} の長連の規準}
+
+このように、「\tex{expandafter} の長い鎖」の使用は厳に慎まれるべきです。
+私自身は以下のような「\tex{expandafter} の長連の規準」を推奨しているので参考にしてください。
+
+\startpoints
+  \item \tex{expandafter} の3重を超える鎖が発生した場合は、それを回避する策をホンキで考えよう。
+  \item \tex{expandafter} の5重を超える鎖は絶対に絶対に絶対に回避しよう。
+\stoppoints
+この規準はかなり厳しいのは確かですが、実際にこのくらいに「長連の回避」を考える機会が得られないと、
+「回避するコツ」がなかなか身に付かないものです。
+
+\subject{\tex{expandafter} の\quotation{ベキ乗則}}
+
+これまでの話では、\tex{expandafter} を（単発でも鎖でも）使うと、
+後ろにあるトークンが一回展開できる、ということでした。
+それでは、後ろにあるトークンを「何回も」展開したい場合はどうすればいいでしょうか。考えましょう。
+
+\subsubject{後ろを2回展開したい話}
+
+\startverbatim
+\def\csB{\csBi}
+\def\csBi{\csBii}
+\def\csBii{\csBiii}
+\def\csBiii{\csBiv}
+% つまり \csB ⇒ \csBi ⇒ \csBii ⇒ \csBiii ⇒ \csBiv
+\stopverbatim
+
+例えば、こういう定義があったとして、
+
+「\verb{\csA\csB}」の後ろにある \tex{csB} を2回展開したい
+（つまり「\verb{\csA\csBii}」に変えたい）
+
+という状況を考えます。どのように \tex{expandafter} を置けばよいでしょうか。
+
+「\tex{expandafter} では1回しか展開できない」という原則は変えられないので、
+これを実現するには「展開自体を2回にする」必要があることは確かです。
+
+【概念図】
+
+\starttabulate[|r|l|lB|]
+  \NC                 \NC \verb{\csA\csB}   \NC \ldots⓪ \NR
+  \NC \Longrightarrow \NC \verb{\csA\csBi}  \NC \ldots① \NR
+  \NC \Longrightarrow \NC \verb{\csA\csBii} \NC \ldots② \NR
+\stoptabulate
+
+まずは「①\Longrightarrow②になるように①に \tex{expandafter} を加える」
+という問題を考えましょう。\tex{csBi} の一回展開が \tex{csBii} なので、
+これは単純な単発の \tex{expandafter} で解決できます。
+
+【①\Longrightarrow②は完成】
+
+\starttabulate[|r|l|lB|]
+  \NC                 \NC {\SUSHI}~\verb{\csA\csB}  \NC \ldots⓪ \NR
+  \NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBi} \NC \ldots① \NR
+  \NC                 \NC \[\verb{\csBi} \Longrightarrow \verb{\csBii}\]\NC \NR
+  \NC \Longrightarrow \NC \verb{\csA\csBii}        \NC \ldots②  \NR
+\stoptabulate
+
+ここで⓪も①と同じ形になるように前に \tex{expandafter} を置きました。この状態で
+「⓪\Longrightarrow①になるように⓪に \tex{expandafter} を加える」という問題を考えます。
+よく見ると、これは「\tex{expandafter} の鎖のガイドライン」が当てはめられることに気づきます。
+
+\startpoints
+  \item {\SUSHI}~\verb{\csA\csB} というトークン列があり、このままでは {\SUSHI}~が実行（展開）される。
+  \item しかし、{\SUSHI}~の実行の前に \tex{csB}（\Longrightarrow \tex{csBi}）を展開したい。
+  \item その場合、{\SUSHI}~\tex{csA} の部分にある全てのトークンの直前に {\SUSHI}~を置けばよい。
+  \startpoints
+    \item つまり、{\SUSHI}~\longrightarrow {\SUSHI}~{\SUSHI}~、\tex{csA}
+          \longrightarrow {\SUSHI}~\tex{csA} と置き換える。
+    \item 従って結果は {\SUSHI}~{\SUSHI}~{\SUSHI}~\tex{csA} となる。
+  \stoppoints
+\stoppoints
+
+つまり、完成形は以下のようになります。結果的に、先頭に3個の {\SUSHI}~を置けばよいことになります。
+
+【2回展開の完成形】
+
+\starttabulate[|r|l|lB|]
+\NC                 \NC {\SUSHI}~{\SUSHI}~{\SUSHI}~\verb{\csA\csB} \NC \ldots⓪  \NR
+\NC                 \NC \[\tex{csB} \Longrightarrow \tex{csBi}\]（鎖則）\NC   \NR
+\NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBi}               \NC \ldots①  \NR
+\NC                 \NC \[\tex{csBi} \Longrightarrow \tex{csBii}\]（単発） \NC\NR
+\NC \Longrightarrow \NC \verb{\csA\csBii}                      \NC \ldots②  \NR
+\stoptabulate
+
+\subsubject{後ろを3回展開したい話}
+
+2回展開ができたので、次は3回展開を考えてみます。
+
+「\verb{\csA\csB}」の後ろにある \tex{csB} を3回展開したい
+（つまり「\verb{\csA\csBiii}」に変えたい）
+3回展開なので、全体のトークン列も3回展開する必要があります。
+先ほどと同様に「後ろから順に」考えてみましょう。
+
+【概念図】
+
+\starttabulate[|r|l|lB|]
+\NC                 \NC \verb{\csA\csB}    \NC \ldots⓪ \NR
+\NC \Longrightarrow \NC \verb{\csA\csBi}   \NC \ldots① \NR
+\NC \Longrightarrow \NC \verb{\csA\csBii}  \NC \ldots② \NR
+\NC \Longrightarrow \NC \verb{\csA\csBiii} \NC \ldots③ \NR
+\stoptabulate
+
+②\Longrightarrow③に単発の \tex{expandafter} を適用します。
+
+【②\Longrightarrow③は完成】
+
+\starttabulate[|r|l|lB|]
+\NC                 \NC {\SUSHI}~\verb{\csA\csB}   \NC \ldots⓪ \NR
+\NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBi}  \NC \ldots① \NR
+\NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBii} \NC \ldots② \NR
+\NC                 \NC \[\tex{csBii} \Longrightarrow \tex{csBiii}\]（単発）\NC \NR
+\NC \Longrightarrow \NC \verb{\csA\csBiii}        \NC \ldots③ \NR
+\stoptabulate
+
+①\Longrightarrow②に \tex{expandafter} の鎖を適用します。
+
+【①\Longrightarrow②\Longrightarrow③は完成】
+
+\starttabulate[|r|l|lB|]
+\NC                 \NC {\SUSHI}~{\SUSHI}~{\SUSHI}~\verb{\csA\csB}  \NC \ldots⓪ \NR
+\NC \Longrightarrow \NC {\SUSHI}~{\SUSHI}~{\SUSHI}~\verb{\csA\csBi} \NC \ldots① \NR
+\NC                 \NC \[\tex{csBi} \Longrightarrow \tex{csBii}]（鎖則）\NC  \NR
+\NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBii}               \NC \ldots② \NR
+\NC                 \NC \[\tex{csBii} \Longrightarrow \tex{csBiii}]（単発）\NC\NR
+\NC \Longrightarrow \NC \verb{\csA\csBiii}                     \NC \ldots③  \NR
+\stoptabulate
+
+最後に⓪\Longrightarrow①の部分ですが、これも鎖則が適用できる形になっていることが判るでしょう。
+つまり、{\SUSHI}~{\SUSHI}~{\SUSHI}~\tex{csA} に\tex{expandafter} の鎖
+（もう「{\SUSHI}~の鎖」でいいよね）を絡ませればよいわけです。
+
+ここで少し一般的に考えてみます。「{\SUSHI}~がn個並んだ後にトークン X がある」
+というトークン列に対して「{\SUSHI}~の鎖の絡ませる」
+（列に含まれる各々のトークンの前に {\SUSHI}~を置く）とどうなるでしょうか。
+「{\SUSHI}~がn個」の部分は個数が倍に増えて「{\SUSHI}~が2n個」になり、
+さらに X が {\SUSHI}~X に変わるので、結局 X の前に2n+1個の {\SUSHI}~がある恰好になります。
+この結果を「\tex{expandafter} 倍増の規則」（いや「{\SUSHI}~倍増の規則」かな？）と呼ぶことにしましょう。
+
+\startFrame
+\ZVRULE{\SUSHI}~\times n X\\
+に {\SUSHI}~の鎖を絡ませると\\
+\ZVRULE{\SUSHI}~\times (2n+1) X\\
+になる\footnote{「{\SUSHI}~がn個並んだトークン列」を「{\SUSHI}~×n」と表記します。 }。
+\stopFrame
+
+この規則に従うと、{\SUSHI}~\times 3 \tex{csA} に鎖を絡ませた結果は
+{\SUSHI}~\times 7 \tex{csA} となります。
+従って、結果的に、先頭に7個の {\SUSHI}~を置けばよいことになります。
+
+【3回展開の完成図】
+
+\starttabulate[|r|l|lB|]
+\NC                 \NC {\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI}~\verb{\csA\csB}    \NC \ldots⓪ \NR
+\NC                 \NC [\tex{csB} \Longrightarrow \tex{csBi}]（鎖則）\NC     \NR
+\NC \Longrightarrow \NC {\SUSHI}~{\SUSHI}~{\SUSHI}~\verb{\csA\csBi} \NC \ldots① \NR
+\NC                 \NC [\tex{csBi} \Longrightarrow \tex{csBii}]（鎖則）  \NC \NR
+\NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBii}               \NC \ldots② \NR
+\NC                 \NC [\tex{csBii} \Longrightarrow \tex{csBiii}]（単発）\NC \NR
+\NC \Longrightarrow \NC \verb{\csA\csBiii}                      \NC \ldots③ \NR
+\stoptabulate
+
+さらに一歩進めて、4回展開はどうなるでしょうか。これまでの手順と同様に考えると、
+結局 {\SUSHI}~×7 \tex{csA} の部分に再度 {\SUSHI}~の鎖を絡ませれば済むことが判るでしょう。
+そして「{\SUSHI}~倍増の規則」により、{\SUSHI}~の個数は 2×7+1 で15個に増えます。
+
+【4回展開の場合】
+
+\starttabulate[|r|l|lB|]
+\NC                 \NC {\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI
+                        \SUSHI\SUSHI\SUSHI\SUSHI\SUSHI
+                        \SUSHI\SUSHI\SUSHI\SUSHI\SUSHI}~\verb{\csA\csB} \NR
+\NC \Longrightarrow \NC {\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI\SUSHI}~\verb{\csA\csBi}\NR
+\NC \Longrightarrow \NC {\SUSHI}~{\SUSHI}~{\SUSHI}~\verb{\csA\csBii}     \NR
+\NC \Longrightarrow \NC {\SUSHI}~\verb{\csA\csBiii} \NR
+\NC \Longrightarrow \NC \verb{\csA\csBiv}          \NR
+\stoptabulate
+
+\subsubject{ベキ乗の法則}
+
+ここで、今までの考察の結果を、一般的なトークン列に対する規則としてまとめてみましょう。
+
+【1回展開】（\tex{expandafter} の定義）
+
+\startFrame
+B\ldots　\Longrightarrow　B'\ldots\\
+であるとき\\
+\ZVRULE{\SUSHI}~A B\ldots　\Longrightarrow　A B'\ldots
+\stopFrame
+
+【2回展開】
+
+\startFrame
+B\ldots 　\Longrightarrow×2　 B'\ldots\\
+であるとき\footnote{「X をn回展開すると Y になる」という言明を「X \Longrightarrow ×n Y」と表記します。}\\
+\ZVRULE{\SUSHI}~×3 A B\ldots 　\Longrightarrow×2　 A B'\ldots
+\stopFrame
+
+【3回展開】
+
+\startFrame
+B\ldots 　\Longrightarrow×3　 B'\ldots\\
+であるとき\\
+\ZVRULE{\SUSHI}~×7 A B\ldots 　\Longrightarrow×3　 A B'\ldots
+\stopFrame
+
+【4回展開】
+
+\startFrame
+B\ldots 　\Longrightarrow×4　 B'\ldots\\
+であるとき\\
+\ZVRULE{\SUSHI}~×15 A B\ldots 　\Longrightarrow×4　 A B'\ldots
+\stopFrame
+
+これを見ると、先頭に置くべき {\SUSHI}~の個数は
+
+1 \longrightarrow 3 \longrightarrow 7 \longrightarrow 15 \longrightarrow \ldots
+
+のように増えています\footnote{先ほどの「{\SUSHI}~倍増の規則」により、
+この数列は漸化式 a\low{n} = 2a\low{n−1} + 1 に従うことになります。}。
+この数列の第n項の値は 2\high{n}−1 で求められます。ここから「n回展開」に関する一般的規則を導き出すことができます。
+
+【n回展開】
+
+\startFrame
+B\ldots 　\Longrightarrow×n　 B'\ldots\\
+であるとき\\
+\ZVRULE{\SUSHI}~×(2\high{n}−1) A B\ldots 　\Longrightarrow×n　 A B'\ldots
+\stopFrame
+
+\tex{expandafter} の個数が2のベキに従って増えていく様子から、この規則は
+「\tex{expandafter} のベキ乗則（power law）\;」と呼ばれることがあります。
+
+\subsubject{ベキ乗則よりも大事なこと}
+
+この\quotation{ベキ乗則}は理論的には非常に面白い結果なのですが、
+しかし私はベキ乗則は覚える必要はないと考えています。
+なぜかというと、ベキ乗則を単純に適用できる状況は実用上はそう多くはないと考えているからです。
+実際のTeX言語のプログラミングで「複数回展開する」状況はもっと多様です。
+
+\startpoints
+  \item 複数回展開したいトークンがずっと後ろにある（つまり鎖則と複合する場合）
+  \item そもそも先に展開したいトークンが複数個ある
+    \startpoints
+      \item しかも各々のトークンで必要な展開回数が異なる
+    \stoppoints
+\stoppoints
+
+従って、「複数回展開する」状況に対応できるようになるために必要なのは、
+ベキ乗則を定理として覚えることではなく「それを導出する方法」を習得することだといえます。
+具体的には、以下のような要素を身につけることが必要です。
+
+\startpoints
+  \item 鎖則を自由に使いこなす
+  \item 展開過程を「後ろから順に」構築する
+  \item 「\tex{expandafter} 倍増の規則」
+\stoppoints
+
+そして、展開制御を上手に行う上で大事なコツは
+そもそも「後ろのトークンを何度も展開する状況」を作らない
+ということです。ベキ乗則から判るように、後ろのトークンを複数回展開しようと試みると、
+\tex{expandafter} が文字通り指数爆発してしまいます。結果的に、
+それほど複雑でない状況であってもコードが「\tex{expandafter} まみれ」になって全く読めなくなる、
+という悲惨な状況が簡単に発生します。
+
+\tex{expandafter} の高度な活用法を学習する際には、ぜひとも、
+他の展開制御の手法（\tex{edef} による完全展開、など）も一緒に習得して、
+「\tex{expandafter} が爆発しないように上手く展開制御する」ことを心がけましょう。
+
+めざせ展開制御マスター！
+
+\subject{練習問題（ホンキ編）}
+
+※ここの練習問題において、カテゴリコードの設定はLaTeXの \tex{makeatletter} の状態を仮定します。
+また、\verb{my@} で始まる名前の制御綴（例えば \tex{my@val}）は未定義であり自由に使ってよいものとします。
+
+\subsubject{問題6：\tex{expandafter} の群れを展開する話}
+
+次のようなマクロが定義されているとする。
+
+\startverbatim
+\def\gobble#1{}
+\def\twice#1{#1#1}
+\stopverbatim
+
+この時、次のトークン列を一回展開した結果はどうなるか。
+
+\startverbatim
+\expandafter\expandafter\expandafter\twice\expandafter
+    \twice\expandafter{\gobble\expandafter} {\gobble}
+\stopverbatim
+
+\subsubject{問題7: 名前で \tex{let} する話}
+
+etoolbox パッケージでは、\tex{let} について「制御綴の代わりにその名前を指定する」変種として以下の命令を提供している。
+
+\startpoints
+  \item \verb{\cslet{<名前A>}\制御綴B} ： \verb{\制御綴B} を「名前が \verb{<名前A>} の制御綴」にコピーする。
+  \item \verb{\letcs\制御綴A{<名前B>}} ： 「名前が\verb{<名前B>}の制御綴」を\verb{\制御綴A} にコピーする。
+  \item \verb{\csletcs{<名前A>}{<名前B>}} ： 「名前が\verb{<名前B>}の制御綴」を「名前が\verb{<名前A>} の制御綴」にコピーする。
+\stoppoints
+
+これらの命令を自分で実装せよ。ただし制御綴の名前の引数は「完全展開すると文字トークンの列になる」ことを仮定してよい。
+
+\startverbatim
+% 以下の4つの文は全て等価になるべき
+\let\foo\bar
+\cslet{foo}\bar
+\letcs\foo{bar}
+\csletcs{foo}{bar}
+\stopverbatim
+
+\subsubject{問題8: マクロの前後にナニカを追加する話}
+
+次の機能をもつマクロ \tex{enclose} を実装せよ。
+
+\verb{\enclose\制御綴A{<トークン列1>}{<トークン列2>}} ：
+引数無しのマクロ \verb{\制御綴A} について、その内容を、
+「前に \verb{<トークン列1>}、後ろに \verb{<トークン列2>} を追加したトークン列」に置き換える。
+\verb{\制御綴A} は引数無しのマクロであると仮定してよい。
+以下に \tex{enclose} の使用例を示す。
+
+\startverbatim
+\def\xTest{\ARE\LaTeX}
+\enclose\xTest{\ARE\TeX}{\ARE{TikZ}}
+% \xTest \Longrightarrow \ARE\TeX\ARE\LaTeX\ARE{TikZ}
+\stopverbatim
+
+\subject{まとめ}
+
+\tex{expandafter} と５回唱えたら願いが叶った。
+
+— 露伴 (@Rohan_zzz) 2016年8月17日
+
+皆さんも\tex{expandafter} で幸せになりましょう！
+
+\stoptext

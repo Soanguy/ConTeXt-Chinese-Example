@@ -1,0 +1,653 @@
+\usemodule[memos][
+    themecolor=cyan,
+    layout=moderate,
+    hdrstyle=foemarginalt,
+    fontstyle=ss,
+    fontsize=10pt,
+    lineheight=1.75\bodyfontsize, 
+    ]
+\definesectionlevels[article][
+  {title},
+  {subject},
+  {subsubject},
+  {subsubsubject},
+  {subsubsubsubject},
+  {subsubsubsubsubject}]
+\starttext
+
+%https://switwu.github.io/2024-01-06-expandafter/#more-theory-multiple-expandafters
+
+\startsectionlevel[article][title={\letterbackslash{}expandafter},reference={expandafter}]
+
+这是 Stephan v. Bechtolsheim 于 1988 年在 TUGboat
+上发表的一篇关于 \type{\expandafter} 的\goto{文章}[url(https://tug.org/TUGboat/tb09-1/tb20bechtolsheim.pdf)]，存档于此处。
+另外，本文中存在一些技术性的问题，请读者留心观察，我会在最后一节指出。
+
+\startsectionlevel[article][title={Introduction},reference={introduction}]
+
+I have found from my own experience teaching TEX courses
+that \type{\expandafter} is one of the instructions that people have
+difficulty understanding. After starting with a little theory, we will
+present a number of examples showing different applications of this
+instruction. Later we will also deal with multiple \type{\expandafter}s.
+
+This article is condensed from a draft of my book, \emph{Another Look
+at TEX}. See the end of this article for more information about the
+book.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={The theory behind it},reference={the-theory-behind-it}]
+
+\type{\expandafter} is an instruction that reverses the order of
+expansion. It is not a typesetting instruction, but an instruction that
+influences the expansion of macros. The term \emph{expansion}means
+the \emph{replacement} of the macro and its arguments, if there are any,
+by the \emph{replacement text} of the macro. Assume you define a
+macro \type{\xx} as follows: \type"\def\xx{ABC}"; then the replacement
+text of \type{\xx} is \type{ABC}, and the \emph{expansion
+of} \type{\xx} is \type{ABC}.
+
+As a control sequence, \type{\expandafter} can be followed by a number
+of argument tokens. Assuming that the tokens in the following list have
+been defined previously
+
+\type{\expandafter} $⟨tokene⟩$ $⟨token1⟩$ $⟨token2⟩$ \type{...} $⟨tokenn⟩$ \type{...}
+
+then the following rules describe the execution of \type{\expandafter}:
+
+\startitemize[n,packed][stopper=.]
+\item
+  $⟨tokene⟩$, the token immediately following \type{\expandafter}, is
+  saved without expansion.
+\item
+  Now $⟨token1⟩$, which is the token after the saved $⟨tokene⟩$, is
+  analyzed. The following cases can be distinguished:
+  \startitemize[n,packed][stopper=.]
+  \item
+    $⟨token1⟩$ is a \emph{macro}: The macro $⟨token1⟩$ will be expanded. In
+    other words, the macro and its arguments, if any, will be replaced
+    by the replacement text. After this TEX will {\bf not} look at the
+    first token of this new replacement text to expand it again or
+    execute it. See 3 instead! Examples 1--6 and others below fall into
+    this category.
+  \item
+    $⟨token1⟩$ is \emph{primitive}: Here is what we can say about this
+    case: Normally a primitive can not be expanded so
+    the \type{\expandafter} has no effect; see Example 7. But there are
+    exceptions:
+    \startitemize[n,packed][stopper=.]
+    \item
+      $⟨token1⟩$ is another \type{\expandafter}: See the section on
+      \quotation{Multiple \type{\expandafter}s} later in this article,
+      and also look at Example 9.
+    \item
+      $⟨token1⟩$ is \type{\csname}: TEX will look for
+      matching \type{\endcsname}, and replace the text between
+      the \type{\csname} and the \type{\endcsname} by the token
+      resulting from this operation. See Example 11.
+    \item
+      $⟨token1⟩$ is an opening curly brace which leads to the opening
+      curly brace temporarily being suspended. This is listed as a
+      separate case because it has some interesting applications; see
+      Example 8.
+    \item
+      $⟨token1⟩$ is \type{\the}: the \type{\the} operation is performed,
+      which involves reading the token after \type{\the}.
+    \stopitemize
+  \stopitemize
+\item
+  $⟨tokene⟩$ is stuck back in front of the tokens generated in the
+  previous step, and processing continues with $⟨tokene⟩$.
+\stopitemize
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 1 and 2: Macros and \type{\expandafter}},
+                   reference={example-1-and-2-macros-and-expandafter}]
+
+In these examples, $⟨token1⟩$ is a macro. Assuming the following two macro
+definitions (Example 1):
+
+\startverbatim
+\def\xx [#1]{...}
+\def\yy{[ABC]}
+\stopverbatim
+
+
+We would like to call \type{\xx} with \type{\yy}'s replacement text as
+its argument. This is not directly possible (\type{\xx\yy}), because
+when TEX reads \type{\xx} it will try to find \type{\xx}'s argument {\bf
+without} expansion. So \type{\yy} will {\bf not} be expanded, and
+because TEX expects square brackets containing the argument
+of \type{\xx} on the main token list, it will report an error stating
+that \quotation{\type{the use of \xx doesn't match its definition}}.
+
+On the other hand \type{\expandafter\xx\yy} will work. Now,
+before \type{\xx} is expanded, the expansion of \type{\yy} will be
+performed, and so \type{\xx} will find \type{[ABC]} on the main token
+list as its argument.
+
+Now assume the following additional macro definition is given (Example
+2):
+
+\startverbatim
+\def\zz {\yy}
+\stopverbatim
+
+
+Observe that \type{\expandafter\xx\zz} will not work,
+because \type{\zz} is replaced by its replacement text which
+is \type{\yy}. But then \type{\yy} is not expanded any further.
+Instead \type{\xx} will be substituted back in front of \type{\yy}. In
+other words the expansion in an \type{\expandafter} case is {\bf
+not} \quotation{pushed all the way}; to accomplish a complete expansion,
+one should use \type{\edef}, where further expansion can be prevented
+only with \type{\noexpand}. This example (using \type{\zz} as an
+argument to \type{\xx}), which would not work with \type{\expandafter},
+but work with \type{\edef}:
+
+\startverbatim
+% Equivalent to "\def\temp{\xx[ABC]}".
+\edef\temp{\noexpand\xx\zz}
+\temp
+\stopverbatim
+
+
+As a side remark: Example 1 can also be programmed {\em
+without} \type{\expandafter}, by using \type{\edef}:
+
+\startverbatim
+% Equivalent to "\def\temp{\xx[ABC]}".
+\edef\temp{\noexpand\xx\yy}
+\temp
+\stopverbatim
+
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 3},reference={example-3}]
+
+In this example, $⟨token1⟩$ is a definition.
+
+\startverbatim
+\def\xx{\yy}
+\expandafter\def\xx{This is fun}
+\stopverbatim
+
+
+\type{\expandafter} will temporarily suspend \type{\def}, which
+causes \type{\xx} being replaced by its replacement text which
+is \type{\yy}. This example is therefore equivalent to
+
+\startverbatim
+\def\yy{This is fun}
+\stopverbatim
+
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 4 and 5: 
+                   Using \type{\expandafter} to pick out arguments},
+reference={example-4-and-5-using-expandafter-to-pick-out-arguments}]
+
+Assume the following macro definitions \type{\Pick...} of two macros,
+which both have two arguments and which print only either the first
+argument or the second one. These macros can be used to pick out parts
+of some text stored in another macro.
+
+\startverbatim
+% \PickFirstOfTwo
+% This macro is called with two
+% arguments, but only the first
+% argument is echoed. The second
+% one is dropped.
+% #1: repeat this argument
+% #2: drop this argument
+\def\PickFirstOfTwo #1#2{#1}
+
+% \PickSecondOfTwo
+% ===============
+% #1 and #2 of \PickFirstOfTwo
+% are reversed in their role.
+% #1: drop this argument
+% #2: repeat this argument
+\def\PickSecondOfTwo #1#2{#2}
+\stopverbatim
+
+
+Here is an application of these macros (Example 4 and 5) where one
+string is extracted from a set of two strings.
+
+\startverbatim
+% Define macro \a. In practice, \a
+% would most likely be defined
+% by \read, or a mark.
+\def\a{{First part}{Second part}}
+
+% Example 4: Generates "First part"
+% Pick out first part of \a.
+\expandafter\PickFirstOfTwo\a
+
+% Example 5: Generates "Second part".
+% Pick out second part of \a.
+\expandafter\PickSecondOfTwo\a
+\stopverbatim
+
+
+Let us analyze Example 4: \type{\PickFirstOfTwo} is saved because of
+the \type{\expandafter} and \type{\a}is expanded
+to \type"{First part}{Second part}". The two strings inside curly braces
+generated this way form the arguments of \type{\PickFirstOfTwo}, which
+is re-inserted in front of \type"{First part}{Second part}". Finally,
+the macro call to \type{\PickFirstOfTwo} will be executed, leaving
+only \type{First part} on the main token list.
+
+Naturally the above \type{\Pick...} macros could be extended to pick
+out x arguments from y arguments, where x≤y, to offer a theoretical
+example.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 6: \type{\expandafter} and \type{\read}},
+                   reference={example-6-expandafter-and-read}]
+
+The \type{\expandafter} can be used in connection with \type{\read},
+which allows the user to read information from a file, typically line by
+line. Assume that a file being read in by the user contains one number
+per line. Then an instruction
+like \type{\read\stream} to \type{\InLine} defines \type{\InLine} as the
+next line from the input file. Assume, as an example, the following
+input file:
+
+\startverbatim
+  12
+  13
+  14
+\stopverbatim
+
+
+Then the first execution of \type{\read\stream} to \type{\InLine} is
+equivalent to \type"\def\InLine{12␣}", the second one
+to \type"\def\InLine{13␣}", and so forth. The space ending the
+replacement text of \type{\InLine} comes from the end-of-line character
+in the input file.
+
+This trailing space can be taken out by defining another
+macro \type{\InLineNoSpace} with otherwise the same replacement text.
+The space contained in the replacement text of \type{\InLine}matches the
+space which forms the delimiter of the first parameter
+of \type{\temp} in the following. Here, the macro \type{\readn} reads
+one line from the input file and defines the
+macro \type{\InLineNoSpace} as that line without the trailing space:
+
+\startverbatim
+\newread\stream
+\def\readn{%
+  \read\stream to \InLine
+  % \temp is a macro with one
+  % parameter, delimited by a space.
+  \def\temp ##1␣{%
+    \def\InLineNoSpace{##1}}%
+  \expandafter\temp\InLine
+}
+\stopverbatim
+
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 7: Primitives and \type{\expandafter}},
+                   reference={example-7-primitives-and-expandafter}]
+
+Most primitives trigger no actions by TEX because in general, primitives
+can not be expanded (a few primitives are treated differently). In this
+sense, characters are primitives also. Let's look at an example:
+
+\startverbatim
+\expandafter AB
+\stopverbatim
+
+
+Character \type{A} is saved. Then TEX tries to expand, but {\em
+not} print \type{B}, because \type{B} can not be expanded.
+Finally, \type{A} is put back in front of the \type{B}; in other words,
+the two characters are printed in the given order, and we may as well
+have omitted the \type{\expandafter}. So what's the point
+here? \type{\expandafter} reverses the order of \emph{expansion}, not of
+execution.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 8: \type{\expandafter} to 
+                   temporarily suspend an opening curly brace},
+reference={example-8-expandafter-to-temporarily-suspend-an-opening-curly-brace}]
+
+\type{\expandafter} can be used to \emph{temporarily suspend an opening
+curly brace}. In the following case this is done to load a token
+register.
+
+\startverbatim
+% Allocate token registers \ta and \tb.
+\newtoks\ta
+\newtoks\tb
+
+% (1) Initialize \ta to "\a\b\c".
+\ta = {\a\b\c}
+% (2) \tb now contains "\a\b\c".
+\tb = \expandafter{\the\ta}
+% (3) \tb now contains "\the\ta".
+\tb = {\the\ta}
+% (4) \tb now contains "\a\b\c"
+\tb = \ta
+\stopverbatim
+
+
+In (1) we load the token register \type{\ta}. In (2)
+the \type{\expandafter} temporarily causes the opening curly brace to be
+hidden, so that \type{\the\ta} is evaluated, resulting in the generation
+of a copy of \type{\ta}'s content. In (3) \type{\ta} is not copied
+because when a token register is loaded, the new content of it, enclosed
+within curly braces, is not expanded. Finally, (4) is equivalent to (2),
+without using \type{\expandafter}.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={More theory: Multiple \type{\expandafter}s},
+                   reference={more-theory-multiple-expandafters}]
+
+Sometimes one needs to reverse the expansion, not of two, but of three
+tokens. This can be done. Assume
+that \type{\a}, \type{\b} and \type{\c} are macros without parameters
+and \type{\ex}i stands for the ii-th \type{\expandafter}. Then
+
+\type{\ex}\low{1} \type{\ex}\low{2} \type{\ex}\low{3} \type{\a} \type{\ex}\low{4} \type{\b} \type{\c}
+
+reverses the expansion of all three tokens. Here is what happens:
+
+\startitemize[n,packed][stopper=.]
+\item
+  \type{\ex}\low{1} is executed causing \type{\ex}\low{2} to be saved.
+  Then TEX looks at \type{\ex}\low{3}.
+\item
+  \type{\ex}\low{3} is another \type{\expandafter}: {\bf TEX will continue
+  performing \type{\expandafter}s!}
+\item
+  \type{\a} is saved (the list of saved tokens is
+  now \type{\ex}\low{2} - \type{\a}).
+\item
+  \type{\ex}\low{4} is now executed: \type{\b} is saved (the saved token list
+  is now \type{\ex}\low{2} - \type{\a} - \type{\b}), and \type{\c}is expanded.
+\item
+  Now \emph{all} saved tokens \type{\ex}\low{2} - \type{\a} - \type{\b} are
+  inserted back in front of the replacement text of \type{\c}.
+\item
+  The first token on the main token list which resulted from the
+  operation of the previous step is \type{\ex}\low{2},
+  another \type{\expandafter}, which causes \type{\a} to be saved again,
+  and \type{\b} to be replaced by its replacement text.
+\item
+  Finally \type{\a} is inserted back into the main token list and
+  replaced by its replacement text. The execution continues with the
+  first token of the replacement text of \type{\a}.
+\stopitemize
+
+One could summarize the net effect of this sequence
+of \type{\expandafter}s and other tokens as follows (this is important
+for Example 8): \emph{in front of the expansion of \type{\c} the
+expansion of \type{\b} is inserted and in turn the expansion
+of \type{\a} is inserted in front of that}.
+
+The above example can be \quotation{expanded} to reverse the expansion
+of any number of tokens. Very rarely the reversed expansion of four
+tokens \type{\a}, \type{\b}, \type{\c} and \type{\d} is needed. Assume
+that all four tokens are macros without parameters. Here is how this is
+done:
+
+\startverbatim
+\let\ex = \expandafter
+% 7 \expandafters
+\ex\ex\ex\ex\ex\ex\ex\a
+% 3 \expandafters
+\ex\ex\ex\b
+% 1 \expandafter
+\ex\c
+\d
+\stopverbatim
+
+
+In general, to reverse the expansion
+of nn tokens $⟨token1⟩$ \ldots{} $⟨tokenn⟩$, the ii-th token has to be
+preceded by $2^{n-i}-1$ \type{\expandafter}s.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 8: 
+                   Forcing the partial expansion of token lists of \type{\write}s},
+reference={example-8-forcing-the-partial-expansion-of-token-lists-of-writes}]
+
+\type{\expandafter} can be used to force the expansion of the first
+token of a delayed \type{\write}. Remember that unless \type{\write} is
+preceded by \type{\immediate}, the expansion of the token list of
+a \type{\write} is delayed until \type{\write} operation is really
+executed, as side effect of the \type{\shipout}instruction in the output
+routine. So, when given the
+instruction \type"\write\stream{\x\y\z}", TEX will try to
+expand \type{\x}, \type{\y} and \type{\z} when the \type{\shipout} is
+performed, not when this \type{\write}instruction is given.
+
+There are applications where we have to expand the first token
+(\type{\x} in our example) immediately, in other words, at the time
+the \type{\write} instruction is given, {\bf not} when
+the \type{\write} instruction is later actually performed as side effect
+of \type{\shipout}. This can be done by:
+
+\startverbatim
+\def\ws{\write\stream}
+\let\ex = \expandafter
+\ex\ex\ex\ws\ex{\x\y\z}
+\stopverbatim
+
+
+Going back to our explanation of
+multiple \type{\expandafter}s: \type{\ws} corresponds
+to \type{\a}, \type"{" to \type{\b}, and \type{\x} to \type{\c}. In
+other words \type{\x} will be expanded (!!), and \type"{" will be
+inserted back in front of it (it cannot be expanded).
+Finally, \type{\ws} will be expanded into \type{\write\stream}.
+Now \type{\write} will be performed and the token list of
+the \type{\write} will be saved without expansion. But observe
+that \type{\x} was already expanded. \type{\y} and \type{\z}, on the
+other hand, will be expanded when the
+corresponding \type{\shipout} instruction is performed.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 9: Extracting a substring},
+                   reference={example-9-extracting-a-substring}]
+
+Assume that a macro \type{\xx} (without parameters) expands to text
+which contains the two tokens \type{\aaa} and \type{\bbb} embedded in it
+somewhere. You would like to extract the tokens
+between \type{\aaa} and \type{\bbb}. Here is how this could be done:
+
+\startverbatim
+% Define macro to extract substring
+% from \xx.
+\def\xx{This is fun\aaa TTXXTT
+        \bbb That's it}
+% Define macro \extract with three
+% delimited parameters.
+% Delimiters are \aaa, \bbb, and \Del.
+% Macro prints substring contained
+% between \aaa and \bbb.
+\def\extract #1\aaa#2\bbb#3\Del{#2}
+% Call macro to extract substring
+% from \xx.
+% Prints "TTXXTT".
+\expandafter\extract\xx\Del
+% which is equivalent to:
+\extract This is fun\aaa TTXXTT
+     \bbb That's it\Del
+\stopverbatim
+
+
+In a \quotation{real life example} \type{\xx} would be defined through
+some other means like a \type{\read}. There is no reason to go to that
+much trouble just to print \type{TTXXTT}.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 10: Testing on the presence of a
+substring\goto{}[url(https://switwu.github.io/2024-01-06-expandafter/\#example-10-testing-on-the-presence-of-a-substring)]},reference={example-10-testing-on-the-presence-of-a-substring}]
+
+Now let us solve the following problem: We would like to test whether or
+not a macro's replacement text contains a specific substring. In our
+example, we will test for the presence of \type{abc} in \type{\xx}'s
+replacement text. For that purpose we define a
+macro \type{\@TestSubS} as follows: (\type{\@Del}is a delimiter):
+
+\startverbatim
+\def\@TestSubS #1abc#2\@Del{...}
+\stopverbatim
+
+
+Now look at the following source:
+
+\startverbatim
+\def\xx{AABBCC}
+% #1 of \@TestSubS is AABBCC
+\expandafter\@TestSubS\xx abc\@Del
+\def\xx{AABBabcDD}
+% #1 of \@TestSubS is AABB
+\expandafter\@TestSubS\xx abc\@Del
+\stopverbatim
+
+
+Observe that
+
+\startitemize[n,packed][stopper=.]
+\item
+  If \type{\xx} {\bf does not} contain the substring \type{abc} we are
+  searching for, then \type{#1} of \type{\@TestSubS}becomes the same
+  as \type{\xx}.
+\item
+  In case \type{\xx} {\bf does} contain the substring \type{abc},
+  then \type{#1} of \type{\@TestSubS} decomes that part
+  of \type{\xx} which occurs before the \type{abc} in \type{\xx}.
+\stopitemize
+
+We can now design \type{\IfSubString}. It is a simple extension of the
+above idea, with a test added at the end to see whether or
+not \type{#1} of \type{\@TestSubS} is the same as \type{\xx}.
+
+\startverbatim
+\catcode`@ = 11
+% This conditional is needed because
+% otherwise we would have to call the
+% following macro \IfNotSubString.
+\newif\if@TestSubString
+% \IfSubString
+% ============
+% This macro evaluates to a conditional
+% which is true iff #1's replacement
+% text contains #2 as substring.
+% #1: Some string
+% #2: substring to test for whether it
+%     is in #1 or not.
+\def\IfSubString #1#2{%
+    \edef\@MainString{#1}%
+    \def\@TestSubS ##1#2##2\@Del{%
+         \edef\@TestTemp{##1}}%
+    \expandafter\@TestSubS
+         \@MainString#2\@Del
+    \ifx\@MainString\@TestTemp
+         \@TestSubStringfalse
+    \else
+         \@TestSubStringtrue
+    \fi
+    \if@TestSubString
+}
+\catcode`@ = 12
+\stopverbatim
+
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Example 11: \type{\expandafter} and \type{\csname}},
+                   reference={example-11-expandafter-and-csname}]
+
+A character string enclosed
+between \type{\csname} and \type{\endcsname} expands to the token formed
+by the character string. \type{\csname a?a-4\endcsname}, for instance,
+forms the token \type{\a?a-4}. If you wanted to use this token in a
+macro definition you have to do it the following way:
+
+\startverbatim
+\expandafter\def\csname a?a-4\endcsname{...}
+\stopverbatim
+
+
+The effect of the \type{\expandafter} is of course to
+give \type{\csname} a chance to form the requested token rather than
+defining a new macro called \type{\csname}.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={Summary},reference={summary}]
+
+These examples have shown some typical applications
+of \type{\expandafter}. Some were presented to \quotation{exercise your
+brain a little bit}. I recommend that you take the examples and try them
+out; there is very little input to enter. I also encourage you to tell
+Barbara Beeton or me what you think about tutorials in TUGboat. There
+are many more subjects which could be discussed and which may be of
+interest to you.
+
+This article is, as briefly mentioned in the introduction, an adaptation
+of a section of my book, \emph{Another Look At TEX}, which I am currently
+finishing. The book, now about 800 pages long, grew out of my teaching
+and consulting experience. The main emphasis of the book is to give
+concrete and useful examples in all areas of TEX. It contains, to give
+just one example, 100 (!!) \type{\halign} tables. In this book you
+should be able to find an answer to almost any TEX problem.
+
+\stopsectionlevel
+
+\startsectionlevel[article][title={注},reference={注}]
+
+作者在文中提到的 Another Look At TEX 这本书应该又名为 TEX in
+Practice，分四卷：
+
+\startitemize[packed]
+\item
+  Volume I: Basics
+\item
+  Volume II: Paragraphs, Math and Fonts
+\item
+  Volume III: Tokens, Macros
+\item
+  Volume IV: Output Routines, Tables
+\stopitemize
+
+本文章所讲述的内容位于第三卷之中。下面指出文章中的问题：
+
+\startitemize[n,packed][stopper=.]
+\item
+  在 第二节 中，如果 token1 为花括号的话，TEX 会试图展开 \type"{"，然而任何 character token
+  都是不可展开的，所以在这种情况下 \type{\expandafter} 没有任何作用。
+  如果tokene 为 \type"{" 的话，TEX 会尝试展开花括号后面的 token (以及该 token 可能附带的参数)，
+  一个经典的例子是 \type"\uppercase\expandafter{\romannumeral3}"，
+  TEX 先将 \type"{" 后面的 \type{\romannumeral3} 展开为 \type{iii}，
+  然后执行 \type"\uppercase{iii}" 得到 \type{III}。
+\item
+  同样在第二节中，作者的叙述容易误导读者以为可以展开的 primitives 只有
+   \type{\the}、\break\type{\csname} 和 \type{\expandafter}，
+  事实上，所有的 {\em conditionals} (包括 \type{\if} 系列、\type{\else}、\type{\fi})
+  以及 \type{\number} 都是可展开的。
+\stopitemize
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\stoptext

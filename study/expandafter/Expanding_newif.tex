@@ -1,0 +1,882 @@
+\usemodule[memos][
+    themecolor=cyan,
+    layout=moderate,
+    hdrstyle=foemarginalt,
+    fontstyle=ss,
+    fontsize=10pt,
+    lineheight=1.75\bodyfontsize, 
+    ]
+\start
+\language[en]
+\startsectionlevel[title={Expanding TeX's \letterbackslash{}newif},reference={expanding-texs-newif}]
+
+%https://mht.wtf/post/tex/
+
+\startsectionlevel[title={Introduction},reference={introduction}]
+
+Like most of my colleagues, I use LaTeX to write papers, reports, notes,
+or what have you. In fact, I think all of the places that I regularly
+write supports some variable subset of LaTeX. Also like most of my
+colleagues, I'm not a TeXnician. I'm not proud to be ignorant in this
+regard, but there's only so many hours in a day, and the gains from
+properly learning a huge ecosystem like LaTeX seems minuscule compared
+to the initial buy-in cost.
+
+Still, I was curious.
+
+LaTeX and TeX, tomato tomato? Here's how I see it. If LaTeX is like
+C++20 --- big, complex, confusing, full of cruft, but still very popular
+--- then TeX is like C89 --- small,
+simpler\high{\goto{1}[url(https://mht.wtf/post/tex/\#user-content-fn-simple)]},
+confusing, a child of its time, and often neglected.
+
+There's a certain pleasure in going far enough down the stack that the
+systems you are using becomes simple enough to reason about on a deep
+level. It's the feeling you might get sitting down one afternoon trying
+to write some assembly after a long week of debugging consistency errors
+in your sharded database across multiple kubernetes
+clusters\high{\goto{2}[url(https://mht.wtf/post/tex/\#user-content-fn-kube)]}.
+No magic, no need to constantly search for other people who's had the
+same problems you're dealing with on StackOverflow. It's just you and
+the CPU, and likely the Intel Instruction Set Manual or something as big
+and scary. I wanted that, but with typesetting.
+
+This was my romantic motivation to dig into TeX and try to see whether
+it really is rewarding to step back a few decades to avoid the
+complexity of newer and bigger typesetting systems. I bought the
+TeXbook, and read it from start to finish. Well, some paragraphs are
+marked with \quotation{dangerous bends}, signalling that the content
+covered or the background assumed for those paragraphs are more
+advanced. I read the single bends, but skipped the double bends, at
+least most of the time.
+
+Somewhere in the book I found the definition of~\type{\newif}, a macro
+that's used to define conditionals, which you can later query, and
+branch on. Booleans, in other words. I read it, and really didn't
+understand a single thing, and I figured that if I can manage to sit
+down and figure out what on earth this macro is doing and why, then I've
+had a good taste of what it's like digging down this low in the world of
+TeX.
+
+This post is the result of that process.
+
+\startsectionlevel[title={How Do I Write
+TeX?},reference={how-do-i-write-tex}]
+
+This is not really as obvious as it might sound. After all, TeX produces
+a document, but when playing with macros we really want to see what
+forms expand to, which macros are defined, and so on. I have to say
+upfront that the method I used here probably wasn't the ideal, because I
+just started used~\type{tex}~(or sometimes~\type{pdftex}, for the
+purposes of this post they seem to be exactly the same), and started
+writing. The repl doesn't support~\type{readline}~bindings or arrow
+keys, or clicking to move the cursor, so if I wanted to add something in
+the middle of a line, I had to hold backspace all the way back to where
+I wanted to go and write out the rest of the expression. Sometimes I
+pasted back and forth from a text editor, which worked okay.
+
+Here's exactly how I got
+started\high{\goto{3}[url(https://mht.wtf/post/tex/\#user-content-fn-arch)]}.
+
+\starttyping
+/h/martin$ tex
+This is TeX, Version 3.141592653 (TeX Live 2021/Arch Linux) (preloaded format=tex)
+**\relax  % don't read input from a file
+
+*\tracingall=1                 % Give us lots of output
+{vertical mode: \tracingstats}
+{\tracingpages}
+{\tracingoutput}
+{\tracinglostchars}
+{\tracingmacros}
+{\tracingparagraphs}
+{\tracingrestores}
+{\showboxbreadth}
+{\showboxdepth}
+{the character =}
+{horizontal mode: the character =}
+{blank space  }
+
+*\message{This will show somewhere}    % some sample message
+{\message}
+This will show somewhere               % here's the things you wrote above
+{blank space  }
+
+*\def\mymacro{from the macro}  % Make a new macro
+{\def}
+{blank space  }
+
+*\message{\mymacro}         % \message will expand the macro
+{\message}
+
+\mymacro ->from the macro   % \mymacro is expanded to `from the macro`
+from the macro              % ... and we get the fully expanded form out.
+{blank space  }
+
+*
+\stoptyping
+
+Input lines start with a~\type{*}. It's very useful to
+set~\type{\tracingall=1}, which makes TeX output a bunch of things some
+of which you care about. Note that I've changed up the formatting of the
+output throughout this post so that it's easier to see what's going on.
+
+Another quick note: I didn't want to spend hours write an intro to TeX
+as well as whatever this is, so if you have never written a line of TeX
+or LaTeX, this might be difficult to follow. If you've written some
+LaTeX, and maybe defined your own simple macros, I think you'll be fine.
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\startsectionlevel[title={The Goal},reference={the-goal}]
+
+This is the definition we'll unravel, copied verbatim from The TeXbook.
+
+\starttyping
+\outer\def\newif#1{\count@=\escapechar \escapechar=-1
+  \expandafter\expandafter\expandafter
+   \def\@if#1{true}{\let#1=\iftrue}%
+  \expandafter\expandafter\expandafter
+   \def\@if#1{false}{\let#1=\iffalse}%
+  \@if#1{false}\escapechar=\count@} % the condition starts out false
+\def\@if#1#2{\csname\expandafter\if@\string#1#2\endcsname}
+{\uccode`1=`i \uccode`2=`f \uppercase{\gdef\if@12{}}} % `if` is required
+\stoptyping
+
+Don't despair if this is nonsense: the whole point of this post is to
+explain what's going on, and to get some better idea of how real and
+(somewhat) involved TeX macros work.
+
+\stopsectionlevel
+
+\startsectionlevel[title={How TeX Reads
+Tokens},reference={how-tex-reads-tokens}]
+
+To start on the right foot, let's make sure that we properly understand
+how TeX reads tokens. A token is the input \quotation{unit} that TeX
+reads when it reads a document. For instance if you were to
+write~\type{Let $n=\numb$ be a number.}~then this will be transformed
+into a queue of tokens from which we will read one at a time. Exactly
+how the tokens are split up is not crucial to understanding, but in this
+example it looks something like this:
+
+\starttyping
+tokens = ['L', 'e', 't', ' ', $, 'n', '=', \numb, $, ...]
+\stoptyping
+
+Notice three things. First, a letter is a token in of itself and we do
+not have one \quotation{word} be a token Second,~\type{$}~is not the
+character~\type{'$'}, but the special begin/end math mode token. If we
+were to write~\type{\$}~we would get the character token~\type{'$'}.
+Third, the whole macro~\type{\numb}~is one single token. When you hear
+\quotation{token}, think \quotation{input unit}.
+
+So how does TeX read the tokens? One mental model is like this:
+
+\starttyping
+while tokens is not empty
+    t <- pop(tokens)
+    if shouldexpand(t)
+        exp <- expand(t)
+        tokens.push(ex)
+    else
+        process(t)
+\stoptyping
+
+Some tokens, like the~\type{\newif}~token we will figure out in this
+post, expand, and the expansion is another list of tokens, some of which
+might be regular character tokens, and some of which might be other
+tokens that also expand. Therefore when we expand a token we will push
+the result back onto the front of the queue.
+
+Note that when we expand a macro that takes arguments,
+like~\type"\def\paren#1{(#1)}"~the expansion of~\type{\paren}~will pop
+more tokens from the queue, and then push the tokens of the expanded
+form back onto the queue.
+
+What does it mean to \quotation{process} a token? For a character, this
+basically means to write that character at the current position on the
+page\high{\goto{4}[url(https://mht.wtf/post/tex/\#user-content-fn-writechar)]}.
+For a macro definition like~\type"\def\bob{123}"~it means to make the
+definition and storing it somewhere in memory so that if you ever
+encounter a~\type{\bob}~token you know that it expands to the three
+tokens~\type{1},\type{2},\type{3}.
+
+\startsectionlevel[title={A Short Example},reference={a-short-example}]
+
+Let~\type"\def\A{a} \def\B{\A b} \def\C{\B\B}"~and the input token queue
+be~\type{[\C]}. To make sure we understand how this works, let's
+manually expand this whole thing. The left column is the token queue,
+and the left side of the queue is the front, which is the place at which
+we will be working. The right column explains what we're about to do.
+
+Tokens \letterbar{} Current action
+:------\letterbar{}:--------------~\type{[\C]}~\letterbar{}
+take~\type{\C}~out of the front of the
+queue~\type{[]}~\letterbar{}~\type{\C}expands to~\type{\B\B}, which we
+push back~\type{[\B \B]}~\letterbar{} take the
+first~\type{\B}~out~\type{[\B]}~\letterbar{}~\type{\B}~expands
+to~\type{\A b``[\A b \B]}~\letterbar{}~\type{\A}~is taken out, expanded
+to~\type{a}~and pushed back~\type{[ a b \B]}~\letterbar{}~\type{a}~is
+taken out and processed, because it doesn't
+expand.~\type{[ b \B]}~\letterbar{}~\type{b}~is taken out and
+processed.~\type{[\B]}~\letterbar{} you get the
+idea\ldots{}~\type{[\A b]}~\letterbar{}~\type{[ a b]}~\letterbar{}~\type{[ b]}~\letterbar{}~\type{[]}~\letterbar{}
+
+The end result of this execution is that we have sent the
+tokens~\type{a},~\type{b},~\type{a},~\type{b}~to the processing part of
+TeX.
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\startsectionlevel[title={A Primer on
+Catcodes},reference={a-primer-on-catcodes}]
+
+We need to know one more thing about tokens, or rather how the
+characters of your input are split into them. Each character have a~{\em
+category code}, or catcode for short. Catcodes decide how to group and
+split characters into a token. There is a character code for letters
+(11), a code for space (10), and one for math shift (3) (there are also
+others). This way TeX knows that in the input~\type{let $}~consists of
+three characters, one space, and one \quotation{math shift}. This is
+also how TeX figures out when the name of a macro ends and new tokens
+begin, as in~\type{\hey3}: here we have one token with catcode 0 (the
+escape character~\type{\}), three of catcode 11, and one of catcode 12
+(\quotation{others}, which include numbers). The name of a macro is only
+letters, so this way TeX knows that~\type{\hey}~is a macro
+and~\type{3}~is just the next token in the queue.
+
+But catcodes can be changed. Why is this useful? Well, if we would like
+to make some macros that another user wouldn't accidentally redefine we
+have it include a character that, by default, isn't allowed to be in its
+name, like~\type{@}. The catcode of~\type{@}~is 12, and so the
+input~\type{\h@}~will be read as two tokens~\type{\h}~and~\type{'@'}.
+However, if we change the catcode of~\type{@}~to 11 it's as
+if~\type{@}~is just a regular letter, and~\type{\h@}~will be read as a
+single token~\type{\h@}.
+
+This is how we change the catcode of~\type{@}~to 11 and then back to 12:
+
+\starttyping
+*\catcode`\@=11  % Category 11 consists of regular letters
+*\catcode`\@=12  % Category 12 consists of "other characters"
+\stoptyping
+
+\stopsectionlevel
+
+\startsectionlevel[title={Some Not So Bad
+Macros},reference={some-not-so-bad-macros}]
+
+We need to know about a few other macros that~\type{\newif}~uses
+internally. Most of these are pretty straight forward.
+
+\startsectionlevel[title={\type{\string}},reference={string}]
+
+Takes an argument and replaces it by the non-expanded token
+list.~\type{\string\foo}~expands to the four tokens~\type{\ f o o}, no
+matter what the macro~\type{\foo}~would expand to. A crucial detail
+which we will come back to is that the tokens~\type{\string}~produces
+will get catcode 12 (unless it's a space).
+
+\stopsectionlevel
+
+\startsectionlevel[title={\type{\escapechar}},reference={escapechar}]
+
+The character which is used when a control sequence is outputted as
+text. Normally set to~\type{\}. If this is set to for instance~\type{@},
+then~\type{\string\foo}~would expand to the four
+tokens~\type{@ f o o}~instead.
+
+\stopsectionlevel
+
+\startsectionlevel[title={\type{\uccode}},reference={uccode}]
+
+Short for uppercase code. This allows one to set the uppercase character
+code for another letter. Usually this would
+be~\type{\uccode}x=\type{X \uccode}X=\type{X}~and so on, but this, like
+most things in TeX, can be changed, and changes, like most things in
+TeX, are local to the current group.
+
+\stopsectionlevel
+
+\startsectionlevel[title={\type{\csname}~and~\type{\endcsname}},reference={csname-and-endcsname}]
+
+Read and expand everything up until the matching~\type{\endcsname}. The
+expansion result should be a list of character tokens, and this list
+will be made into a single control sequence token. If this is currently
+not defined it will be defined to~\type{\relax}.
+
+For instance~\type{\csname hello\endcsname}~will expand to the single
+token~\type{\hello}~and make the macro~\type{\hello}~expand
+to~\type{\relax}. More
+interestingly,~\type"\def\inner{hello}\csname\inner\endcsname"will do
+the same: Here the~\type{inner}~macro expands to the list of
+tokens~\type{h e l l o}, and the~\type{csname}pair of macros expand this
+macro, effectively replacing it with~\type{\csname hello\endcsname}.
+
+\stopsectionlevel
+
+\startsectionlevel[title={\type{\gdef}},reference={gdef}]
+
+Normally definitions made with~\type{\def}~are local to your scope, just
+like in most programming languages. However, sometimes we want to define
+global macros, and~\type{gdef}~does exactly this. When a macro is
+defined with~\type{\gdef}~it is as if it was defined in the top level
+scope.
+
+\starttyping
+{
+    \def\inner{hello}
+    \inner  % expands to  h e l l o
+}
+\inner   % this doesn't work, because \inner is no longer defined
+
+{
+    \gdef\inner{hello}
+    \inner  % expands to  h e l l o
+}
+\inner % also expands to  h e l l o
+\stoptyping
+
+\stopsectionlevel
+
+\startsectionlevel[title={\type{\outer}},reference={outer}]
+
+This is a safety measure that you put before a~\type{\def}~which ensures
+that this macro is not allowed to be an argument, in the parameter text,
+or in the replacement text of another macro.
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\startsectionlevel[title={The~\type{\expandafter}~Macro},reference={the-expandafter-macro}]
+
+Now that we've seen a few simple macros we turn to one that is slightly
+less simple. The~\type{\expandafter}~macro first reads the very next
+token in the queue without expanding it. Then, it'll read~{\em and
+expand}~the next token after that. Last, it will put the first token
+back in front, without expanding it. Here's a small example of how it
+runs:
+
+\starttyping
+*\def\first{first}
+*\def\second{second}
+*\expandafter\first\second
+{\expandafter}
+
+\second ->SECOND
+
+\first ->FIRST
+{the letter F}
+*
+\stoptyping
+
+Here the output shows that~\type{\second}~is expanded
+before~\type{\first}, and that the first token that we process
+is~\type{f}. Note that the second form is only~{\em expanded}~and not
+actually processed, so the following does~{\bf not}~work:
+
+\starttyping
+*\expandafter\first\def\first{another first!}
+\stoptyping
+
+The second term, the~\type{\def}~will be expanded, but it will not
+\quotation{run}, so when~\type{\expandafter}~later
+expands~\type{\first}~it will still have the same value as before, for
+instance not to be defined.
+
+Due to how TeX expansion rules work, a macro doesn't have to have all of
+it's arguments in place when you use it;
+currying\high{\goto{5}[url(https://mht.wtf/post/tex/\#user-content-fn-curry)]}~is
+in a sense possible. We can use~\type{\expandafter}~to use this fact if
+the first token expands to a curried macro, and the first token in
+the~{\em expansion}~of the second token is the argument we want to give
+to the curried form.
+
+Here's an example. Say we have a macro~\type{\twoarray}~that takes two
+things and wraps them in square brackets divided by a comma, as well as
+a macro~\type{\tuple}~that expands to two tokens~\type{4}~and~\type{5}.
+If we want to have~\type{\twoarray}~wrap the two tokens
+from~\type{\tuple}, it doesn't work out of the box:
+
+\starttyping
+*\def\twoarray#1#2{[ #1 , #2 ]}
+*\def\tuple{4 5}
+*\twoarray\tuple X  % X is just a placeholder for whatever's next; we don't want it.
+[ 4 5 , X ]
+% This does not work because `\twoarray` will read two tokens, `\tuple` and `X`
+
+*\expandafter\twoarray\tuple X
+[ 4 , 5 ] X
+% This does work because `\tuple` is expanded before `\twoarray`, and so the token
+% queue when we process `\twoarray` is  `4 5 X`
+\stoptyping
+
+\startsectionlevel[title={Chaining},reference={chaining}]
+
+So what happens when we chain multiple~\type{\expandafter}s together?
+Let's work it out with some notation: dashes under a line
+means~\type{\expandafter}~is skipping that line, and it's expanding the
+token above the hat~\type{^}. Primed~\type{a'}~letters means expanded.
+
+\starttyping
+*\expandafter a  b  c  d ...
+%             -  ^
+% token list: a  b' c  d
+\stoptyping
+
+With two~\type{\expandafter}s this becomes
+
+\starttyping
+*\expandafter \expandafter a  b  c  d ...
+%             ------------ ^
+% token list:  \expandafter a' b  c  d
+*\expandafter  a' b  c  d ...
+%              -  ^
+% token list:  a' b' c  d
+\stoptyping
+
+It undid itself! The expansion order was~\type{a}~and then~\type{b}.
+Let's try three expands in a row. Now we're getting somewhere, because
+when expanding the second token that~\type{\expandafter}~finds, we might
+end up reading~{\em additional}~tokens,~{\em if}~that token takes
+arguments. In this case this token is~\type{\expandafter}, which does
+indeed take two arguments!
+
+\starttyping
+*\expandafter \expandafter \expandafter a  b  c  d ...
+%             ------------     ^^^
+%                          [eat 2 arguments]
+*             \expandafter       a  b'        c  d ...
+% This is just the first example again.
+% token list:  a  b'' c  d ...
+\stoptyping
+
+and we're again back to having the expansion order
+of~\type{a}~and~\type{b}~flipped. Despite this though, they are not
+identical, because~\type{expandafter}~does not expand a form until it
+only expands to itself, but only once. We can think of regular expansion
+as taking out the next token in the queue and if it is expandable we
+push back the expansion onto the queue.
+
+Let's get concrete. As a warm up, here is the easy case where the two
+forms~{\em are}~identical, namely when expanding once is fully expanded.
+The list of~\type{\A ->a}~beneath each input line is the evaluation
+sequence such that the macro~\type{\A}~expands to the token~\type{a}.
+
+\starttyping
+*\def\A{a}\def\B{b}\def\C{c}
+
+*\A\B\C
+\A ->a   \B ->b   \C ->c
+*\expandafter\A\B\C
+\B ->b   \A ->a   \C ->c
+*\expandafter\expandafter\A\B\C
+\A ->a   \B ->b   \C ->c
+*\expandafter\expandafter\expandafter\A\B\C
+\B ->b   \A ->a   \C ->c
+\stoptyping
+
+Note that just like we said above, the first and third lines are the
+same, and the second and fourth are the same.
+
+Next we make it slightly more interesting by expanding macros which body
+is another macro:
+
+\starttyping
+*\def\AA{\A}\def\BB{\B}\def\CC{\C}
+
+*\AA\BB\CC
+\AA ->\A   \A ->a     \BB ->\B    \B ->b   \CC ->\C   \C ->c
+*\expandafter\AA\BB\CC
+\BB ->\B   \AA ->\A   \A ->a      \B ->b   \CC ->\C   \C ->c
+*\expandafter\expandafter\AA\BB\CC
+\AA ->\A   \BB ->\B   \A ->a      \B ->b   \CC ->\C   \C ->c
+*\expandafter\expandafter\expandafter\AA\BB\CC
+\BB ->\B   \B ->b     \AA ->\A    \A ->a   \CC ->\C   \C ->c
+\stoptyping
+
+The four lines have all distinct orders on which macros are expanded
+when, in contrast with the last example. With four~\type{expandafter}s
+we are back to as if we had none.
+
+What if we had~\type{\AAA}~and friends?
+
+\type{\meaning\noexpand\foo}
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\startsectionlevel[title={Start Actually
+Expanding~\type{\newif}},reference={start-actually-expanding-newif}]
+
+If you've made it this far, good job! I realize this is a fair amount of
+prerequisites before getting to the point of the post.
+
+Here's the definition of~\type{\newif}~again, but formatted a little
+differently:
+
+\starttyping
+\outer\def\newif#1{
+    \count@=\escapechar
+    \escapechar=-1
+    \expandafter\expandafter\expandafter \def\@if#1{true}{\let#1=\iftrue}%
+    \expandafter\expandafter\expandafter \def\@if#1{false}{\let#1=\iffalse}%
+    \@if#1{false} % the condition starts out false
+    \escapechar=\count@
+}
+\def\@if#1#2{\csname\expandafter\if@\string#1#2\endcsname}
+{
+    \uccode`1=`i
+    \uccode`2=`f
+    \uppercase{\gdef\if@12{}}
+} % `if` is required
+\stoptyping
+
+Let's do this in parts, starting with the bottom group, then the
+middle~\type{\def}, and then move on to the actual~\type{\newif}. Note
+that only the first form is the actual body of~\type{\newif}~and that
+the bottom group and the~\type{\def}~in the middle is just part of the
+one-time setup. We'll start with the bottom group.
+
+\startsectionlevel[title={The Bottom
+Group},reference={the-bottom-group}]
+
+\starttyping
+{
+    \uccode`1=`i
+    \uccode`2=`f
+    \uppercase{\gdef\if@12{}}
+} % `if` is required
+\stoptyping
+
+Recall from before that the~\type{\uccode}~macro sets the character code
+of the uppercase version of a character, so we can for instance change
+the uppercase of~\type{g}~to be~\type{H}~by
+writing~\type{\uccode}g=\type{H}. In our snippet we are setting the
+uppercase version of the numbers~\type{1}~and~\type{2}~to
+be~\type{i}~and~\type{f}. Yes really. Also recall that the change is
+local to the current group, so this change will be undone after the
+third macro.
+
+So we've changed the uppercase of~\type{1}~and~\type{2}, and next we're
+uppercasing a~\type{gdef}~which name is~\type{if@12}.
+
+Let's make this slightly easier by only having one character we
+uppercase
+
+\starttyping
+*{\uccode`1=`M \uppercase{\gdef\bob1{bob}}}
+*\bob
+\bob M->BOB
+\stoptyping
+
+Notice that the name of the macro is just~\type{\bob},
+not~\type{\bob1}~or~\type{\bobM}.
+
+\startsectionlevel[title={A note about more advanced parameter
+texts},reference={a-note-about-more-advanced-parameter-texts}]
+
+TeX allows us to ensure that there are other tokens in the argument list
+of a macro expansion, or that the arguments are delimited by certain
+tokens. For instance consider the following:
+
+\starttyping
+*\def\commasep#1,#2{(#1, #2)}
+*\message{\commasep 1 2 3 , 9 8 7}
+(1 2 3 ,9) 8 7
+\stoptyping
+
+We see that the first argument was not in fact just the first token, but
+all tokens up until we hit~\type{,}which we had after the~\type{#1}~in
+the parameter text. The last argument however, was just the next token.
+
+We can also do this:
+
+\starttyping
+*\def\mfirst m#1{(#1)}
+*\message{\mfirst a a}
+! Use of \mfirst doesn't match its definition.
+<*> \mfirst a
+              a
+*\message{\mfirst m a}
+(a)
+\stoptyping
+
+Here we've said that we need an~\type{m}~before we get the next token as
+the first argument to the macro. If the next token is not an~\type{m},
+like in the first attempt, we error. It is basically a very simple
+version of pattern matching.
+
+\stopsectionlevel
+
+\startsectionlevel[title={Back to Bob},reference={back-to-bob}]
+
+In our definition of~\type{\bob}~we have ensured that the parameter text
+should end with an uppercase~\type{1}, which was~\type{M}. There is a
+problem though:
+
+\starttyping
+*\bob M
+! Use of \bob doesn't match its definition.
+<*> \bob M
+
+?
+\stoptyping
+
+The reason this doesn't work is that while the uppercase of~\type{1}~is
+temporarily set to~\type{M}~and the macro really does expect to be
+called as~\type{\bob M}, the~\type{M}~we send in now has the wrong
+character code: it's a letter and not a number. We can temporarily
+change this in a group, and it will work.
+
+\starttyping
+*{\catcode`M=12 \bob M}
+{begin-group character {}
+{entering simple group (level 1)}
+{\catcode}
+{changing \catcode77=11}
+{into \catcode77=12}
+
+\bob M->BOB
+{the letter B}
+{end-group character }}
+{restoring \catcode77=11}
+{leaving simple group (level 1)}
+{blank space  }
+
+*
+\stoptyping
+
+Now we are ready to understand the current snippet
+
+\starttyping
+{\uccode`1=`i \uccode`2=`f \uppercase{\gdef\if@12{}}} % `if` is required
+\stoptyping
+
+This will define a macro~\type{\if@}~that ensures that the first two
+tokens after it is~\type{i}~and~\type{f}~with category code~\type{12}.
+Also note that it will expand to nothing, but it will eat the matched
+tokens in the parameter list. In other words:
+
+\starttyping
+*\def\eat h{H} \message{\eat hello}
+Hello
+\stoptyping
+
+The~\type{h}~is eaten and replaced with the body of the macro,~\type{H},
+and the rest of the tokens~\type{ello}~are just characters so nothing is
+done to them, and the result is~\type{Hello}.
+
+To summarize, we've now globally defined a macro~\type{if@}~which
+ensures that when applied the next two tokens in the token list will be
+two tokens with catcode 12 that is~\type{i}~and~\type{f}, and these
+tokens will be taken out of the token list.
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\startsectionlevel[title={The
+Middle~\type{\def}},reference={the-middle-def}]
+
+Moving on to this part:
+
+\starttyping
+\def\@if#1#2{\csname\expandafter\if@\string#1#2\endcsname}
+\stoptyping
+
+Let's peel the onion. We've got a~\type{csname}/\type{endcsname}~pair,
+so the output of the function will be a control sequence name, which
+will, unless already defined, be defined to expand to~\type{\relax}. The
+name will be the result of~\type{\expandafter\if@\string#1#2}; the
+arguments passed to~\type{\@if}~(the~\type{def}we're looking at) will
+thus be sent to~\type{\if@}, but the first argument will be eaten
+by~\type{\string}~first. We just learned that the only thing
+that~\type{\if@}~does is to ensure that the first two tokens given
+are~\type{i f}~of catcode 12. And it just so happen that the tokens that
+we get from expanding~\type{\string}~are exactly of catcode 12!
+
+Let's try to expand~\type"\@if{ifeven}{true}":
+
+\starttyping
+\@if{ifeven}{true}
+\csname \expandafter\if@\string{i f e v e n}{t r u e}\endcsname
+\csname \if@ i f e v e n {t r u e}\endcsname
+\csname e v e n {t r u e}\endcsname
+\csname e v e n t r u e\endcsname   % csname doesn't care about grouping
+eventrue
+\stoptyping
+
+The result is a single control sequence token with the
+name~\type{eventrue}. That's it! As long as the~\type{\string}~expansion
+of the first argument starts with~\type{i f}~we will get a control
+sequence token that is the concatenation of the two arguments.
+
+\stopsectionlevel
+
+\startsectionlevel[title={The
+First~\type{\def}},reference={the-first-def}]
+
+Phew, back at the top. Here it is, once more:
+
+\starttyping
+\outer\def\newif#1{
+    \count@=\escapechar
+    \escapechar=-1
+    \expandafter\expandafter\expandafter \def\@if#1{true}{\let#1=\iftrue}%
+    \expandafter\expandafter\expandafter \def\@if#1{false}{\let#1=\iffalse}%
+    \@if#1{false} % the condition starts out false
+    \escapechar=\count@
+}
+\stoptyping
+
+We're almost there; it's just a matter of piecing together some of the
+parts that we've already unravelled. First we can note that we are
+temporarily setting~\type{\escapechar}~to be~\type{-1}~and then
+restoring it at the end. There are two questions we can answer here: (1)
+why do we set it, and (2) why can't we group it instead?
+
+\startlists
+\item
+  We want the argument to~\type{\newif}~to be a control sequence,
+  like~\type{\newif\ifred}, and we also need to check that the given
+  control sequence starts with~\type{if}, which we do
+  in~\type{\if@}~through the~\type{\string}~macro. If naively
+  applied,~\type{\string\ifred}~would expand to~\type{\ i f r e d}, but
+  we need it to be~\type{i f r e d}. By setting~\type{\escapechar=-1}~we
+  make~\type{\string}~output nothing for~\type{\}, and we are good.
+\item
+  Had we used grouping the~\type{\def}s we have inside would be local to
+  the group and effectively destroyed by the time we are done
+  expanding~\type{\newif}. If we were to use~\type{\gdef}~then all
+  defined macros with~\type{\newif}~would have to be global. This way we
+  can have the user define~\type{\newif}s that are local to their
+  groups.
+\stoplists
+
+That only leaves three lines in the macro body, and two of them are of
+the same form. From earlier we remember that
+three~\type{\expandafter}~would expand the second token in the token
+list twice. Let's assume~\type{#1 = \ifred}. With the total form
+
+\starttyping
+\expandafter\expandafter\expandafter \def \@if \ifred {true} {\let \ifred = \iftrue}
+\stoptyping
+
+we would first expand~\type{\@if}, which will eat two
+tokens,~\type{#1}~and~\type"{true}"~and be replaced with the body of the
+macro, as seen above. Then we need a second expansion to expand
+the~\type{csname}~pair, and this will expand to the control sequence
+token~\type{redtrue}. This would be put back in the token queue,
+
+\starttyping
+\expandafter \def \csname \expandafter\if@\string\ifred{true}\endcsname{\let \ifred = \iftrue}
+\def \redtrue{\let \ifred = \iftrue}
+\stoptyping
+
+and at the end we have a familiar form. The same happens with
+the~\type{false}~variant. The next line is then ran:
+
+\starttyping
+\@if\ifred{false} % expand:
+\csname \expandafter\if@\string\ifred{true}\endcsname  % eval the csname pair
+\redfalse  % we just defined this macro
+\let\ifred=\iffalse  % run this
+\stoptyping
+
+At last, we restore~\type{\escapechar}~to whatever it was initially.
+
+\stopsectionlevel
+
+\stopsectionlevel
+
+\startsectionlevel[title={In Conclusion},reference={in-conclusion}]
+
+Taking it all together, running~\type{\newif\ifred}~expands to this:
+
+\starttyping
+% In the preamble we have the forms
+\def\@if#1#2{\csname\expandafter\if@\string#1#2\endcsname}
+{\uccode`1=`i \uccode`2=`f \uppercase{\gdef\if@12{}}} % `if` is required
+
+% The user writes
+\newif\ifred
+% .. which expands to
+\count@=\escapechar
+\escapechar=-1
+\expandafter\expandafter\expandafter \def\@if\ifred{true}{\let\ifred=\iftrue}
+\expandafter\expandafter\expandafter \def\@if\ifred{false}{\let\ifred=\iffalse}
+\@if\ifred{false}
+\escapechar=\count@
+% ... which is basically the same as
+\def\redtrue{\let\ifred=\iftrue}
+\def\redfalse{\let\ifred=\iffalse}
+\redfalse
+\stoptyping
+
+and that's it! So hey, we had to peel a few
+onions\high{\goto{6}[url(https://mht.wtf/post/tex/\#user-content-fn-onion)]},
+but in the end we managed to unravel the mystery and really understand
+what's going on in~\type{\newif}; it turns out it's quite a lot, though
+the main functionality seems that we don't have to write these three
+lines every time we want to define a new conditional, but that only one
+suffices.
+
+If you want to know more \quotation{real} definition and edge cases,
+check out~\goto{this
+site}[url(https://www.tug.org/utilities/plain/cseq.html)]; I went back
+and forth on that and in the TeXbook when writing this post, and having
+a searchable index of basically the entire language is, well,
+indispensable. Of course, if you don't know much about TeX from before I
+can only assume that the reference will be hard to dig into.
+
+Notes, comments, questions, and tomatoes can be sent to my~\goto{public
+inbox}[url(mailto:https://lists.sr.ht/~mht/public-inbox)].
+
+Hope you learned something, and thanks for reading.
+
+\stopsectionlevel
+
+\startsectionlevel[title={Footnotes},reference={footnotes}]
+
+\startlists
+\item
+  I couldn't call C89 or TeX simple in good
+  faith.~\goto{↩}[url(https://mht.wtf/post/tex/\#user-content-fnref-simple)]
+\item
+  I don't know what I'm talking about here; can you
+  tell?~\goto{↩}[url(https://mht.wtf/post/tex/\#user-content-fnref-kube)]
+\item
+  btw I use
+  arch~\goto{↩}[url(https://mht.wtf/post/tex/\#user-content-fnref-arch)]
+\item
+  This isn't really how it works, but for the purposes of this post we
+  might as well pretend it
+  is.~\goto{↩}[url(https://mht.wtf/post/tex/\#user-content-fnref-writechar)]
+\item
+  This example is more close to destructuring, but I didn't want to get
+  in the weeds of constructing an example that looked more like
+  currying. Here's a sketch: you can have a macro in the body of another
+  macro~\type{\func #1 x y}~such that~\type{#1}~expands to another
+  macro. If we~\type{\expandafter}~the~\type{#1}~here we might get
+  something like~\type{\func u v w x y}~and so we've effectively
+  constructed a
+  function~\type{f(g) = h(g(), x, y)}.~\goto{↩}[url(https://mht.wtf/post/tex/\#user-content-fnref-curry)]
+\item
+  Something something crying when peeling an
+  onion.~\goto{↩}[url(https://mht.wtf/post/tex/\#user-content-fnref-onion)]
+\stoplists
+
+\stopsectionlevel
+
+\stopsectionlevel
+\stop
+\page
+\setuplayout[default]
