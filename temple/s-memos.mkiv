@@ -406,11 +406,18 @@
 \installlanguage [hans] [patterns={zh,en}]% install simplified  chinese
 \installlanguage [hant] [patterns={zh,en}]% install traditional chinese
 \mainlanguage[\p_mainlanguage]
+\usetypescriptfile [dyna]
+\usetypescriptfile [ipaex]
 \usetypescriptfile [adobe]
 \usetypescriptfile [macos]
 \usetypescriptfile [source]
+\usetypescriptfile [morisawa]
+\usetypescriptfile [fontworks]
 \usetypescriptfile [others]
 \usetypescriptfile [\p_typescript]
+%\ifx\p_mainlanguage\c!langhans
+%  \usemodule[zhpunc]
+%\fi
 \ifempty\p_latinfontname
   \ifx\currentlanguage\c!langhans
     \def\p_latinfontname{libertinum}
@@ -594,7 +601,7 @@
 
 \newdimen\defaultlineheight
 \newdimen\defaultbaselineskip
-\defaultlineheight  =\lineheight  \relax
+\defaultlineheight  =\baselineskip  \relax
 \defaultbaselineskip=\baselineskip\relax
 
 \unexpanded\def\lazylanguage_direct[#id]%
@@ -1053,7 +1060,7 @@
 \newcount\c_margincount\c_margincount=\moduleparameter{memos}{margincount}\relax
 \newdimen\d_textfontsize\d_textfontsize=\fontdimen6\font\relax
 \newdimen\d_textlineheight\d_textlineheight=
-         \dimexpr\lineheight*\c_heightcount-\lineheight+
+         \dimexpr\baselineskip*\c_heightcount-\baselineskip+
          \ifdim\topskip<\ht\strutbox\topskip\else\ht\strutbox\fi\relax
 \newdimen\d_marginwidth\d_marginwidth=\dimexpr\fontdimen6\font*\c_margincount\relax
 
@@ -1200,7 +1207,7 @@ context.definelayout(
 \setuphead  [title,subject][incrementnumber=list]
 \definehead [tochead]      [title]
             [page=no,incrementnumber=no,
-             before=\blank[force,2*line],after=\blank[line]]
+             before=\null\vskip2\baselineskip\relax,after=\vskip\baselineskip\relax]
 \def\linedhead#1{\framed[frame=off,bottomframe=on,width=.8\textwidth,
                          offset=0pt,align=flushleft,
                          rulethickness=4pt,framecolor=titlecolor]
@@ -1338,8 +1345,8 @@ context.definelayout(
   \setuplabeltext  [cn][content=Table Of Contents]
   \setuphead       [tochead][
                     before={\setupbackgrounds[page][background=olay:toc]
-                            \blank[force,5*line]},
-                    after=\blank[force,2*line],
+                            \null\vskip5\baselineskip\relax},
+                    after=\null\vskip2\baselineskip\relax,
                     align=center,
                     style=\definedfont[SansBold at 25pt],
                     ]
@@ -1367,7 +1374,7 @@ context.definelayout(
 \iftocs_sty_rocket
   \edef\currenttocsstyle{rocket}
   \define[1]\chaplabel{{\sc\color[themecolor]{\Romannumerals\currentlistentrynumber}}}
-  \setuphead       [tochead][alternative=middle,before=\blank[force,2*line]]
+  \setuphead       [tochead][alternative=middle,before=\null\vskip2\baselineskip\relax]
   \setupcombinedlist[content][list={part,title,chapter,section,subject}]
   \setuplist       [part,chapter,title,subject,section]
                                     [before=,after=,style=ss,distance=.5em,
@@ -1388,7 +1395,7 @@ context.definelayout(
                      subsubsubject,subsubsection,
                      subsubsubsection,subsubsubsubsection}]
   \setuphead       [tochead][alternative=paragraph,align=flushright,
-                             before=\blank[force,2*line]]
+                             before=\null\vskip2\baselineskip\relax]
   \setuplist       [part]   [width=2.5em,distance=0.0em,
                              numbercommand=\partlabel]
   \setuplist       [title]  [margin=2.5em]
@@ -1439,7 +1446,7 @@ context.definelayout(
              {\placecontent}{\??TOCscontent}%
   \page[\headparameter\c!page]%
   \doifinsetelse{\headparameter\c!page}{no,disable}%
-    {\blank[line]}%
+    {\vskip\baselineskip\relax}%
     {\setuplayout[\??TOCsresetlayout]}%
   \endgroup}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1451,7 +1458,7 @@ context.definelayout(
             subsubsubsection,subsubsubsubsection]
            [indentnext=yes,interlinespace=auto,
             %textcommand={\setcharactercasing[Words]},
-            before={\blank[halfline]}, after={\blank[halfline]},]
+            before={\vskip.5\baselineskip\relax}, after={\vskip.5\baselineskip\relax},]
 \setuphead [part,chapter,title]  [color=titlecolor]
 \setuphead [title,subject]       [incrementnumber=list]
 \setuphead [part]                [style=\definedfont[Sans sa 2.488]]
@@ -1468,7 +1475,7 @@ context.definelayout(
 \setuphead [chapter]             [page={odd},header=empty,
                                   interlinespace=3\bodyfontsize,
                                   before={\null\vskip3\baselineskip\relax},
-                                  after={\blank[line]}]
+                                  after={\vskip\baselineskip\relax}]
 \setuphead [part]                [sectionsegments=part]
 \setuphead [chapter]             [sectionsegments=chapter]
 \setuphead [section]             [sectionsegments=section]
@@ -1800,7 +1807,7 @@ StopPage ;
 %%                              location=outermargin,
 %%                            numbercommand=\groupedcommand
 %%                              {\vskip\dimexpr.06\paperwidth\relax}
-%%                              {\blank[2cm]},
+%%                              {\blank},
                              ]
 % startpartmakeup \part{} \stoppartmakeup
 % ------------- only set for chapter
@@ -1832,8 +1839,8 @@ StopPage ;
 \stopsetups
 \setuphead[chapter][before={\setupbackgrounds[page][background=olay:chapter]
                             \setup{chapter:before}
-                            \blank[force,2*line]},
-                     after={\blank[force,2*line]
+                            \null\vskip2\baselineskip\relax},
+                     after={\null\vskip2\baselineskip\relax
                             \setupbackgrounds[page][background=olay:all,state=repeat]},]
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1917,7 +1924,7 @@ StopPage ;
                 \strut\headnumbercontent\quad%\par % <-- commented out
             \else\fakeheadnumbercontent\fi
             \begstrut\headtextcontent\endstrut
-            \blank[line]
+            \vskip\baselineskip\relax
        }\inoutermargin{\useMPgraphic{style:chapter:number}}
     \stopsetups
     \setuphead [chapter][alternative=hexagradient,numbercolor=white,]
@@ -2046,13 +2053,13 @@ StopPage ;
   \framed[frame=off,bottomframe=on,
           align=low,
           height=\headerheight,width=max]
-         {\pagenumber\quad\limitatetext{王阳明图传}{6cm}{...}\par}
+         {\let\\\quad\getmarking[chapter]\quad\pagenumber\par}
 \stopsetups
 \startsetups hdr:even:novelchaptermark
   \framed[frame=off,bottomframe=on,
           align={flushright,low},
           height=\headerheight,width=max]
-         {\getmarking[chapter]\quad\pagenumber\par}
+         {\let\\\quad\getmarking[chapter]\quad\pagenumber\par}
 \stopsetups
 % Pair 3 ：hdr:edge:structuremark
 \startsetups hdr:odd:edgesectionmark
@@ -2149,7 +2156,7 @@ StopPage ;
      \quad% \undepthed
      {\blackrule
          [width=\linewidth,color=themecolor,
-          height=\headerheight,depth=.3\lineheight,]}%\strutht,
+          height=\headerheight,depth=.3\baselineskip,]}%\strutht,
           %depth=\dimexpr\headerheight+\topspace\relax,
      \quad
      \color[themecolor]{\getmarking[chapternumber] \quad {\bi\getmarking[chapter]}} \hss
@@ -2161,7 +2168,7 @@ StopPage ;
      \quad% \undepthed
      {\blackrule
          [width=\linewidth,color=themecolor,
-         height=\headerheight,depth=.3\lineheight,]}%\strutht,
+         height=\headerheight,depth=.3\baselineskip,]}%\strutht,
           %depth=\dimexpr\headerheight+\topspace\relax,
      \quad
      \color[themecolor]{\prefixedpagenumber}
@@ -2330,8 +2337,8 @@ StopPage ;
                   rulethickness=1pt,
                   indenting={yes,2em},
                   offset=\bodyfontsize,
-                  before={\blank[line]},
-                  after={\blank[halfline]},
+                  before={\vskip\baselineskip\relax},
+                  after={\vskip.5\baselineskip\relax},
                   width=\textwidth,
                   title=]
 \definecounter[FrameCounter]
@@ -2407,8 +2414,8 @@ endgroup;
 \definetextbackground[shadowed]
                      [mp=MPFrameShadow,
                      location=always,
-                     before=\blank[line]\startwiderpara[left,right],
-                     after=\blank[line]\stopwiderpara]
+                     before=\vskip\baselineskip\relax\startwiderpara[left,right],
+                     after=\vskip\baselineskip\relax\stopwiderpara]
 \startuseMPgraphic{MPFrameAxiom}
   begingroup;
     for i=1 upto nofmultipars :
@@ -2443,7 +2450,7 @@ endgroup;
    backgroundcolor=softwhite,
    framecolor=red,
    before={\blank},
-   after={\blank[2*medium]}]
+   after={\vskip2\baselineskip\relax}]
 %\starttheoremFrame
 %  \useexternalfigure[ctanlion]
 %  [http://www.ctan.org/lion/ctan_lion_350x350.png][width=5cm]
@@ -2474,8 +2481,8 @@ endgroup;
                      text={\raise 2pt \hbox to 1em{$\bullet$}},%hang=99,
                      alternative=hanging,]
 \definedescription  [topdescr][
-                     before=\blank[quarterline],
-                     after=\blank[quarterline],
+                     before=\vskip.25\baselineskip\relax,
+                     after=\vskip.25\baselineskip\relax,
                      inbetween=,width=fit,
                      indenting={2em},indentnext=yes,
                      headstyle=bold,style=normal,
@@ -2504,10 +2511,11 @@ endgroup;
                  textseparator={,},
                  ]
 \setupnotation  [setups={fn:hanzi},
-                 style=\itx,
+                 style=\restoreglobalbodyfont\itx,
                  color=footnotecolor,
                  headstyle=\itx,
                  headcolor=footnotecolor,
+                 way=bypage,
                  ]
 \newdimen\d_temp_margin\d_temp_margin=\rightmarginwidth\relax
 \definenote    [marginnote]
@@ -2534,7 +2542,7 @@ endgroup;
 \define\PlaceFootnote%
   {\inoutermargin%
     [stack=continue,dy=\move_sidenote]{\vtop{\setups{fn:hanzi}%
-      \placelocalnotes[sidenote][before=,after=,]}}\movesidenote[0em]}
+      \placelocalnotes[sidenote][align=inner,before=,after=,]}}\movesidenote[0em]}
 \definenote    [sidenote]
 \setupnote     [sidenote] [location=text,next=\PlaceFootnote]
 \setupnotation [sidenote] [numberconversion=sidenote,width=2mm,]
@@ -2580,8 +2588,8 @@ endgroup;
   rightoffset=\bodyfontsize,
   topoffset=.5\bodyfontsize,
   bottomoffset=.5\bodyfontsize,
-  before={\blank[force,halfline]},
-  after={\blank[force,halfline]},]
+  before={\blank},
+  after={\blank},]
 \setuptextbackground [halfframedcode][width=.55\textwidth,before=,after=,]
 \setuptextbackground [wideframedcode][width=\measured{spanmargin},]
 \definetextbackground[framelmverbatim][
@@ -2601,6 +2609,7 @@ endgroup;
 \definetyping[lmverbatim]
 \definetyping[widelmverbatim][lmverbatim]
 \setuptype   [verb][option=context,strip=yes,color=codecolor]
+\setuptyping [before=,after=]
 \setuptyping [verbatim][strip=yes,
           width=.95\textwidth,option=context,
           style={\switchtobodyfont[10pt,tt]
@@ -2704,8 +2713,8 @@ endgroup;
              [%default={here,split,top,bottom,page},
               before=,after=,indentnext=yes,
               setups={fn:hanzi},
-              spacebefore=\blank[halfline],
-              spaceafter=\blank[halfline],]
+              spacebefore=\vskip.5\baselineskip\relax,
+              spaceafter=\vskip.5\baselineskip\relax,]
 \setupfloat  [figure]
              [%default={here,split,top,bottom,page},%it seems to influences location,bette to comment
               before=\vskip.5\baselineskip,
@@ -2719,7 +2728,7 @@ endgroup;
               color=captioncolor,
              % hang=yes,% 将使标题不居中且悬挂
              % align={last,width,hanging},
-             % inbetween={\blank[small]},
+             % inbetween={},
               ]
 \setupTABLE[header][style=bf,color=themecolor]
 \startsetups trilines
@@ -2824,7 +2833,7 @@ endgroup;
 %%%%%%  \placemarginfigureeasy[reference][option]{caption}                 %%%%%%
 %%%%%%                      reference 和 圖片名稱公用一個值                    %%%%%%
 %%%%%%  \adjustmarginvspace[linenumber]                                    %%%%%%
-%%%%%%  \movesidefloat[y=\lineheight] 上下移動浮動體                          %%%%%%
+%%%%%%  \movesidefloat[y=\baselineskip] 上下移動浮動體                          %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \protected\def\placemarginfigeasy{\dodoubleargument\doPlacemarginfigeasy}
 \protected\def\doPlacemarginfigeasy[#1][#2]#3{%
@@ -2832,7 +2841,7 @@ endgroup;
    \startplacefloat[marginfig][title={#3},reference={fig:#1},#2]
      \externalfigure[#1][#2]
    \stopplacefloat
-   \movesidefloat[y=\lineheight]
+   \movesidefloat[y=\baselineskip]
 }}
 \protected\def\placemargintabeasy{\dodoubleargument\doPlacemargintabeasy}
 \protected\def\doPlacemargintabeasy[#1][#2]#3{%
@@ -2841,7 +2850,7 @@ endgroup;
      \setupxtable[option={width,stretch},#2]
      \getbuffer[#1]
    \stopplacefloat
-   \movesidefloat[y=\lineheight]
+   \movesidefloat[y=\baselineskip]
 }}
 %\startmode[kindle]
 %\definemeasure [spanmargin]  [\dimexpr\textwidth\relax]
@@ -3131,7 +3140,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Verse}
-\def\parapoint#1{\blank[medium]\crlf\noindent{\ss\bf#1}}
+\def\parapoint#1{\blank\crlf\noindent{\ss\bf#1}}
 \def\divider{\enspace \vrule height .7em depth 1pt width .8pt \enspace}
 \def\author{\dodoubleempty\doauthor}
 \def\doauthor[#1][#2]#3{\bgroup%
@@ -3358,7 +3367,7 @@ end
          corner=\iconcardparameter{corner},
          radius=\iconcardparameter{radius},
                   #3]%
-     \starttextbackground[iconcards]%\blank[force,line]%
+     \starttextbackground[iconcards]%\null\vskip\baselineskip\relax%
      \begingroup\setupicontitle[#2]%
      \processaction[\icontitleparameter\c!symbol]%
             [info=>{\def\iconsymbol{\symbol[fontawesome][info_sign]}},
@@ -3372,8 +3381,8 @@ end
      \inheritedicontitleframed{{\iconsymbol}%
          {\hskip\dimexpr\icontitleparameter{inbetween}\relax}{#1}}%
      \endgroup\startnarrower}
-\def\stopiconcard{\stopnarrower\blank[quarterline]%
-                  \stoptextbackground\blank[halfline]}
+\def\stopiconcard{\stopnarrower\vskip.25\baselineskip\relax%
+                  \stoptextbackground\vskip.5\baselineskip\relax}
 \setupiconcard  [background=color,
                  location=always,
                  backgroundcolor=softcyan,
@@ -3445,8 +3454,8 @@ end
 \startsetups[\????titlerenderings:\s!default]
     \blank[\roottitleparameter\c!spacebefore]
     \startalignment[\roottitleparameter\c!align]
-        \titleelement\c!title \marking[title] {\roottitleparameter\c!title} \blank[1.5em]
-        \titleelement\c!author\marking[author]{\roottitleparameter\c!author}\blank[1em]
+        \titleelement\c!title \marking[title] {\roottitleparameter\c!title} \blank
+        \titleelement\c!author\marking[author]{\roottitleparameter\c!author}\blank
         \titleelement\c!date  \marking[date]  {\roottitleparameter\c!date}
     \stopalignment
     \blank[\roottitleparameter\c!spaceafter]
@@ -3600,13 +3609,13 @@ end
                 list={series,book,author,introduction,publisher},
                 cover=cover,%flyleaf
           % background=IMG_0346.pdf,
-         seriesvspace=\blank[force,3*line],
-        bookvspace=\blank[2*line],
-       authorvspace=\blank[3*line],
-        introductionvspace=\blank[line],
+         seriesvspace=\null\vskip3\baselineskip\relax,
+        bookvspace=\vskip2\baselineskip\relax,
+       authorvspace=\vskip3\baselineskip\relax,
+        introductionvspace=\vskip\baselineskip\relax,
          publishervspace=\vfill,
              series={\CONTEXT\ 模板系列示例},
-               book={这是书名\blank[line]{\restoreglobalbodyfont
+               book={这是书名\vskip\baselineskip\relax{\restoreglobalbodyfont
                       \rm Here\ \ is\ \ Subtitle}},
              author={主編 \quad Welson,Alex},
           publisher={这是出版社},
@@ -3625,7 +3634,7 @@ end
   introductionalign=center,
 %         beforeintroduction=\tophrule,
 %          afterintroduction=\bottomhrule,
-          lastvspace=\blank[force,line],]
+          lastvspace=\null\vskip\baselineskip\relax,]
 
 \def\doifemptyelsex#1#2{\doifelse{#1}{}{#2}{#1}}
 \def\definecovervariable#1{\begingroup\par% #1=element name
@@ -3719,11 +3728,10 @@ end
 %\makecover[newbook]
 %\stopmakeup
 
-\writestatus{module mode}    {mode     "\p_mode" mode is on.}
-\writestatus{module language}{language "\currentlanguage" mode is on.}
-\writestatus{module font}    {font     "\p_latinfontname" is loaded.}
-\writestatus{module font}    {font     "\p_fontname" is loaded.}
-\writestatus{module layout}  {current layout is "\currentlayout".}
+\writestatus{module mode}    {current mode     is "\p_mode".}
+\writestatus{module language}{current language is "\currentlanguage".}
+\writestatus{module layout}  {current layout   is "\currentlayout".}
+\writestatus{module font}    {font     "\p_latinfontname" and "\p_fontname" is loaded.}
 
 \def\startlang[#1]{\begingroup
    \edef\inheritfontstyle{\fontstyle}
