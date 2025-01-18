@@ -11,87 +11,35 @@
 %D      license=,
 %D          url=]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%D Module start
-
 \startmodule[memos]
 \unprotect
-%D \start\hans
-%D 通過下面的設置列表可以獲取所有的鍵值。\stop
-%D \starttabulate[|r|l|l|l|]
-%D \NC papersize    \NS[2]: inherit from CONTEXT system                      \NC\NR
-%D \NC layout       \NC: narrow      \NC propiorroot       \NC propiorgplden \NC\NR
-%D \NC              \NC: moderate    \NC moderatecomments  \NC sidemirror    \NC\NR
-%D \NC              \NC: wide        \NC moderatecommentsii\NC gridneeds     \NC\NR
-%D \NC              \NC: exotic      \NC ipad              \NC kindle        \NC\NR hermes
-%D \NC design       \NS[2]: set papersize and layout at sametime             \NC\NR
-%D \NC              \NC: exotic      \NC ipad              \NC kindle        \NC\NR
-%D \NC language     \NS[2]: lang with inherit from mainlanguage              \NC\NR
-%D \NC              \NC: cn          \NC hant(tw)           \NC ja            \NC\NR
-%D \NC              \NC: en                                                  \NC\NR
-%D \NC mode         \NC: display     \NC print             \NC kindle        \NC\NR
-%D \NC              \NC: draft                                               \NC\NR
-%D \NC themecolor   \NC: red         \NC blue              \NC yellow        \NC\NR
-%D \NC              \NC: green       \NC pink              \NC gray          \NC\NR
-%D \NC              \NC: cyan        \NC orange            \NC purple        \NC\NR
-%D \NC              \NC: black       \NC white             \NC               \NC\NR
-%D \NC typescript   \NS[2]: font typescript name in CONTEXT                  \NC\NR
-%D \NC latinfontname\NC: cormorant   \NC libertinum        \NC ibmplex       \NC\NR
-%D \NC              \NC: silseries   \NC ubuntu            \NC               \NC\NR
-%D \NC fontname     \NS[2]:  font for CJK,default is for chinese simplified  \NC\NR
-%D \NC from adobe   \NC: adobehans   \NC adobehant         \NC  kozuka       \NC\NR
-%D \NC              \NC:             \NC sonyhant          \NC               \NC\NR
-%D \NC from macos   \NC: sinohans    \NC sinohant          \NC  hiragino     \NC\NR
-%D \NC              \NC:             \NC lihant            \NC  jiyou        \NC\NR
-%D \NC from source  \NC: sourcehans  \NC sourcehant        \NC sourceja      \NC\NR
-%D \NC              \NC:             \NC genyotw           \NC               \NC\NR
-%D \NC              \NC:             \NC genryutw          \NC               \NC\NR
-%D \NC              \NC:             \NC genyotc           \NC               \NC\NR
-%D \NC              \NC:             \NC genryutc          \NC               \NC\NR
-%D \NC              \NC: dyna-hans   \NC dyna-hant         \NC dyna-nihon    \NC\NR
-%D \NC              \NC: dyna-XXXb   \NC source-XXXb       \NC               \NC\NR
-%D \NC              \NC: tsukushia   \NC tsukushiaold      \NC tsukushiantique\NC\NR
-%D \NC              \NC: tsukushib   \NC tsukushibold      \NC               \NC\NR
-%D \NC              \NC:             \NC tsukushicold      \NC               \NC\NR
-%D \NC              \NC: reimin      \NC reiminb           \NC               \NC\NR
-%D \NC              \NC: ryumin      \NC ryuminb           \NC               \NC\NR
-%D \NC              \NC: shuei       \NC shueib            \NC               \NC\NR
-%D \NC kindle-fontname\NS[2]: used to change fonename for kindle.            \NC\NR
-%D \NC fontstyle    \NC: rm          \NC ss                \NC tt            \NC\NR
-%D \NC              \NC: hw                                                  \NC\NR
-%D \NC fontsize     \NS[2]:  inherit from CONTEXT system                     \NC\NR
-%D \NC chapterstyle \NC: default     \NC simple            \NC line          \NC\NR
-%D \NC              \NC: classics    \NC classicnovel      \NC hexa          \NC\NR
-%D \NC              \NC: rocket      \NC colorful          \NC               \NC\NR
-%D \NC hdrstyle     \NC: fctext      \NC foemargin         \NC foemarginalt  \NC\NR
-%D \NC              \NC: hctext      \NC hoemargin         \NC colorful      \NC\NR
-%D \stoptabulate
 \setupmodule [
-              papersize=A4, layout=moderate, design=,
-              mainlanguage=hans,  mode=,
-              language=\moduleparameter{memos}{mainlanguage},
-              lineheight=,
-              typescript=, latinfontname=,    fontname=,
-              fontstyle=rm,    fontsize=10.54pt,
-              textcount=35, heightcount=0, margincount=0,
-              chapterstyle=,   hdrstyle=,     background=,
-              tocsstyle=,      themecolor=,]
-\def\errormessage#1{
+              papersize=A4,
+              layout=moderate,
+              mainlanguage=hans,
+              lineheight=1.5\bodyfontsize,
+              latinfontname=none,
+              fontname=reset,
+              fontstyle=rm,
+              fontsize=10.5pt,
+              textcount=40, heightcount=40, margincount=0,
+              mode=,
+              themecolor=,
+              chapterstyle=,
+              hdrstyle=,
+              tocstyle=,
+              background=,]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\errorparameter#1{%
     \writestatus{module error}{!! Something Wrong happened at #1}
     \writestatus{module error}{!! #1 is \moduleparameter{memos}{#1}}
     \writestatus{module error}{!! if the value is valid,please ignore the message.}}
-\def\errorparameter#1{\begingroup%
-    \framed[align={flushleft,lohi},width=max,loffset=4pt,
-            frame=off,leftframe=on,rulethickness=2pt]{%
-    \switchtocolor[blue]\infofont\noindent%
-    \setuplocalinterlinespace[1pt]%
-    There is something Wrong happened
-    at \color[red]{\underbar{parameter:#1}}.\\
-    Please check your code.\\
-    }\endgroup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \definemode[kindle]   [keep]
 \definemode[draft]    [keep]
 \definemode[print]    [keep]
 \definemode[moresize] [keep]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newif\ifcolor_palet_blue     \color_palet_bluefalse%
 \newif\ifcolor_palet_red      \color_palet_redfalse%
 \newif\ifcolor_palet_yellow   \color_palet_yellowfalse%
@@ -116,6 +64,8 @@
 \newif\ifchap_sty_hexa        \chap_sty_hexafalse%
 \newif\ifchap_sty_madsen      \chap_sty_madsenfalse%
 \newif\ifchap_sty_kaolike     \chap_sty_kaolikefalse%
+\newif\ifchap_sty_publish     \chap_sty_publishfalse%
+\newif\ifchap_sty_artical     \chap_sty_articalfalse%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newif\iftocs_sty_default     \tocs_sty_defaultfalse%
 \newif\iftocs_sty_simple      \tocs_sty_simplefalse%
@@ -174,10 +124,12 @@
       classics=>\chap_sty_classicstrue,
   classicnovel=>\chap_sty_classicnoveltrue,
        kaolike=>\chap_sty_kaoliketrue,
+       article=>\chap_sty_articaltrue,
+       publish=>\chap_sty_publishtrue,
           none=>\relax,
     \v!default=>\chap_sty_defaulttrue,
     \v!unknown=>\errorparameter{chapterstyle},]
-\processaction[\currentmoduleparameter{tocsstyle}][
+\processaction[\currentmoduleparameter{tocstyle}][
           line=>\tocs_sty_linetrue,
       colorful=>\tocs_sty_colorfultrue,
         madsen=>\tocs_sty_madsentrue,
@@ -188,7 +140,7 @@
   classicnovel=>\tocs_sty_classicnoveltrue,
           none=>\relax,
     \v!default=>\tocs_sty_defaulttrue,
-    \v!unknown=>\errorparameter{tocsstyle},]
+    \v!unknown=>\errorparameter{tocstyle},]
 \processaction[\currentmoduleparameter{hdrstyle}]%
    [       book=>\hdr_sty_booktrue,
           novel=>\hdr_sty_noveltrue,
@@ -205,88 +157,24 @@
 \setupcolors            [state=start,pagecolormodel=auto,textcolor=textcolor,]
 \setupinteraction       [state=start,
                          author={商無辛・Soanguy},
-                         style=,color=linkcolor,contrastcolor=themecolor
-                         ]
+                         style=\tt,
+                         color=linkcolor,
+                         contrastcolor=themecolor]
 \setupurl               [color=linkcolor,style={\tt}]
 \setupcombinedlist      [content] [interaction=all,color=toclinkcolor]
 \setupinteractionscreen [option=bookmark]
 \placebookmarks         [part,chapter,section][chapter]
+% \enabledirectives[backend.pdf.nounicode=當前非有效版本，請聯繫作者]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%                            字體集設置                                 %%%%%%
+%%%%%%                            字體集設置                               %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{SCMD:fakesc}
-\def\fakesc{\begingroup%
-    \let\par=\space\obeylines\obeyspaces%
-    \let\myspace=\space\dosmallcaps}
-\def\dosmallcaps#1{\dosc#1\end\endgroup}
-\def\dosc#1{% assumes #1 is a sequence of characters
-    \ifx#1\end \let\next=\relax
-        \else\if#1\space \myspace\let\myspace=\relax% skip repeated spaces
-             \else\ifnum\lccode`#1=`#1{\csname\fontstyle x\endcsname \uppercase{#1}}%
-             % change \tfx to your desired size
-                  \else #1\fi
-                  \let\myspace=\space
-             \fi
-        \let\next=\dosc
-   \fi\next}
-%{\it Not everyone is a typographer to
-%produce the appropriate fine-typography glyphs
-%for their favourite font to cater to
-%a particular style. Why should the system impose
-%\fakesc{"super-duper" Typography}
-%on users when they are willing to settle for less?
-%\fakesc{Watch out  for returns.}}
-\def\showfontinfo{{\switchtocolor[red]\infofont\setuplocalinterlinespace[1pt]
-    \starttabulate[|r|l|r|l|]
-      \NC {class}:\NC \fontclass\NC {body} :      \NC \fontbody       \NC\NR
-      \NC {style}:\NC \fontstyle\NC {alternative}:\NC \fontalternative\NC\NR
-      \NC {size} :\NC \fontsize \NC {face}:       \NC \fontface       \NC\NR
-    \stoptabulate}}
-\def\reset_every_font_action{%
-   \redoconvertfont % just in case a pagebreak occurs
-   \the\everybodyfont
-   \the\everyglobalbodyfont
-   \saveinterlinespace}
-\let\resetfont\fullrestoreglobalbodyfont
-% reset font style, like rm to ss.
-\unexpanded\def\resetfontstyle
-  {\font_basics_switch_style\globalfontstyle
-   \reset_every_font_action}
-\unexpanded\def\resetfontalter
-  {\let\fontface\defaultfontface
-   \tf\reset_every_font_action}
-% reset font size, like 12pt to 11pt.
-\unexpanded\def\resetfontsize
-  {\let\fontsize\defaultfontsize
-   \let\fontbody\defaultfontbody
-   \let\fontface\defaultfontface
-   \currentxfontsize\zerocount
-   \font_basics_switch_points\normalizedglobalbodyfontsize
-   \reset_every_font_action}
-\def\resetfont[#1]{
-    \edef\currentfontclass{\defaultfontclass}
-    \edef\currentfontbody{\fontbody}
-    \edef\currentfontsize{\fontsize}
-    \edef\currentfontface{\fontface}
-    \edef\currentfontstyle{\defaultfontstyle}
-    \edef\currentfontalternative{\defaultfontalternative}
-    \doif{#1}{class}{\switchtobodyfont[\currentfontclass]}%???
-    \doif{#1}{style}{\csname \currentfontstyle\endcsname}
-    \doif{#1}{alternative}{\csname \currentfontalternative\endcsname}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%                      **COMMAND: setupspacing                        %%%%%%
-%%%%%%   Setup the spacing rules. Punctuation, for this command,           %%%%%%
-%%%%%%   is the set . ? ! : ; ,.  Available value:fixed packed broad       %%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\startmode[moresize]
 % show all size customized : o , i , ii ... especially,11pt & 12pt is fixed size
 %\noindent\dorecurse{9}{%
 %    {\csname tf\romannumeral\recurselevel\endcsname
 %     \fontstyle\romannumeral\recurselevel}
 %    {\csname \fontstyle\romannumeral\recurselevel s\endcsname
 %     \fontstyle\romannumeral\recurselevel{s}}\\}
-%D \start\hans
 %D \ConTeXt\ 似乎在設計字號時，只能選擇縮放或者固定大小中的一種。默認情況下只有
 %D \startnarrower
 %D     scriptscript \rightarrow xx     \rightarrow script \rightarrow x(small)
@@ -303,13 +191,7 @@
 %D     一號字、二號字、三號字、四號字、五號字、六號字、七號字、八號字、九號字\\
 %D     小一號、小二號、小三號、小四號、小五號、小六號、小七號、小八號、小九號
 %D \stopnarrower
-%D \stop
-%D \start\hans
 %D 對於特別小字號的文本，需要調整行高。中文行高大體設置在正文字號的 1.2 ~ 1.8 倍之間即可。
-%D \stop
-\definebodyfontenvironment [default] [em=italicface]
-\definebodyfontenvironment [8pt]     [interlinespace=1.25em,]
-\startmode[moresize]
   \definefontsize [e]
   \definefontsize [huge]     \definefontsize [large]
   \definefontsize [extra]    \definefontsize [titlesize]
@@ -357,175 +239,192 @@
                            viis=5.00bp,     viii=4.50bp,     viiis=4.00bp,
                              ix=3.50bp,      ixs=3.00bp,]
 \stopmode
-  \definebodyfontenvironment
-    [10.5bp][
-    \s!text=10.5bp,\s!script=9.00bp,\s!scriptscript=7.50bp,
-       \s!a=14.0bp,     \s!b=16.0bp,      \s!c=22.0bp,
-       \s!d=26.0bp,     \s!x=8.80bp,     \s!xx=6.60bp,
-     \v!big=14.0bp, \v!small=9.00bp,        em=italicface]
-  \definebodyfontenvironment
-    [11bp][
-    \s!text=11.0bp,\s!script=8.80bp,\s!scriptscript=6.60bp,
-       \s!a=13.2bp,     \s!b=15.8bp,      \s!c=19.6bp,
-       \s!d=22.8bp,     \s!x=8.80bp,     \s!xx=6.60bp,
-     \v!big=13.2bp, \v!small=8.80bp,        em=italicface]
-  \definebodyfontenvironment
-    [12bp][
-    \s!text=12.0bp,\s!script=9.60bp,\s!scriptscript=7.20bp,
-       \s!a=14.4bp,     \s!b=17.3bp,      \s!c=21.4bp,
-       \s!d=24.9p,     \s!x=9.60bp,     \s!xx=7.20bp,
-     \v!big=14.4bp,\v!small=9.60bp,        em=italicface]
+\definebodyfontenvironment [default] [em=italicface]
+\definebodyfontenvironment [8pt]     [interlinespace=1.25em,]
+\definebodyfontenvironment [10.5bp]
+\definebodyfontenvironment [11bp]
+\definebodyfontenvironment [12bp]
+\setupbodyfontenvironment  [10.5pt][
+  \s!text=10.5bp,\s!script=9.00bp,\s!scriptscript=7.50bp,
+     \s!a=14.0bp,     \s!b=16.0bp,      \s!c=22.0bp,
+     \s!d=26.0bp,     \s!x=8.80bp,     \s!xx=6.60bp,
+   \v!big=14.0bp, \v!small=9.00bp,        em=italicface]
+\setupbodyfontenvironment  [11pt][
+  \s!text=11.0bp,\s!script=8.80bp,\s!scriptscript=6.60bp,
+     \s!a=13.2bp,     \s!b=15.8bp,      \s!c=19.6bp,
+     \s!d=22.8bp,     \s!x=8.80bp,     \s!xx=6.60bp,
+   \v!big=13.2bp, \v!small=8.80bp,        em=italicface]
+\setupbodyfontenvironment  [12pt][
+  \s!text=12.0bp,\s!script=9.60bp,\s!scriptscript=7.20bp,
+     \s!a=14.4bp,     \s!b=17.3bp,      \s!c=21.4bp,
+     \s!d=24.9p,      \s!x=9.60bp,     \s!xx=7.20bp,
+   \v!big=14.4bp, \v!small=9.60bp,        em=italicface]
+
+\definefont[notefont][Handwriting at 9bp]
+\definefontfeature[f:case][mode=node,case=yes]
+\definefontfeature[f:pnum][mode=node,lnum=yes,pnum=yes]
+\definefontfeature[f:onum][lnum=no,pnum=no,onum=yes,liga=yes,kern=yes]
+\definefontfeature[f:tnum][mode=node,pnum=no,tnum=yes]
+\definefontfeature[f:caps][always][smcp=yes]
+\def\PLUS{＋}
+\def\MINUS{－}
+\def\EQUAL{＝}
+\def\SLASH{／}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                             本地化設置                              %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% 你可以设定任意键值对，并通过 labeltext{yourKey} 来获取该值。例如：
-%%%%% setuplabeltext [newcontent={目录}]
-%%%%% definecombinedlist[newcontent][anything]
-%%%%% setuplabeltext [preface={前言}]
-%%%%% definehead [preface]
-%%%%% labeltexts{page}{NUMBER} => 第 NUMBER 頁
-%%\def\latinfallbackfont{\moduleparameter{memos}{latinfontname}}
-%%% test if empty:\expandafter\doifemptyelse\expandafter{\@author}{\@authora}{\@author}
-%\usetypescriptfile[adobe]
-%\usetypescriptfile[source]
-%\usetypescriptfile[macos]
-%\usetypescriptfile[customize]
 
-\edef\c!langhans{hans}
-\edef\c!langhant{hant}
-\edef\c!langja{ja}
-\edef\p_mode{\moduleparameter{memos}{mode}}
-\edef\p_language{\moduleparameter{memos}{language}}
-\edef\p_mainlanguage{\moduleparameter{memos}{mainlanguage}}
-\def\p_typescript{\moduleparameter{memos}{typescript}}
-\edef\p_fontname{\moduleparameter{memos}{fontname}}
-\edef\p_latinfontname{\moduleparameter{memos}{latinfontname}}
-\edef\p_lineheight{\doifelse{\moduleparameter{memos}{lineheight}}{}%
-                  {1.5\bodyfontsize}{\moduleparameter{memos}{lineheight}}}
+\installlanguage [hans] [patterns={zh,en},]% install simplified  chinese
+\installlanguage [hant] [patterns={zh,en},]% install traditional chinese
 
-\installlanguage [hans] [patterns={zh,en}]% install simplified  chinese
-\installlanguage [hant] [patterns={zh,en}]% install traditional chinese
-\mainlanguage[\p_mainlanguage]
-\usetypescriptfile [dyna]
-\usetypescriptfile [ipaex]
-\usetypescriptfile [adobe]
-\usetypescriptfile [macos]
-\usetypescriptfile [source]
-\usetypescriptfile [morisawa]
-\usetypescriptfile [fontworks]
-\usetypescriptfile [others]
-\usetypescriptfile [\p_typescript]
-%\ifx\p_mainlanguage\c!langhans
-%  \usemodule[zhpunc]
-%\fi
-\ifempty\p_latinfontname
-  \ifx\currentlanguage\c!langhans
-    \def\p_latinfontname{libertinum}
-    \input{type-bak-\p_latinfontname .mkiv}\relax
-  \else
-    \ifx\currentlanguage\c!langhant
-      \def\p_latinfontname{cormorantlight}
-      \input{type-bak-\p_latinfontname .mkiv}\relax
-    \else
-      \ifx\currentlanguage\c!langja
-        \def\p_latinfontname{ibmplex}
-        \input{type-bak-\p_latinfontname .mkiv}\relax
-      \fi
-    \fi
-  \fi
-\else
-  \input{type-bak-\p_latinfontname .mkiv}\relax
-\fi
-\ifempty\p_fontname
-  \ifx\currentlanguage\c!langhans
-    \def\p_fontname{adobehans}
-  \else
-    \ifx\currentlanguage\c!langhant
-      \def\p_fontname{lihant}
-    \else
-      \ifx\currentlanguage\c!langja
-        \def\p_fontname{kozuka}
-      \fi
-    \fi
-  \fi
-\fi
+%\loadtypescriptfile [adobe]
+\definefilesynonym [type-imp-adobehans.mkiv]        [type-imp-adobe.mkiv]
+\definefilesynonym [type-imp-adobehant.mkiv]        [type-imp-adobe.mkiv]
+\definefilesynonym [type-imp-adobenihon.mkiv]       [type-imp-adobe.mkiv]
+\definefilesynonym [type-imp-sonyhant.mkiv]         [type-imp-adobe.mkiv]
+\definefilesynonym [type-imp-kozuka.mkiv]           [type-imp-adobe.mkiv]
+\definefilesynonym [type-imp-founder.mkiv]          [type-imp-adobe.mkiv]
 
-\setuplanguage[hans][latinfontname=libertinum,fontname=adobehans]
-\setuplanguage[hant][latinfontname=cormorantlight,fontname=lihant]
-\setuplanguage[ja][latinfontname=ibmplex,fontname=kozuka]
+\definefilesynonym [type-imp-sourcehans.mkiv]       [type-imp-source.mkiv]
+\definefilesynonym [type-imp-sourcehant.mkiv]       [type-imp-source.mkiv]
+\definefilesynonym [type-imp-sourcenihon.mkiv]      [type-imp-source.mkiv]
+\definefilesynonym [type-imp-sourcehanslight.mkiv]  [type-imp-source.mkiv]
+\definefilesynonym [type-imp-sourcehantlight.mkiv]  [type-imp-source.mkiv]
+\definefilesynonym [type-imp-sourcenihonlight.mkiv] [type-imp-source.mkiv]
+\definefilesynonym [type-imp-genyotw.mkiv]          [type-imp-source.mkiv]
+\definefilesynonym [type-imp-genyotc.mkiv]          [type-imp-source.mkiv]
+\definefilesynonym [type-imp-genryutw.mkiv]         [type-imp-source.mkiv]
+\definefilesynonym [type-imp-genryutc.mkiv]         [type-imp-source.mkiv]
 
-\startsetups lang:hans
-  \setglobalscript [hanzi]
-  \setupalign[height,hanging,justified]
-  \setupinterlinespace[line=\p_lineheight]
-  \setupindenting  [first,always,2em]
-%    \setupwhitespace[halfline]
-  \ifx\currentmainlanguage\c!langhans\else
-    \input{type-bak-\languageparameter{latinfontname}.mkiv}\relax
-    \switchtobodyfont[\languageparameter{fontname}]\fi
-\stopsetups
-\startsetups lang:hant
-  \setglobalscript [hanzi]
-  \setupalign[height,hanging,justified]
-  \setupinterlinespace[line=\p_lineheight]
-  \setupindenting  [first,always,2em]
-%    \setupwhitespace[halfline]
-  \ifx\currentmainlanguage\c!langhant\else
-    \input{type-bak-\languageparameter{latinfontname}.mkiv}\relax
-    \switchtobodyfont[\languageparameter{fontname}]\fi
-\stopsetups
-\startsetups lang:ja
-  \setglobalscript [nihongo]
-  \setupalign[height,hanging,justified]
-  \setupinterlinespace[line=\p_lineheight]
-  \setupindenting  [first,always,1em]
-%    \setupwhitespace[halfline]
-  \ifx\currentmainlanguage\c!langja\else
-    \input{type-bak-\languageparameter{latinfontname}.mkiv}\relax
-    \switchtobodyfont[\languageparameter{fontname}]\fi
+\definefilesynonym [type-imp-dynahans.mkiv]         [type-imp-dyna.mkiv]
+\definefilesynonym [type-imp-dynahant.mkiv]         [type-imp-dyna.mkiv]
+\definefilesynonym [type-imp-dynanihon.mkiv]        [type-imp-dyna.mkiv]
+
+\definefilesynonym [type-imp-ipaexhans.mkiv]        [type-imp-ipaex.mkiv]
+\definefilesynonym [type-imp-ipaexhant.mkiv]        [type-imp-ipaex.mkiv]
+\definefilesynonym [type-imp-ipaexnihon.mkiv]       [type-imp-ipaex.mkiv]
+\definefilesynonym [type-imp-huiwen.mkiv]           [type-imp-ipaex.mkiv]
+
+\definefilesynonym [type-imp-sinohans.mkiv]         [type-imp-macos.mkiv]
+\definefilesynonym [type-imp-sinohant.mkiv]         [type-imp-macos.mkiv]
+\definefilesynonym [type-imp-lihant.mkiv]           [type-imp-macos.mkiv]
+\definefilesynonym [type-imp-jiyou.mkiv]            [type-imp-macos.mkiv]
+\definefilesynonym [type-imp-hiragino.mkiv]         [type-imp-macos.mkiv]
+
+\definefilesynonym [type-imp-reimin.mkiv]           [type-imp-morisawa.mkiv]
+\definefilesynonym [type-imp-ryumin.mkiv]           [type-imp-morisawa.mkiv]
+
+% \startsetups lang:hans
+% \stopsetups
+% \startsetups lang:hant
+% \stopsetups
+% \startsetups lang:ja
+% \stopsetups
+
+%%%%%%%% \section {設置 語言 字體 行高等}
+%% 可以通過 module parameter 控制 fontname latinfontname fontstyle 和 fontsize
+%% 其他的內容則通過具體的語言進行控制。
+%% 包括 align indenting interlinespace whitespace
+%% 我不太懂原因， 但是必須是先放置 appendtoks to everylanguage
+%% 然後在設置 mainlangugae， 才可以正常的切換不同語言的字體。
+%% 從終端結果來看， 和字體的加載順序相關。
+
+\startsetups fontfallback:reset
+  \resetfontfallback[fallback-serif]
+  \resetfontfallback[fallback-seriflight]
+  \resetfontfallback[fallback-seriflightitalic]
+  \resetfontfallback[fallback-serifitalic]
+  \resetfontfallback[fallback-serifbold]
+  \resetfontfallback[fallback-serifmedium]
+  \resetfontfallback[fallback-serifmediumitalic]
+  \resetfontfallback[fallback-serifbolditalic]
+  \resetfontfallback[fallback-serifslanted]
+  \resetfontfallback[fallback-serifboldslanted]
+  \resetfontfallback[fallback-serifcaps]
+  \resetfontfallback[fallback-sans]
+  \resetfontfallback[fallback-sanslight]
+  \resetfontfallback[fallback-sanslightitalic]
+  \resetfontfallback[fallback-sansitalic]
+  \resetfontfallback[fallback-sansbold]
+  \resetfontfallback[fallback-sansmedium]
+  \resetfontfallback[fallback-sansmediumitalic]
+  \resetfontfallback[fallback-sansbolditalic]
+  \resetfontfallback[fallback-sansslanted]
+  \resetfontfallback[fallback-sansboldslanted]
+  \resetfontfallback[fallback-sanscaps]
+  \resetfontfallback[fallback-mono]
+  \resetfontfallback[fallback-monolight]
+  \resetfontfallback[fallback-monolightitalic]
+  \resetfontfallback[fallback-monoitalic]
+  \resetfontfallback[fallback-monobold]
+  \resetfontfallback[fallback-monomedium]
+  \resetfontfallback[fallback-monomediumitalic]
+  \resetfontfallback[fallback-monobolditalic]
+  \resetfontfallback[fallback-monoslanted]
+  \resetfontfallback[fallback-monoboldslanted]
+  \resetfontfallback[fallback-monocaps]
+  \resetfontfallback[fallback-hanw]
+  \resetfontfallback[fallback-hanwlight]
+  \resetfontfallback[fallback-hanwlightitalic]
+  \resetfontfallback[fallback-hanwitalic]
+  \resetfontfallback[fallback-hanwbold]
+  \resetfontfallback[fallback-hanwmedium]
+  \resetfontfallback[fallback-hanwmediumitalic]
+  \resetfontfallback[fallback-hanwbolditalic]
+  \resetfontfallback[fallback-hanwslanted]
+  \resetfontfallback[fallback-hanwboldslanted]
+  \resetfontfallback[fallback-hanwcaps]
 \stopsetups
 
-\startmode[*hans,*hant,*ja]
-    \definedelimitedtext    [paren]   [location=text]
-    \setupdelimitedtext     [paren:1] [left={（\nobreak}, right={\nobreak）}]
-    \setupdelimitedtext     [paren:2] [left={\,[~}, right={~]\,}]
-    \setupdelimitedtext     [paren:3] [left={\,\{~}, right={~\}\,}]
-    \definedelimitedtext    [quota]   [location=text]
-    \setupdelimitedtext     [quota:1] [left=\symbol[leftquotation]\nobreak,
-                                       right=\nobreak\symbol[rightquotation]]
-    \setupdelimitedtext     [quota:2] [left=\symbol[leftquote]\nobreak,
-                                       right=\nobreak\symbol[rightquote]]
-    %D \start\hans
-    %D \ConTeXt\ 似乎對中文斷行有問題。下面的代碼可能會有助於改善斷行問題。\par
-    %D TODO 1:  標點符號的斷行規則\par
-    %D >> 標點斷行似乎有禁則： 一部分標點無法出現在行頭。
-    %D >> 標點符號和標點符號在搭配時，可以對標點間距進行調整。
-    %D >> 句末點號不出現在開頭。
-    %D TODO 2: 中英文之間應該插入間隔。\par
-    %D \stop
-    \definebreakpoint [compound] [、] [nleft=1,nright=1,type=1]
-    \definebreakpoint [compound] [（] [nleft=3,nright=3,type=1]
-    \definebreakpoint [compound] [）] [nleft=2,nright=2,type=1]
-    \definebreakpoint [compound] [(]  [nleft=3,nright=3,type=1]
-    \definebreakpoint [compound] [)]  [nleft=3,nright=3,type=1]
-    \definebreakpoint [compound] [_]  [nleft=1,nright=1,type=1]
-    \setbreakpoints   [compound]
-    % Note: month is special  \setupwhitespace
-    \definedate   [typei]   [year:cn-d,年,month:cn-d,day:cn-d,日]
-    \definedate   [typeii]  [year:n,年,mm,月,dd,日]
-    \definedate   [typeiii] [yy,/,mm,/,dd]
-    \definedate   [typeiv]  [yy,-,mm,-,dd]
-    \definedate   [typev]   [yy,/,dd,/,mm]
-    %D \starttyping
-    %D  \currentdate[typei] \currentdate[typeii] \currentdate[typeiii]
-    %D  \currentdate[typeiv] \currentdate[typev]
-    %D \stoptyping
-\stopmode
+\appendtoks
+  \edef\getfontinfo{[\languageparameter{fontname},\the\fontspecifiedsize\font ,\fontstyle]}%
+  % \setups{fontfallback:reset}% seems no need
+  \doifnot{\currentlanguage}{en}{\setups{fallback:\languageparameter{latinfontname}}}%
+  \expandafter\switchtobodyfont\getfontinfo%
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip\unskip
+  \setlocalscript[\languageparameter{script}]%
+  \ifhmode\else
+  \setupalign[\languageparameter\c!align]%
+  \setupwhitespace[\languageparameter{whitespace}]%
+  \setupindenting[\languageparameter\c!indenting]%
+  \setupinterlinespace[line=\languageparameter{interlinespace}]\fi%
+\to \everylanguage
+
+\setuplanguage[en]
+  [script=latin,patterns=en,
+   fontname=roman,
+   latinfontname=none,
+   align={bottom,width},
+   interlinespace=2.8ex,
+   indenting=none,]
+
+\setuplanguage[cn]
+  [script=latin,patterns=en,
+   fontname=sourcehans,
+   latinfontname=none,
+   align={bottom,width},
+   interlinespace=2.8ex,
+   indenting=none,]
 
 \setuplanguage  [hans]
                 [   date={\v!year,年,mm,月,dd,日},
                   setups={lang:hans},
-                 spacing=packed,        patterns={zh,en},
+                 spacing=packed,
+                patterns={zh,en},
+                  script=nihongo,
+                fontname=sourcehans,
+           latinfontname=newsreader,
+          interlinespace=1.5em,
+                   align={height,hanging,justified},
+               indenting={first,always,2em},
             leftsentence=——,       rightsentence=——,
          leftsubsentence=——,    rightsubsentence=——,
            leftquotation=「,      rightquotation=」,
@@ -538,13 +437,26 @@
                  graphic={插图},        graphics={插图},
             marginfigure={边图 },           text={参见 :\,},
                  preface={前言},       totalpage={共,页},
-             monday:mnem={星期一},  tuesday:mnem={星期二},
-          wednesday:mnem={星期三}, thursday:mnem={星期四},
-             friday:mnem={星期五}, saturday:mnem={星期六},
-             sunday:mnem={星期日}]
+                 january={一月},        february={二月},
+                   march={三月},           april={四月},
+                     may={五月},            june={六月},
+                    july={七月},          august={八月},
+               september={九月},         october={十月},
+                november={十一月},      december={十二月},
+             monday:mnem={周一},    tuesday:mnem={周二},
+          wednesday:mnem={周三},   thursday:mnem={周四},
+             friday:mnem={周五},   saturday:mnem={周六},
+             sunday:mnem={周日}]
 \setuplanguage  [hant] [date={\v!year,年,mm,月,dd,日},
                   setups={lang:hant},
-                 spacing=packed,       patterns={zh,en},
+                 spacing=packed,
+                patterns={zh,en},
+                  script=nihongo,
+                fontname=lihant,
+           latinfontname=cormorantlight,
+          interlinespace=1.5em,
+                   align={height,hanging,justified},
+               indenting={first,always,2em},
             leftsentence=——,      rightsentence=——,
          leftsubsentence=——,   rightsubsentence=——,
            leftquotation=「,     rightquotation=」,
@@ -557,13 +469,26 @@
                  graphic={插圖},        graphics={插圖},
             marginfigure={邊圖 },      totalpage={共,頁},
                  preface={前言},
-             monday:mnem={星期一},  tuesday:mnem={星期二},
-          wednesday:mnem={星期三}, thursday:mnem={星期四},
-             friday:mnem={星期五}, saturday:mnem={星期六},
-             sunday:mnem={星期日}]
+                 january={一月},        february={二月},
+                   march={三月},           april={四月},
+                     may={五月},            june={六月},
+                    july={七月},          august={八月},
+               september={九月},         october={十月},
+                november={十一月},      december={十二月},
+             monday:mnem={週一},    tuesday:mnem={週二},
+          wednesday:mnem={週三},   thursday:mnem={週四},
+             friday:mnem={週五},   saturday:mnem={週六},
+             sunday:mnem={週日}]
 \setuplanguage  [ja]  [\c!date={西暦,\v!year,年,mm,月,dd,日},
                         setups={lang:ja},
-                       spacing=packed,     patterns={ja,en},
+                       spacing=packed,
+                      patterns={ja,en},
+                        script=nihongo,
+                      fontname=kozuka,
+                 latinfontname=ibmplex,
+                interlinespace=1.5em,
+                         align={height,hanging,justified},
+                     indenting={first,always,1em},
                   leftsentence=——,    rightsentence=——,
                leftsubsentence=——, rightsubsentence=——,
                  leftquotation=「,   rightquotation=」,
@@ -574,7 +499,6 @@
                         figure={図 },       figures={図 },
                        graphic={図 },      graphics={図 },
                   marginfigure={図 },       preface={前書き},
-                     totalpage={共,ページ},
                        january={一月},     february={二月},
                          march={三月},        april={四月},
                            may={五月},         june={六月},
@@ -586,161 +510,187 @@
                    friday:mnem={金},  saturday:mnem={土},
                    sunday:mnem={日}]
 
-\setupbodyfont     [\p_fontname,
-                    \moduleparameter{memos}{fontstyle},
-                    \moduleparameter{memos}{fontsize}]
-%%%%%%%%%%%%%%%%%
-\installnamespace                        {lazylanguage}
-\installcommandhandler \????lazylanguage {lazylanguage} \????lazylanguage
+\mainlanguage        [\moduleparameter{memos}{mainlanguage}]
+\setglobalscript     [\languageparameter{script}]
+\setupalign          [\languageparameter\c!align]%
+\setupwhitespace     [\languageparameter{whitespace}]%
+\setupindenting      [\languageparameter\c!indenting]%
+\setupinterlinespace [line=\languageparameter{interlinespace}]
+% \input{type-bak-\moduleparameter{memos}{latinfontname}.mkiv}
+\input type-bak-fallbacks.mkiv
+\setups{fallback:newsreader}
+\setupbodyfont [\moduleparameter{memos}{fontname},
+                \moduleparameter{memos}{fontstyle},
+                \moduleparameter{memos}{fontsize}]
 
-\appendtoks
-  \setuevalue        {\currentlazylanguage}{\lazylanguage_direct[\currentlazylanguage]}%
-  \setuevalue{\e!start\currentlazylanguage}{\lazylanguage_start [\currentlazylanguage]}%
-  \setuevalue{\e!stop \currentlazylanguage}{\lazylanguage_stop                        }%
-\to \everydefinelazylanguage
+\definedelimitedtext [paren]       [location=text]
+\setupdelimitedtext  [paren:1]     [left={（\nobreak}, right={\nobreak）}]
+\setupdelimitedtext  [paren:2]     [left={\,[~}, right={~]\,}]
+\setupdelimitedtext  [paren:3]     [left={\,\{~}, right={~\}\,}]
+\setupdelimitedtext  [quotation]   [language=local,repeat=yes,location=paragraph]
+\setupdelimitedtext  [quotation:1] [left=\symbol[leftquotation]\nobreak,
+                                    middle=\symbol[leftquotation]\nobreak,
+                                    right=\nobreak\symbol[rightquotation]]
+\setupdelimitedtext  [quotation:2] [left=\symbol[leftquote]\nobreak,
+                                    middle=\symbol[leftquotation]\nobreak,
+                                    right=\nobreak\symbol[rightquote]]
 
-\newdimen\defaultlineheight
-\newdimen\defaultbaselineskip
-\defaultlineheight  =\baselineskip  \relax
-\defaultbaselineskip=\baselineskip\relax
-
-\unexpanded\def\lazylanguage_direct[#id]%
-  {\edef\currentlazylanguage{#id}%
-   \dosingleempty\lazylanguage_direct_indeed}
-\def\lazylanguage_direct_indeed[#options]%
-  {\groupedcommand
-     {\lazylanguage_start_indeed[#options]}%
-     \donothing}
-
-\unexpanded\def\lazylanguage_start[#id]%
-  {\bgroup
-   \edef\currentlazylanguage{#id}%
-   \dosingleempty\lazylanguage_start_indeed}
-\def\lazylanguage_start_indeed[#options]%
-  {\iffirstargument\setupcurrentlazylanguage[#options]\fi%
-   \mainlanguage[\lazylanguageparameter{patterns}]%
-   \language[\lazylanguageparameter{patterns}]%
-   \enablemode [*\lazylanguageparameter{patterns}]%
-   \doifsomething{\lazylanguageparameter{bodyfont}}%
-    {\switchtobodyfont[\lazylanguageparameter{bodyfont}]}
-  \doifsomething{\lazylanguageparameter{baselineskip}}%
-    {\baselineskip=\lazylanguageparameter{baselineskip}}
-  \doifsomething{\lazylanguageparameter{indenting}}%
-    {\setupindenting[\lazylanguageparameter{indenting}]}
-  \doifsomething{\lazylanguageparameter{whitespace}}%
-    {\setupwhitespace[\lazylanguageparameter{whitespace}]}
-}
-\unexpanded\def\lazylanguage_stop{\par\egroup}
-
-  \definelazylanguage [en]
-  \setuplazylanguage  [en] [
-    patterns=en,
-    baselineskip=\defaultbaselineskip,
-    indenting={no,none,first},
-    whitespace=1ex,]
-  \definelazylanguage [ja]
-  \setuplazylanguage  [ja] [
-    patterns=ja,
-    baselineskip=\baselineskip,
-    indenting={yes,always,1em},
-    whitespace=none,]
-  \definelazylanguage [hant]
-  \setuplazylanguage  [hant] [
-    patterns=hant,
-    baselineskip=\baselineskip,
-    indenting={yes,always,2em},
-    whitespace=none,]
-  \definelazylanguage [hans]
-  \setuplazylanguage  [hans] [
-    patterns=hans,
-    baselineskip=\baselineskip,
-    indenting={yes,always,2em},
-    whitespace=none,]
-
-%D \start\hans
-%D 特別的，draft 模式下會開啟字符缺失檢查
-%D 但可能會導致未知錯誤，包括目錄、引用等無法生成
-%D \type{\enabledirectives[logs.errors=missing characters]}
-%D 命令檢查字符是否缺失，如果有則停止繼續打印。
-%D 需要注意的是，開啟 draft 和 moresize 模式會拖慢生成文件的速度。
-%D \stop
-\startmode[draft]
-  \overfullrule=10pt%
-  \let\infofont\relax
-  \let\infofont\ttxx
-  \version[temporary]
-  \enabletrackers[builders.hpack.quality]
-  \enabletrackers[builders.hpack.overflow]
-  \enabletrackers[fonts.missing]
-  \replacemissingcharacters
+\startmode[*hans,*hant,*ja]
+  %D \ConTeXt\ 似乎對中文斷行有問題。下面的代碼可能會有助於改善斷行問題。\par
+  \definebreakpoint [compound] [、] [nleft=1,nright=1,type=1]
+  \definebreakpoint [compound] [（] [nleft=3,nright=3,type=1]
+  \definebreakpoint [compound] [）] [nleft=2,nright=2,type=1]
+  \setbreakpoints   [compound]
+  \definecharacterspacing [CJKPunc] % name may change / unit is em
+  %排版员通常会在以下标记的左侧添加空格：
+  %: ; ” ’ ! ? / ) ] } * ¿ › » @ ® ™ ℓ ° ¡ ' " † + = ÷ - – —
+  %他们通常会在以下位置的右侧添加空格：
+  %“ ‘ / ( [ { > ≥ < ≤ £ $ ¢ € ‹ « √ μ # @ + = ÷ - – —
+  \setupcharacterspacing  [CJKPunc] ["003A] [\c!left =.125,\c!right =.125,\c!alternative=1] % : e.g. 1:2 a:"b."
+  \setupcharacterspacing  [CJKPunc] ["003B] [\c!left =.125,\c!right =.125,\c!alternative=1] % ;
+  \setupcharacterspacing  [CJKPunc] ["003F] [\c!left =.125,\c!right =.125,\c!alternative=1] % ?
+  \setupcharacterspacing  [CJKPunc] ["0021] [\c!left =.125,\c!right =.125,\c!alternative=1] % !
+  \setupcharacterspacing  [CJKPunc] ["0028] [\c!left =.125,               \c!alternative=1] % (
+  \setupcharacterspacing  [CJKPunc] ["0029] [              \c!right =.125,\c!alternative=1] % )
+  \setupcharacterspacing  [CJKPunc] ["2013] [\c!left =.125,\c!right =.125,\c!alternative=1] % -
+  \setupcharacterspacing  [CJKPunc] ["2014] [\c!left =.125,\c!right =.125,\c!alternative=1] % --
+  \setupcharacterspacing  [CJKPunc] ["2015] [\c!left =.125,\c!right =.125,\c!alternative=1] % ---
+  \setupcharacterspacing  [CJKPunc] ["00AB] [              \c!right =.125,\c!alternative=1] % leftguillemot
+  \setupcharacterspacing  [CJKPunc] ["00BB] [\c!left =.125,               \c!alternative=1] % rightguillemot
+  %\setupcharacterspacing  [CJKPunc] ["FF1A] [\c!left  =.125,\c!right =.250,\c!alternative=1] % ：
+  %\setupcharacterspacing  [CJKPunc] ["3001] [\c!right =-.50,\c!alternative=1] %、
+  %\setupcharacterspacing  [CJKPunc] ["FF08] [\c!left  =-.25,\c!alternative=1] %（
+  %\setupcharacterspacing  [CJKPunc] ["FF09] [\c!right =-.25,\c!alternative=1] %）
+  %\setupcharacterspacing  [CJKPunc] ["3008] [\c!left  =-.25,\c!alternative=1] %〈
+  %\setupcharacterspacing  [CJKPunc] ["3009] [\c!right =-.25,\c!alternative=1] %〉
+  %\setupcharacterspacing  [CJKPunc] ["300A] [\c!left  =-.25,\c!alternative=1] %《
+  %\setupcharacterspacing  [CJKPunc] ["300B] [\c!right =-.25,\c!alternative=1] %》
+  %\setupcharacterspacing  [CJKPunc] ["300C] [\c!left  =-.5,\c!alternative=1] %「
+  %\setupcharacterspacing  [CJKPunc] ["300D] [\c!right =-.5,\c!alternative=1] %」
+  %\setupcharacterspacing  [CJKPunc] ["300E] [\c!left  =-.5,\c!alternative=1] %『
+  %\setupcharacterspacing  [CJKPunc] ["300F] [\c!right =-.5,\c!alternative=1] %』
+  % --，FF0C 。 3002  -- ”201C“201D ？FF1F
+  \setcharacterspacing    [CJKPunc]
 \stopmode
-\startmode[print]
-%
-\stopmode
-\startmode[kindle]
-    \setupmodule   [fontsize=14pt,papersize=kindle,layout=kindle]
-\stopmode
+
+\definedate   [typei]   [year:cn-d,年,month,day:cn,号]
+\definedate   [typeii]  [year:n,年,mm,月,dd,日]% 2025年01月11日
+\definedate   [typeiii] [yy,/,mm,/,dd]%25/01/11
+\definedate   [typeiv]  [yy,-,mm,-,dd]%25-01-11
+\definedate   [typev]   [yy,/,dd,/,mm]%25/11/01
+%D \starttyping
+%D  \currentdate[typei] \currentdate[typeii] \currentdate[typeiii]
+%D  \currentdate[typeiv] \currentdate[typev]
+%D \stoptyping
 %%%%%%%%%%%%%%%
+%%  ！！！ 應該只考慮 英數 和 漢字 之間的空間插入，符號 和 漢字 之間的間距不應該由這個程式控制
+
 \startluacode
-  Thirddata = Thirddata or {}
+Thirddata = Thirddata or {}
 
-  local glyph_id = nodes.nodecodes.glyph --node.id("glyph")
-  local node_insertbefore = node.insertbefore
-  local node_insertafter  = node.insertafter
-  local node_new = node.new
-  local tex_sp = tex.sp
+local glyph_id = nodes.nodecodes.glyph
+local node_insertbefore = node.insertbefore
+local node_insertafter = node.insertafter
+local node_new = node.new
+local tex_sp = tex.sp
 
-  local function ischinesechar(c)
-      -- for more ranges:
-      -- https://wiki.contextgarden.net/List_of_Unicode_blocks
-    return (c >= 0x4E00 and c <= 0x9FFF)       -- Basic CJK
-        or (c >= 0x3400 and c <= 0x4DBF)       -- Extension A
-        or (c >= 0x20000 and c <= 0x2A6DF)     -- Extension B
-        or (c >= 0x2A700 and c <= 0x2B73F)     -- Extension C
-        or (c >= 0x2B740 and c <= 0x2B81F)     -- Extension D
-        or (c >= 0x2B820 and c <= 0x2CEAF)     -- Extension E
-        or (c >= 0x2CEB0 and c <= 0x2EBEF)     -- Extension F
-        or (c >= 0xF900 and c <= 0xFAFF)       -- Compatibility Ideographs
-        or (c >= 0x2F800 and c <= 0x2FA1F)     -- Compatibility Ideographs Supplement
-  end
+local function ischinesechar(c)
+    -- cjk汉字，不含符号
+    -- for more ranges:
+    -- https://wiki.contextgarden.net/List_of_Unicode_blocks
+    -- 按常用程度排列
+    return (c >= 0x04E00 and c <= 0x09FFF) --CJK Unified Ideographs; cjkunifiedideographs
+        or (c >= 0x03400 and c <= 0x04DBF) --CJK Unified Ideographs Extension A; cjkunifiedideographsextensiona
+        or (c >= 0x02E80 and c <= 0x02EFF) --CJK Radicals Supplement; cjkradicalssupplement
+        or (c >= 0x031C0 and c <= 0x031EF) --CJK Strokes; cjkstrokes
+        or (c >= 0x0F900 and c <= 0x0FAFF) --CJK Compatibility Ideographs; cjkcompatibilityideographs
+        or (c >= 0x20000 and c <= 0x2A6DF) --CJK Unified Ideographs Extension B; cjkunifiedideographsextensionb
+        or (c >= 0x2A700 and c <= 0x2B73F) --CJK Unified Ideographs Extension C; cjkunifiedideographsextensionc
+        or (c >= 0x2B740 and c <= 0x2B81F) --CJK Unified Ideographs Extension D; cjkunifiedideographsextensiond
+        or (c >= 0x2B820 and c <= 0x2CEAF) --CJK Unified Ideographs Extension E; cjkunifiedideographsextensione
+        or (c >= 0x2CEB0 and c <= 0x2EBEF) --CJK Unified Ideographs Extension F; cjkunifiedideographsextensionf
+        or (c >= 0x2F800 and c <= 0x2FA1F) --CJK Compatibility Ideographs Supplement; cjkcompatibilityideographssupplement
 
-  function Thirddata.processmystuff(head)
-      local n = head
-      while n do
-          if n.id == glyph_id and ischinesechar(n.char) then
+end
 
-              local n_prev = n.prev
-              if n_prev
-                  and n_prev.id == glyph_id
-                  and not ischinesechar(n_prev.char)
-                  then
-              local glue = node_new("glue")
-              glue.width = tex_sp("0.25em")
-              glue.stretch = tex_sp("0.25em")
-              -- print("insert space before:", utf8.char(n.char))
-              head, glue = node_insertbefore(head, n, glue)
-              end
+local function ispunctuation(c)
+  return (c >= 0x0000 and c <= 0x002F)
+      or (c >= 0x003A and c <= 0x003F)
+      or (c >= 0x005B and c <= 0x0060)
+      or (c >= 0x007B and c <= 0x007F)
+      or (c >= 0x2000 and c <= 0x206F)
+end
 
-              local n_next = n.next
-              if n_next
-                  and n_next.id == glyph_id
-                  and not ischinesechar(n_next.char)
-                  then
-              local glue = node_new("glue")
-              glue.width = tex_sp("0.25em")
-              glue.stretch = tex_sp("0.25em")
-              -- print("insert space after:", utf8.char(n.char))
-              head, glue = node_insertafter(head, n, glue)
-              n = glue.next
-              end
-          end
-          n = n.next
-      end
-      return head, done
-  end
+-- 汉字环境中的（非汉字）合法符号
+local legalsymbolinchinese = {
+    [0x00b7] = true, -- ·   MIDDLE DOT
+    [0x002D] = true, -- -  Hyphen-Minus. Will there be any side effects?
+    [0x002F] = true, -- /  Solidus
+    [0x3007] = true, -- 〇 captical zero
+}
 
-  nodes.tasks.appendaction("processors", "after", "Thirddata.processmystuff")
+local function islegalsymbolinchinese(c)
+    return legalsymbolinchinese[c]
+end
+
+function Thirddata.processmystuff(head)
+    local n = head
+    while n do
+        if n.id == glyph_id then
+            if  ischinesechar(n.char) then -- 本字是汉字
+                local n_prev = n.prev
+                if n_prev and n_prev.id == glyph_id  and not ispunctuation(n_prev.char) then
+                    if ischinesechar(n_prev.char) then -- 前字是汉字
+                    elseif not islegalsymbolinchinese(n_prev.char) then --前字不是汉字也不是合法中文语境符号
+                        local glue = node_new("glue")
+                        glue.width = tex_sp("0.25em")
+                        glue.stretch = tex_sp("0.25em")
+                        --print("insert space before:", utf8.char(n.char))
+                        head, glue = node_insertbefore(head, n, glue)
+                    end
+                end
+
+                local n_next = n.next
+                if n_next
+                and n_next.id == glyph_id
+                and not ischinesechar(n_next.char)
+                and not islegalsymbolinchinese(n_next.char)
+                and not ispunctuation(n_next.char)
+                then
+                    local glue = node_new("glue")
+                    glue.width = tex_sp("0.25em")
+                    glue.stretch = tex_sp("0.25em")
+                    --print("insert space after:", utf8.char(n.char))
+                    head, glue = node_insertafter(head, n, glue)
+                    n = glue.next
+                end
+            elseif n.char == 0x2014 then -- — — 双符破折号中间加入一个
+                local n_prev = n.prev
+             if n_prev and n_prev.id == glyph_id and n_prev.char == 0x2014 then
+                    local k_l = node_new("kern")
+                    k_l.kern = -n.width / 2
+                    head, k_l = node_insertbefore(head, n, k_l)
+                    local glyph_n = node_new("glyph")
+                    glyph_n.font = font.current()
+                    glyph_n.subtype = 0
+                    glyph_n.char = 0x2014
+                    head, glyph_n = node_insertbefore(head, n, glyph_n)
+                    local k_r = node_new("kern")
+                    k_r.kern = -n.width / 2
+                    head, k_r = node_insertbefore(head, n, k_r)
+             end
+            end
+        end
+        n = n.next
+    end
+    return head, done
+end
+
+nodes.tasks.appendaction("processors", "after", "Thirddata.processmystuff")
 \stopluacode
+
+\def\disablepanguspace{\ctxluacode{nodes.tasks.disableaction("processors","Thirddata.processmystuff")}}
+\def\enablepanguspace {\ctxluacode {nodes.tasks.enableaction ("processors","Thirddata.processmystuff")}}
 
 \startprotectedcolors
   \definecolor [transparent] [r=1,t=0,a=1]
@@ -779,9 +729,9 @@
   \definecolor [blackblack]  [x=000000]  \definecolor [blackwhite]  [x=DBD6CA]
 \stopprotectedcolors
 \definepalet [serene]    [themecolor=blue,% bluetheme 1
-                           altcolori=softblue,          altcolorii=lightblue,
-                         altcoloriii=darkblue,          altcoloriv=deepblue,
-                           altcolorv=lightred,          altcolorvi=red,
+                      softthemecolor=softblue,     lightthemecolor=lightblue,
+                      darkthemecolor=darkblue,      deepthemecolor=deepblue,
+                       lightoptcolor=lightred,            optcolor=red,
                        mainbackcolor=softblue,  secondarybackcolor=darkwhite,
                           titlecolor=blue,               textcolor=black,
                            codecolor=deepblue,        captioncolor=deepblue,
@@ -789,9 +739,9 @@
                            linkcolor=blue,            toclinkcolor=blue,
                           framecolor=lightblue,     referencecolor=blue,]
 \definepalet [harmony]   [themecolor=green,% greentheme 2
-                           altcolori=softgreen,         altcolorii=lightgreen,
-                         altcoloriii=darkgreen,         altcoloriv=deepgreen,
-                           altcolorv=lightblue,         altcolorvi=blue,
+                      softthemecolor=softgreen,    lightthemecolor=lightgreen,
+                      darkthemecolor=darkgreen,     deepthemecolor=deepgreen,
+                       lightoptcolor=lightblue,           optcolor=blue,
                        mainbackcolor=softgreen, secondarybackcolor=darkwhite,
                           titlecolor=green,              textcolor=black,
                            codecolor=deepgreen,       captioncolor=deepgreen,
@@ -799,9 +749,9 @@
                            linkcolor=green,           toclinkcolor=green,
                           framecolor=lightgreen,    referencecolor=green,]
 \definepalet [passion]   [themecolor=red,%redtheme 3
-                           altcolori=softred,           altcolorii=lightred,
-                         altcoloriii=darkred,           altcoloriv=deepred,
-                           altcolorv=lightgreen,        altcolorvi=green,
+                      softthemecolor=softred,      lightthemecolor=lightred,
+                      darkthemecolor=darkred,       deepthemecolor=deepred,
+                       lightoptcolor=lightgreen,          optcolor=green,
                        mainbackcolor=softred,   secondarybackcolor=darkwhite,
                           titlecolor=red,                textcolor=black,
                            codecolor=deepred,         captioncolor=deepred,
@@ -809,9 +759,9 @@
                            linkcolor=red,             toclinkcolor=red,
                           framecolor=lightred,      referencecolor=red,]
 \definepalet [adventure] [themecolor=orange,%orange 4
-                           altcolori=softorange,        altcolorii=lightorange,
-                         altcoloriii=darkorange,        altcoloriv=deeporange,
-                           altcolorv=lightcyan,         altcolorvi=cyan,
+                      softthemecolor=softorange,   lightthemecolor=lightorange,
+                      darkthemecolor=darkorange,    deepthemecolor=deeporange,
+                       lightoptcolor=lightcyan,           optcolor=cyan,
                        mainbackcolor=softorange,secondarybackcolor=darkwhite,
                           titlecolor=orange,             textcolor=black,
                            codecolor=deeporange,      captioncolor=deeporange,
@@ -819,9 +769,9 @@
                            linkcolor=orange,          toclinkcolor=orange,
                           framecolor=lightorange,   referencecolor=orange,]
 \definepalet [optimism]  [themecolor=yellow,%yellow 5
-                           altcolori=softyellow,        altcolorii=lightyellow,
-                         altcoloriii=darkyellow,        altcoloriv=deepyellow,
-                           altcolorv=lightorange,       altcolorvi=orange,
+                      softthemecolor=softyellow,   lightthemecolor=lightyellow,
+                      darkthemecolor=darkyellow,    deepthemecolor=deepyellow,
+                       lightoptcolor=lightorange,         optcolor=orange,
                        mainbackcolor=softyellow, secondarybackcolor=darkwhite,
                           titlecolor=yellow,              textcolor=black,
                            codecolor=deepyellow,       captioncolor=deepyellow,
@@ -829,9 +779,9 @@
                            linkcolor=yellow,           toclinkcolor=yellow,
                           framecolor=lightyellow,    referencecolor=yellow,]
 \definepalet[creativity] [themecolor=cyan,% cyan 6
-                           altcolori=softcyan,         altcolorii=lightcyan,
-                         altcoloriii=darkcyan,         altcoloriv=deepcyan,
-                           altcolorv=lightyellow,      altcolorvi=yellow,
+                      softthemecolor=softcyan,    lightthemecolor=lightcyan,
+                      darkthemecolor=darkcyan,     deepthemecolor=deepcyan,
+                       lightoptcolor=lightyellow,        optcolor=yellow,
                        mainbackcolor=softcyan, secondarybackcolor=darkwhite,
                           titlecolor=cyan,              textcolor=black,
                            codecolor=deepcyan,       captioncolor=deepcyan,
@@ -839,9 +789,9 @@
                            linkcolor=cyan,           toclinkcolor=cyan,
                           framecolor=lightcyan,    referencecolor=cyan,]
 \definepalet [magic]     [themecolor=purple,% purple 7
-                           altcolori=softpurple,         altcolorii=lightpurple,
-                         altcoloriii=darkpurple,         altcoloriv=deeppurple,
-                           altcolorv=lightpink,          altcolorvi=pink,
+                      softthemecolor=softpurple,    lightthemecolor=lightpurple,
+                      darkthemecolor=darkpurple,     deepthemecolor=deeppurple,
+                       lightoptcolor=lightpink,            optcolor=pink,
                        mainbackcolor=softpurple, secondarybackcolor=darkwhite,
                           titlecolor=purple,              textcolor=black,
                            codecolor=deeppurple,       captioncolor=deeppurple,
@@ -849,9 +799,9 @@
                            linkcolor=purple,           toclinkcolor=purple,
                           framecolor=lightpurple,    referencecolor=purple,]
 \definepalet [romance]   [themecolor=pink,% pink 8
-                           altcolori=softpink,         altcolorii=lightpink,
-                         altcoloriii=darkpink,         altcoloriv=deeppink,
-                           altcolorv=lightgray,        altcolorvi=gray,
+                      softthemecolor=softpink,    lightthemecolor=lightpink,
+                      darkthemecolor=darkpink,     deepthemecolor=deeppink,
+                       lightoptcolor=lightgray,          optcolor=gray,
                        mainbackcolor=softpink, secondarybackcolor=darkwhite,
                           titlecolor=pink,              textcolor=black,
                            codecolor=deeppink,       captioncolor=deeppink,
@@ -859,9 +809,9 @@
                            linkcolor=pink,           toclinkcolor=pink,
                           framecolor=lightpink,    referencecolor=pink,]
 \definepalet [reliable]  [themecolor=gray,% gray 9
-                          altcolori=softgray,      altcolorii=lightgray,
-                          altcoloriii=darkgray,    altcoloriv=deepgray,
-                          altcolorv=lightpurple,      altcolorvi=purple,
+                     softthemecolor=softgray, lightthemecolor=lightgray,
+                       darkthemecolor=darkgray,deepthemecolor=deepgray,
+                      lightoptcolor=lightpurple,        optcolor=purple,
                           mainbackcolor=softgray, secondarybackcolor=darkwhite,
                           titlecolor=gray,         textcolor=black,
                           codecolor=deepgray,      captioncolor=deepgray,
@@ -869,9 +819,9 @@
                           linkcolor=gray,          toclinkcolor=gray,
                           framecolor=lightgray,    referencecolor=gray,]
 \definepalet [formality] [themecolor=pink,% black 10
-                          altcolori=softred,      altcolorii=softblue,
-                          altcoloriii=softyellow, altcoloriv=softgreen,
-                          altcolorv=softpurple,   altcolorvi=softorange,
+                     softthemecolor=softred, lightthemecolor=softblue,
+                       darkthemecolor=softyellow,deepthemecolor=softgreen,
+                      lightoptcolor=softpurple,     optcolor=softorange,
                           mainbackcolor=softcyan, secondarybackcolor=softgray,
                           titlecolor=black,        textcolor=black,
                           codecolor=deeppink,      captioncolor=deeppink,
@@ -879,9 +829,9 @@
                           linkcolor=pink,          toclinkcolor=pink,
                           framecolor=lightgray,    referencecolor=pink,]
 \definepalet [innocence] [themecolor=blue,% white 11
-                          altcolori=lightred,      altcolorii=lightblue,
-                          altcoloriii=lightyellow, altcoloriv=lightgreen,
-                          altcolorv=lightpurple,   altcolorvi=lightorange,
+                     softthemecolor=lightred, lightthemecolor=lightblue,
+                       darkthemecolor=lightyellow,deepthemecolor=lightgreen,
+                      lightoptcolor=lightpurple,     optcolor=lightorange,
                           mainbackcolor=deepwhite, secondarybackcolor=darkwhite,
                           titlecolor=black,        textcolor=black,
                           codecolor=deepgray,      captioncolor=deepgray,
@@ -928,20 +878,20 @@
 \definepapersize [ipad]   [width=7.5in, height=10in, ]
 \definepapersize [kindle] [width=120mm, height=160mm,]
 \definelayout    [exotic] [% width=120mm,height=250mm,
-                  width=fit,                height=fit,
-              backspace=20mm,             topspace=0mm,
-              rightedge=10mm,    rightedgedistance=5mm,
-            rightmargin=50mm,  rightmargindistance=5mm,
+                   width=fit,               height=fit,
+               backspace=20mm,            topspace=5mm,
+               rightedge=10mm,   rightedgedistance=5mm,
+             rightmargin=50mm, rightmargindistance=5mm,
                   header=10mm,      headerdistance=5mm,
                   footer=15mm,      footerdistance=5mm,
                   bottom=0mm,       bottomdistance=0mm]
 \definelayout    [kaolike] [% width=120mm,height=250mm,
-                  width=fit,                height=fit,
-              backspace=24mm,             topspace=0mm,
-              rightedge=20mm,    rightedgedistance=0mm,
-            rightmargin=45mm,  rightmargindistance=5mm,
-                 header=22mm,       headerdistance=5mm,
-                 footer=22mm,       footerdistance=5mm,
+                   width=fit,               height=fit,
+               backspace=24mm,            topspace=0mm,
+               rightedge=20mm,   rightedgedistance=0mm,
+             rightmargin=45mm, rightmargindistance=5mm,
+                  header=22mm,      headerdistance=5mm,
+                  footer=22mm,      footerdistance=5mm,
                   bottom=0mm,       bottomdistance=0mm]
 \definelayout    [ipad][
                    width=fit,               height=fit,
@@ -1030,10 +980,7 @@
               topspace=12.37mm,   bottomspace=12.37mm,
               backspace=17.5mm,         %cutspace=15mm,
                     bottom=0mm,    bottomdistance=0mm,
-%                 rightedge=0mm, rightedgedistance=0mm,
-%                  leftedge=0mm,  leftedgedistance=0mm,
                               rightmargindistance=5mm,
-%                               leftmargindistance=0mm,
                 leftmargin=0mm,      rightmargin=50mm,
                 header=12.45mm,    headerdistance=0mm,
                 footer=12.38mm,    footerdistance=0mm,
@@ -1043,26 +990,22 @@
               topspace=12.37mm,   bottomspace=12.37mm,
               backspace=17.5mm,         %cutspace=15mm,
                     bottom=0mm,    bottomdistance=0mm,
-%                 rightedge=0mm, rightedgedistance=0mm,
-%                  leftedge=0mm,  leftedgedistance=0mm,
                               rightmargindistance=5mm,
-%                               leftmargindistance=0mm,
                 leftmargin=0mm,      rightmargin=50mm,
                 header=12.45mm,    headerdistance=0mm,
                 footer=35.0mm,     footerdistance=0mm,
                      width=fit,            height=fit,]
 
-\setuppapersize  [\moduleparameter{memos}{papersize}]
 %% must load font first,then can get real text fontsize(1em)
 % 只關心每行寬度每列高度和邊注寬度。其他的依照 1:√2 的比例切割（只是粗略）
-\newcount\c_textcount\c_textcount=\moduleparameter{memos}{textcount}\relax
-\newcount\c_heightcount\c_heightcount=\moduleparameter{memos}{heightcount}\relax
-\newcount\c_margincount\c_margincount=\moduleparameter{memos}{margincount}\relax
-\newdimen\d_textfontsize\d_textfontsize=\fontdimen6\font\relax
+\newcount\c_textcount     \c_textcount=\moduleparameter{memos}{textcount}\relax
+\newcount\c_heightcount   \c_heightcount=\moduleparameter{memos}{heightcount}\relax
+\newcount\c_margincount   \c_margincount=\moduleparameter{memos}{margincount}\relax
+\newdimen\d_textfontsize  \d_textfontsize=\fontdimen6\font\relax
+\newdimen\d_marginwidth   \d_marginwidth=\dimexpr\fontdimen6\font*\c_margincount\relax
 \newdimen\d_textlineheight\d_textlineheight=
          \dimexpr\baselineskip*\c_heightcount-\baselineskip+
          \ifdim\topskip<\ht\strutbox\topskip\else\ht\strutbox\fi\relax
-\newdimen\d_marginwidth\d_marginwidth=\dimexpr\fontdimen6\font*\c_margincount\relax
 
 \startluacode
   local todimen
@@ -1151,24 +1094,35 @@ context.definelayout(
 )
 \stopluacode
 
+%%%%% \section{layout}
+\setuppapersize  [\moduleparameter{memos}{papersize}]
 \setuplayout     [\moduleparameter{memos}{layout}]
 \definelayout    [default][\moduleparameter{memos}{layout}]
+%%% 此處定義了默認的頁面佈局， 可以通過 \setuplayout[default] 來設置
+% \doloopoverlist
+%   {exotic, kaolike, ipad, kindle, sidemirror,
+%    propiorroot, propiorgplden,
+%    narrow, moderate, wide, extrawide,
+%    moderatecomments, moderatecommentsii}
+%   {\page\setuplayout[\recursestring]{\red\ssd \currentlayout}\showsetups }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                                結構相關設置                         %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\startsectionblockenvironment[frontpart]
+\setupsectionblock [\v!frontmatter] [\c!number=\v!yes]
+\setupsectionblock [\v!frontpart]   [\c!number=\v!yes]
+\startsectionblockenvironment[frontmatter]
   \setcounter [userpage] [1]
   \setupuserpagenumber[numberconversion=Romannumerals]
 \stopsectionblockenvironment
-\startsectionblockenvironment[bodypart]
+\startsectionblockenvironment[bodymatter]
   \resetuserpagenumber
   \setupuserpagenumber [numberconversion=numbers]
-  \setuphead  [part,chapter] [header=empty,footer=empty,text=empty]
+  \setuphead  [part,chapter] [header=empty,footer=empty]
 \stopsectionblockenvironment
-\startsectionblockenvironment[appendix]
+\startsectionblockenvironment[appendices]
   \setupuserpagenumber [numberconversion=numbers]
 \stopsectionblockenvironment
-\startsectionblockenvironment[backpart]
+\startsectionblockenvironment[backmatter]
   \setupuserpagenumber [numberconversion=numbers]
 \stopsectionblockenvironment
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1176,8 +1130,6 @@ context.definelayout(
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\setuplist [figure]  [prefix=yes]
 %\setuplist [table]   [prefix=yes]
-%\setupcombinedlist  [content]
-%           [list={part,chapter,section,preface,title,subject}]
 %\setuppagenumber
 %  [way=bytext,
 %   prefix=yes,
@@ -1238,7 +1190,7 @@ context.definelayout(
 \define[1]\parenpage{\hskip-.5\emwidth\relax(#1)}
 \define[1]\partlabel{{\sc\color[themecolor]{\tx Part}\ }}
 \iftocs_sty_default
-  \edef\currenttocsstyle{default}
+  \edef\currenttocstyle{default}
   \setupcombinedlist[content][list={part,%
                title,chapter,subject,section,
                subsubject,subsection,
@@ -1263,7 +1215,7 @@ context.definelayout(
   \setuplist  [subsubsubsubsection][margin=6.5em]
 \fi
 \iftocs_sty_simple
-  \edef\currenttocsstyle{simple}
+  \edef\currenttocstyle{simple}
   \setupcombinedlist[content][list={part,%
                title,chapter,subject,section,
                subsubject,subsection,
@@ -1287,7 +1239,7 @@ context.definelayout(
   \setuplist  [subsubsubsubsection][margin=7.0em]
 \fi
 \iftocs_sty_line
-  \edef\currenttocsstyle{line}
+  \edef\currenttocstyle{line}
   \let\partlabel\relax
   \define[1]\partlabel{{\sc\color[themecolor]{\tx Part (#1)}\ }}
   \define[1]\chaplabel{{\sc\color[themecolor]{\tx Chap (#1)}\ }}
@@ -1306,7 +1258,7 @@ context.definelayout(
   \setuplist  [subsection][margin=4.5em,alternative=d,pagecommand=\parenpage]
 \fi
 \iftocs_sty_madsen
-  \edef\currenttocsstyle{madsen}
+  \edef\currenttocstyle{madsen}
   \definehead [tochead]   [title][alternative=madsentoc]
   \setupcombinedlist[content][list={part,title,chapter,subject,section}]
   \setuplist  [chapter,section]
@@ -1326,7 +1278,7 @@ context.definelayout(
   \setuplist  [subsubsubsubsection][margin=5.5em]
 \fi
 \iftocs_sty_colorful
-  \edef\currenttocsstyle{colorful}
+  \edef\currenttocstyle{colorful}
   \startuseMPgraphic{MP:toc}
       numeric width , height ;
       width  = \overlaywidth ;
@@ -1336,10 +1288,10 @@ context.definelayout(
       txtheight := \overlayheight ;
       path paper_back ;%%% i
       paper_back  := fullsquare xscaled width yscaled height ;
-      fill paper_back withcolor \MPcolor{altcolori} ;
+      fill paper_back withcolor \MPcolor{softthemecolor} ;
       path text_back ;%%% ii
       text_back := fullsquare xscaled txtwidth yscaled txtheight;
-      fill text_back shifted(-.35width,0) withcolor \MPcolor{altcolorii} ;
+      fill text_back shifted(-.35width,0) withcolor \MPcolor{lightthemecolor} ;
   \stopuseMPgraphic
   \defineoverlay   [olay:toc][\useMPgraphic{MP:toc}]
   \setuplabeltext  [cn][content=Table Of Contents]
@@ -1362,17 +1314,17 @@ context.definelayout(
   \setuplist  [section]   [margin=\dimexpr\backspace+1em\relax,headnumber=no]
 \fi
 \iftocs_sty_classicnovel
-  \edef\currenttocsstyle{classicnovel}
+  \edef\currenttocstyle{classicnovel}
   \setupcombinedlist[content][list={part,title,chapter}]
   \setuplist        [part,chapter,title,][label=yes,after=,style=ss]
   \setuplist        [chapter][before=,]
   \setuplist        [title]  [margin=5em]
 \fi
 \iftocs_sty_classics
-  \edef\currenttocsstyle{classics}
+  \edef\currenttocstyle{classics}
 \fi
 \iftocs_sty_rocket
-  \edef\currenttocsstyle{rocket}
+  \edef\currenttocstyle{rocket}
   \define[1]\chaplabel{{\sc\color[themecolor]{\Romannumerals\currentlistentrynumber}}}
   \setuphead       [tochead][alternative=middle,before=\null\vskip2\baselineskip\relax]
   \setupcombinedlist[content][list={part,title,chapter,section,subject}]
@@ -1388,7 +1340,7 @@ context.definelayout(
   \setuplist       [subject]        [margin=4em]
 \fi
 \iftocs_sty_hexa
-  \edef\currenttocsstyle{hexa}
+  \edef\currenttocstyle{hexa}
   \setupcombinedlist[content][list={part,%
                      title,chapter,subject,section,
                      subsubject,subsection,
@@ -1414,29 +1366,17 @@ context.definelayout(
      \getparameters[??TOCs][#1]\fi}
 
 \setupTOCs[%#1 to set lists,#2 to set tochead
-  alternative=,% dont know why dont work
+  alternative=default,% dont know why dont work
   interlinespace=\baselineskip,
   title=\labeltext{content},
   content=yes,
   layout=moderate,
   resetlayout=default,][placehead=yes,page=yes]
 
-\def\placeTOCs{\dosingleempty\doplaceTOCs}
-\def\doplaceTOCs[#1]{\begingroup%
+\tolerant\def\placeTOCs[#1]{\begingroup%
   \iffirstargument\setupTOCs[#1]\fi%
-  \doifnot{\??TOCsalternative}{}%
-          {\csname tocs_sty_\currenttocsstyle false\endcsname}%
-  \processaction[\??TOCsalternative][%
-          line=>\tocs_sty_linetrue,
-      colorful=>\tocs_sty_colorfultrue,
-        madsen=>\tocs_sty_madsentrue,
-        rocket=>\tocs_sty_rockettrue,
-          hexa=>\tocs_sty_hexatrue,
-        simple=>\tocs_sty_simpletrue,
-      classics=>\tocs_sty_classicstrue,
-  classicnovel=>\tocs_sty_classicnoveltrue,
-    \v!default=>\csname tocs_sty_\currenttocsstyle true\endcsname,
-    \v!unknown=>\errorparameter{tocs:alternative},]%
+  % \csname tocs_sty_\currenttocstyle false\endcsname
+  % \csname tocs_sty_\??TOCsalternative true\endcsname
   \doifinsetelse{\headparameter\c!page}{no,disable}%
      {}{\setuplayout[\??TOCslayout]}%
   \edef\p_title{\??TOCstitle}%
@@ -1450,29 +1390,31 @@ context.definelayout(
     {\setuplayout[\??TOCsresetlayout]}%
   \endgroup}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%                            標題相關設置                               %%%%%
+%%%%%%                            標題相關設置                             %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\definehead[preface][title]% for preface
 \setupheads
            [part,chapter,section,subsection,subsubsection,
             subsubsubsection,subsubsubsubsection]
-           [indentnext=yes,interlinespace=auto,
-            %textcommand={\setcharactercasing[Words]},
+           [indentnext=yes,interlinespace=auto,%textcommand={\setcharactercasing[Words]},
             before={\vskip.5\baselineskip\relax}, after={\vskip.5\baselineskip\relax},]
 \setuphead [part,chapter,title]  [color=titlecolor]
 \setuphead [title,subject]       [incrementnumber=list]
 \setuphead [part]                [style=\definedfont[Sans sa 2.488]]
 \setuphead [chapter]             [style=\ssd]
-\setuphead [section]             [style=\bfb]
-\setuphead [subsection]          [style=\ita]
-\setuphead [subsubsection]       [style=\it]
-\setuphead [subsubsubsection]    [style=\it]
-\setuphead [subsubsubsubsection] [style=\it]
+\setuphead [section]             [style=\rm\bfb]
+\setuphead [subsection]          [style=\rma]
+\setuphead [subsubsection]       [style=\rm\bf]
+\setuphead [subsubsubsection]    [style=\rm\bf]
+\setuphead [subsubsubsubsection] [style=\rm\bf]
 \setuphead [part]                [placehead=yes,alternative=middle,
                                   before={\mbox{}\vskip4\baselineskip\relax},
                                    after={\vskip2\baselineskip\relax}]
-\setuphead [part,title]          [page={odd},header=empty,footer=empty]
-\setuphead [chapter]             [page={odd},header=empty,
+\setuphead [part,title]          [header=empty,footer=empty]
+\setuphead [chapter]             [header=empty,
+                                  frontpartlabel=preface,
+                                  bodypartlabel=chapter,
+                                  appendixlabel=appendix,
+                                  backpartlabel=backpart,
                                   interlinespace=3\bodyfontsize,
                                   before={\null\vskip3\baselineskip\relax},
                                   after={\vskip\baselineskip\relax}]
@@ -1486,12 +1428,17 @@ context.definelayout(
 \def\parenround#1{(#1) }
 \def\parenkaku#1{<#1> }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%                    標題相關設置                    %%%%%%
-%%%%%%                     數字式標籤                     %%%%%%
+%%%%%%                          標題相關設置                               %%%%%%
+%%%%%%                           數字式標籤                                %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %characters(a),romannumerals(i),numbers(1),
 %chinesenumerals(四十二) chinesecapnumerals(肆拾二) chineseallnumerals(廿二)
 \ifchap_sty_simple
+%% 第 1 章    --- chapter
+%% 1 XXXX     --- section
+%% 1.1 XXXX   --- subsection
+%% (1) XXXX   --- subsubsection
+%% (1.1) XXXX --- subsubsubsection
 \definestructureconversionset[simpconversionset]
                              [chinesenumerals,% part
                               Numbers,         % chapter
@@ -1508,15 +1455,20 @@ context.definelayout(
 \setupheads[subsubsubsection]    [sectionsegments=subsubsection:*]
 \setupheads[subsubsubsubsection] [sectionsegments=subsubsection:*]
 \fi
+%% 第 1 章          --- chapter
+%% 第 1 節 XXXX     --- section
+%% (一) XXXX        --- subsection
+%% (1) XXXX         --- subsubsection
+%% (1.1) XXXX       --- subsubsubsection
 \ifchap_sty_default
     \definestructureconversionset[defaultconversionset][chinesenumerals,
-       Numbers,Numbers,chinesenumerals,Numbers,characters,romannumerals][n]
+       Numbers,Numbers,chinesenumerals,Numbers][n]
     \setupheads[part,chapter,section,subsection,subsubsection,
                 subsubsubsection,subsubsubsubsection]
                [sectionconversionset=defaultconversionset]
-    \setupheads[chapter]             [alternative=middle]
-    \setupheads[subsubsubsection]    [sectionsegments=subsubsubsection]
-    \setupheads[subsubsubsubsection] [sectionsegments=subsubsubsubsection]
+    \setupheads[chapter]             [align=center,distance=\widthofstring{\ssd 章}]
+    \setupheads[subsubsubsection]    [sectionsegments=subsubsection:*]
+    \setupheads[subsubsubsubsection] [sectionsegments=subsubsection:*]
     \setupheads[subsection]          [numbercommand=]
     \setupheads[subsubsection]       [numbercommand=]
     \setupheads[subsubsubsection]    [numbercommand=]
@@ -1528,10 +1480,10 @@ context.definelayout(
                              subsection={(,) },subsubsection={(,) },
                              subsubsubsection={<,> },subsubsubsubsection={<,> }]
 \fi
-%% ------------        1.1.1 Subsection
-%%  1 Chapter          <1> Subsubsection
-%% ------------        <1.1> Subsubsubsection
-%% 1.1 Section         <1.1.1> Subsubsubsubsection
+%% ------------      1.1 Subsection
+%%  1 Chapter        (1) Subsubsection
+%% ------------      (1.1) Subsubsubsection
+%% 1 Section         (1.1.1) Subsubsubsubsection
 %%%%%%
 \ifchap_sty_line
     \defineheadalternative[linecentered]
@@ -1563,7 +1515,7 @@ context.definelayout(
                                       alternative=linecentered,
                                       interlinespace=medium,
                                       style=\bfd]
-    \setuphead [section,subsection]  [numbercolor=altcolorii,numberwidth=2em]
+    \setuphead [section,subsection]  [numbercolor=lightthemecolor,numberwidth=2em]
     \setuphead [section]             [style=\bfb,   numberstyle=\bid,]
     \setuphead [subsection]          [style=\tfa,   numberstyle=\itc]
     \setupheads[subsection]          [numbercommand=,]
@@ -1575,6 +1527,13 @@ context.definelayout(
     \setupheads[subsubsubsubsection] [sectionsegments=subsubsection:*]
 \fi
 %%%%%%
+%% chapter 1 XXXX    --- chapter
+%% 1 XXXX            --- section
+%% 1.1 XXXX          --- subsection
+%% 1.1.1 XXXX        --- subsubsection
+%% 1.1.1.1 XXXX      --- subsubsubsection
+\ifchap_sty_madsen
+\definebodyfontenvironment [40pt]
 \defineoverlay[chapback][{\externalfigure[][width=0.8\paperwidth,height=6cm]}]
 \startsetups chapstyle:madsentoc
   \startlocalheadsetup
@@ -1598,10 +1557,10 @@ context.definelayout(
 \startsetups chapstyle:madsenchapter
   \startlocalheadsetup
   \headsetupspacing
-  \startframed[height=fit,width=\structureparameter{textwidth},%\measured{spanmargin}
-             %background=chapback,
-              align=flushright,location=hanging,
-              frame=off,bottomframe=on,topframe=on]
+  \startframed[height=fit,width=\headparameter\c!width,
+              %background=chapback,
+               align=flushright,location=hanging,
+               frame=off,bottomframe=on,topframe=on]
     \startframed[frame=off,]%
       \startframed[frame=off]%
         \ifconditional\headshownumber
@@ -1619,24 +1578,25 @@ context.definelayout(
                  \headnumber[chapter]%
       \stopframed%
     \stopframed\endgraf
-    \startframed[height=fit,width=0.65\paperwidth,
+    \startframed[height=fit,width=0.65\headparameter\c!width,
                 location=hanging,align=right,frame=off,]
                 \headtextcontent
     \stopframed
   \stopframed
   \stoplocalheadsetup
 \stopsetups
-\ifchap_sty_madsen
-  \definebodyfontenvironment [40pt]
   \defineheadalternative[madsentoc][renderingsetup=chapstyle:madsentoc]
   \defineheadalternative[madsen][renderingsetup=chapstyle:madsenchapter]
-  \setuphead[chapter][alternative=madsen,textstyle=\definedfont[Sans sa 2.488]]
+  \setuphead[chapter][before=,width=\textwidth,%\measured{spanmargin},
+                      alternative=madsen,
+                      textstyle=\definedfont[Sans sa 2.488]]
   \setupheads[subsection]          [sectionsegments=section:*]
   \setupheads[subsubsection]       [sectionsegments=section:*]
   \setupheads[subsubsubsection]    [sectionsegments=section:*]
   \setupheads[subsubsubsubsection] [sectionsegments=section:*]
 \fi
 %%%%%%
+%% 第 一 回 XXXX
 \ifchap_sty_classicnovel
 \definestructureconversionset[classicnovelconversionset]
                       [chineseallnumerals][chineseallnumerals]
@@ -1645,7 +1605,7 @@ context.definelayout(
             subsubsubsubsection]
            [sectionconversionset=classicnovelconversionset]
 \setuplabeltext [hans] [part={部},chapter={第,回},]
-\setuplabeltext [hant][part={部},chapter={第,回},]
+\setuplabeltext [hant] [part={部},chapter={第,回},]
 \setuplist [chapter] [width=4em,distance=1em,numberalign=inner,style=\bf]
 \defineheadalternative[classicnovel]
                       [alternative=vertical,
@@ -1683,6 +1643,7 @@ context.definelayout(
                      alternative=classicnovel,align={center,lohi}]
 \fi
 %%%%%%
+%% XX 第一
 \ifchap_sty_classics
 \definestructureconversionset[classicsconversionset]
                       [chineseallnumerals][chineseallnumerals]
@@ -1718,7 +1679,7 @@ context.definelayout(
     textwidth  := .9*\overlaywidth ; textheight := .92*\overlayheight ;
     path paper_back ;%%% i
     paper_back  := fullsquare xscaled width yscaled height ;
-    fill paper_back withcolor \MPcolor{altcolori} ;
+    fill paper_back withcolor \MPcolor{softthemecolor} ;
     path text_back ;%%% ii
     text_back := fullsquare xscaled textwidth yscaled textheight cornered .5cm;
     fill text_back withcolor white ;
@@ -1754,12 +1715,12 @@ StartPage ;
    HorizBoxii := fullsquare xysized (  marginwidth,.06paperheight)
                             shifted (shifttomargin, .7paperheight);
     pickup pencircle scaled 2pt ;
-    fill Page        withcolor \MPcolor{altcolori}   ;
-    fill VertBox     withcolor \MPcolor{altcolorii}  ;
+    fill Page        withcolor \MPcolor{softthemecolor}   ;
+    fill VertBox     withcolor \MPcolor{lightthemecolor}  ;
     fill VertBoxi    shifted(-edgewidth,0) withcolor white ;
     fill HorizBoxi   withcolor white ;
-    fill HorizBox    withcolor \MPcolor{altcoloriii}  ;
-    fill HorizBoxii  withcolor \MPcolor{altcoloriv}  ;
+    fill HorizBox    withcolor \MPcolor{darkthemecolor}  ;
+    fill HorizBoxii  withcolor \MPcolor{softthemecolorv}  ;
 StopPage ;
 \stopuseMPgraphic
 %\startuseMPgraphic{partcontent}
@@ -1820,7 +1781,7 @@ StopPage ;
     textheight := .65*\overlayheight ;
     path paper_back ;%%% i
     paper_back  := fullsquare xscaled width yscaled height ;
-    fill paper_back withcolor \MPcolor{altcolori} ;
+    fill paper_back withcolor \MPcolor{softthemecolor} ;
     path text_back ;%%% ii
     text_back := fullsquare xscaled textwidth yscaled textheight cornered .5cm;
     fill text_back shifted(0,-.15textheight) withcolor white ;
@@ -1851,72 +1812,115 @@ StopPage ;
 %    Chapter Title     \/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifchap_sty_rocket
-    \startuseMPgraphic{style:chapter:number}
-      fill fullsquare   xysized (75pt , 150pt)
-                        shifted (0,     10pt)
-                        withcolor \MPcolor{altcolorii};
-      fill downtriangle xysized (75pt ,  40pt)
-                        shifted (0,   -78.4pt)
-                        withcolor \MPcolor{altcolorii};
-      label("\definedfont[Sans sa 4]\getheadnumber",
-            origin shifted (0, -35pt)) withcolor white;
-    \stopuseMPgraphic
-    \definelayer     [layer:chapter:number]
-                     [x=0mm, y=0mm,width=\paperwidth,height=\paperheight]
-    \setupbackgrounds[page][background=layer:chapter:number]
-%    \startsetups setup:chapter:number
-%       \setlayer[layer:chapter:number][hoffset=38em, voffset=0cm]
-%                {\useMPgraphic{style:chapter:number}}
-%    \stopsetups
-    \defineheadalternative[rocketdown]
-                          [alternative=vertical,renderingsetup=rocketdown]
-    \startsetups[rocketdown]
-       \vbox{
-            \headsetupspacing\veryraggedright
-            \let\\\endgraf\let\crlf\endgraf
-            \framed[frame=off,bottomframe=on,offset=0pt,
-                    framecolor=titlecolor,rulethickness=2pt]
-                   {\color[titlecolor]{ Chapter }\color[white]{
-            \ifconditional\headshownumber
-            \strut\headnumbercontent\quad%\par % <-- commented out
-            \else\fakeheadnumbercontent\fi}}
-            \begstrut\headtextcontent\endstrut
-       }\inoutermargin{\useMPgraphic{style:chapter:number}}
-    \stopsetups
-    \setuphead[chapter][alternative=rocketdown,
-                        numberstyle=\it,
-                        textstyle=\definedfont[Sans sa 2.488],]
+  \startuseMPgraphic{style:chapter:number}
+    fill fullsquare   xysized (75pt , 150pt)
+                      shifted (0,     10pt)
+                      withcolor \MPcolor{lightthemecolor};
+    fill downtriangle xysized (75pt ,  40pt)
+                      shifted (0,   -78.4pt)
+                      withcolor \MPcolor{lightthemecolor};
+    label("\definedfont[Sans sa 4]\somenamedheadnumber{chapter}{current}",
+          origin shifted (0, -35pt)) withcolor white;
+  \stopuseMPgraphic
+  \definelayer  [layer:chapter:number]
+                [x=0mm, y=0mm,width=\paperwidth,height=\paperheight]
+
+  \defineoverlay
+    [pagebackground]
+    [\directsetup{pagebackground}]
+
+  \setupbackgrounds
+    [page]
+    [background=pagebackground]
+
+  \startsetups pagebackground
+    \doifelsemode {chapterpage} {
+        \setlayer
+          [layer:chapter:number]
+          [preset=righttop,hoffset=16pt,]
+          {\useMPgraphic{style:chapter:number}}
+        \globaldisablemode[chapterpage]
+    } {
+        \setlayer
+          [layer:chapter:number]
+          [preset=middle]
+          {}
+    }
+    \placelayer[layer:chapter:number]
+  \stopsetups
+  \defineheadalternative[rocketdown]
+                        [alternative=vertical,renderingsetup=rocketdown]
+  \startsetups[rocketdown]
+    \globalenablemode[chapterpage]
+    \vbox{
+      \headsetupspacing\veryraggedright
+      \let\\\endgraf\let\crlf\endgraf
+      \framed[frame=off,bottomframe=on,offset=0pt,
+              framecolor=titlecolor,rulethickness=2pt]
+              {\color[white]{
+      \ifconditional\headshownumber
+      \strut\headnumbercontent\quad%\par % <-- commented out
+      \else\fakeheadnumbercontent\fi}}
+      \begstrut\headtextcontent\endstrut
+    }
+  \stopsetups
+  \setuplabeltext[en]  [chapter=Chapter,preface=Preface,appendix=Appendix]
+  \setuplabeltext[hans][chapter=Chapter,preface=Preface,appendix=Appendix]
+  \setuplabeltext[hant][chapter=Chapter,preface=Preface,appendix=Appendix]
+  \setuphead[chapter][alternative=rocketdown,
+                      numberstyle=\it,
+                      textstyle=\definedfont[Sans sa 2.488],]
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 一种 chapter 样式 hexa
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifchap_sty_hexa%
-    \let\MPchaplabel\relax
-    \def\MPchaplabel{\ifzeronum\namedheadnumber{chapter}\relax%
-                     \else\sc Chapter\fi}
-    \startuseMPgraphic{style:chapter:number}
-        fill (dir(0) -- dir(60)  -- dir(120) -- dir(180)
-                     -- dir(240) -- dir(300) -- cycle)
-              scaled 60pt
-              withshademethod "linear"
-              withshadevector (10,-5)
-              withcolor green shadedinto blue
-              withtransparency (1,.5) ;
-        label("\definedfont[SansBold at 30pt]\getheadnumber",
-              origin shifted(0,5pt)) withcolor white;
-        label("\definedfont[Sans]\MPchaplabel",
-              origin shifted(0,-30pt)) withcolor white;
-        \stopuseMPgraphic
-    \definelayer     [layer:chapter:number]
-                     [x=0mm, y=0mm,width=\cutspace, height=\paperheight]
-    \setupbackgrounds[page][background=layer:chapter:number]
-    %    \startsetups setup:chapter:number
-    %       \setlayer[layer:chapter:number][hoffset=38em, voffset=5em]
-    %                {\useMPgraphic{style:chapter:number}}
-    %    \stopsetups
-    \defineheadalternative[hexagradient][alternative=vertical,
-                                         renderingsetup=hexagradient]
-    \startsetups[hexagradient]
+  \let\MPchaplabel\relax
+  \def\MPchaplabel{\ifzeronum\namedheadnumber{chapter}\relax%
+                    \else\sc Chapter\fi}
+  \startuseMPgraphic{style:chapter:number}
+      fill (dir(0) -- dir(60)  -- dir(120) -- dir(180)
+                    -- dir(240) -- dir(300) -- cycle)
+            scaled 60pt
+            withshademethod "linear"
+            withshadevector (10,-5)
+            withcolor green shadedinto blue
+            withtransparency (1,.5) ;
+      label("\definedfont[SansBold at 30pt]%
+             \somenamedheadnumber{chapter}{current}",
+            origin shifted(0,5pt)) withcolor white;
+      label("\definedfont[Sans]\MPchaplabel",
+            origin shifted(0,-30pt)) withcolor white;
+      \stopuseMPgraphic
+  \definelayer     [layer:chapter:number]
+                    [x=0mm, y=0mm,width=\paperwidth, height=\paperheight]
+  \defineoverlay
+    [pagebackground]
+    [\directsetup{pagebackground}]
+
+  \setupbackgrounds
+    [page]
+    [background=pagebackground]
+
+  \startsetups pagebackground
+    \doifelsemode {chapterpage} {
+        \setlayer
+          [layer:chapter:number]
+          [preset=righttop,hoffset=16pt,voffset=5\baselineskip]
+          {\useMPgraphic{style:chapter:number}}
+        \globaldisablemode[chapterpage]
+    } {
+        \setlayer
+          [layer:chapter:number]
+          [preset=middle]
+          {}
+    }
+    \placelayer[layer:chapter:number]
+  \stopsetups
+  \defineheadalternative[hexagradient][alternative=vertical,
+                                       renderingsetup=hexagradient]
+  \startsetups[hexagradient]
+    \globalenablemode[chapterpage]
        \vbox{
             \headsetupspacing\veryraggedleft
             \let\\\endgraf\let\crlf\endgraf
@@ -1925,12 +1929,193 @@ StopPage ;
             \else\fakeheadnumbercontent\fi
             \begstrut\headtextcontent\endstrut
             \vskip\baselineskip\relax
-       }\inoutermargin{\useMPgraphic{style:chapter:number}}
-    \stopsetups
-    \setuphead [chapter][alternative=hexagradient,numbercolor=white,]
-    \setupheads[subsection,subsubsection,
-                subsubsubsection,subsubsubsubsection]
-               [sectionsegments=section:*]
+       }
+  \stopsetups
+  \setuphead [chapter][alternative=hexagradient,numbercolor=white,]
+  \setupheads[subsection,subsubsection,
+              subsubsubsection,subsubsubsubsection]
+              [sectionsegments=section:*]
+\fi
+% \starttitle[title=How to write a \tex{placetitle} command,]
+%            [author=Ben Lee User,date=\currentdate\space\currenttime]
+% \structureuservariable\c!author
+% \stoptitle
+\ifchap_sty_artical
+  \defineheadalternative
+    [artical]
+    [\c!alternative=\v!vertical,
+    \c!renderingsetup=\??headrenderings:artical]
+
+  \startsetups[\??headrenderings:artical]
+    \vbox {
+      \headsetupspacing
+      \ifconditional\headshownumber
+          \ifzeropt\headwidth \else
+              \ifzeropt\headnumberwidth
+                  \ifzeropt\headtextwidth \else
+                      \headnumberwidth\dimexpr\headwidth-\headtextwidth\relax
+                  \fi
+              \else
+                  \ifzeropt\headtextwidth
+                      \headtextwidth\dimexpr\headwidth-\headnumberwidth\relax
+                  \fi
+              \fi
+              \hsize\headwidth
+          \fi
+          \ifzeropt\headnumberwidth \else
+              \headnumberdistance\zeropoint
+          \fi
+          \setbox\scratchbox\hbox \ifzeropt\headnumberwidth\else to \headnumberwidth\fi{\headnumbercontent}
+          \scratchdimen\dimexpr\wd\scratchbox+\headnumberdistance\relax
+          \ifzeropt\headtextwidth \else
+              \hsize\dimexpr\scratchdimen+\headtextwidth\relax
+          \fi
+          \hangindent\scratchdimen
+          \hangafter \plusone
+          \noindent
+          \box\scratchbox
+          \hskip\headnumberdistance
+      \else
+          \ifzeropt\headtextwidth
+              \ifzeropt\headwidth \else
+                  \hsize\headwidth
+              \fi
+          \else
+              \hsize\headtextwidth
+          \fi
+          \noindent
+          \fakeheadnumbercontent
+          % will also be done in the other ones (force consistency with numbered)
+      \fi
+      \headtextcontent\par
+      \doifsomethingelse{\structureuservariable{authorbefore}}
+      {\structureuservariable{authorbefore}}
+      {\setupinterlinespace[line=1em]}
+      \doifsomethingelse{\structureuservariable{authoralign}}{%
+        \startalignment[\structureuservariable{authoralign}]%
+          \restoreglobalbodyfont\tfa
+          \structureuservariable{authorstyle}%
+          \switchtocolor[\structureuservariable{authorcolor}]%
+          \structureuservariable\c!author
+        \stopalignment
+      }{{%
+        \startalignment[center]%
+          \rma
+          \structureuservariable{authorstyle}%
+          \switchtocolor[\structureuservariable{authorcolor}]%
+          \structureuservariable\c!author
+        \stopalignment
+      }}%
+      \doifsomethingelse{\structureuservariable{dateafter}}
+      {\structureuservariable{authorafter}}{\par}
+      \doifsomethingelse{\structureuservariable{datebefore}}
+      {\structureuservariable{datebefore}}
+      {}
+      \doifsomethingelse{\structureuservariable{datealign}}{%
+        \startalignment[\structureuservariable{datealign}]%
+          \rma
+          \structureuservariable{datestyle}%
+          \switchtocolor[\structureuservariable{datecolor}]%
+          \structureuservariable\c!date
+        \stopalignment
+      }{{%
+        \startalignment[center]%
+          \rma
+          \structureuservariable{datestyle}
+          \switchtocolor[\structureuservariable{datecolor}]
+          \structureuservariable\c!date
+        \stopalignment
+      }}%
+      \doifsomethingelse{\structureuservariable{dateafter}}
+      {\structureuservariable{dateafter}}{}
+    }
+  \stopsetups
+  \setuphead[title][alternative=artical]
+\fi
+\ifchap_sty_publish
+  \defineframed[chappublish]
+  \defineframed[chapissue]
+  \defineframed[chapdate]    [chapissue]
+  \defineframed[chapsubtitle][chapissue]
+  \setupframed [chappublish]
+    [align=\headparameter\c!align,
+     width=\measured{spanmargin},frame=off,
+     background=\headparameter\c!background,
+     backgroundcolor=\headparameter\c!backgroundcolor,]
+  \setupframed [chapissue]
+    [foregroundstyle=\definedfont[Sans at 10pt],
+     foregroundcolor=white,
+     frame=off,]
+  \setupframed [chapsubtitle]
+    [align=center,width=\measured{spanmargin},]
+
+  \defineheadalternative[publish]
+    [alternative=vertical,
+     renderingsetup=chap:publish]
+  \startsetups[chap:publish]
+    \chappublish{
+      \headsetupspacing
+      \let\\\endgraf\let\crlf\endgraf
+      \chapissue{\headparameter{issue}}\hfill
+      \chapdate{\headparameter{date}}\par
+      \ifconditional\headshownumber
+          \strut\headnumbercontent\quad
+      \else\fakeheadnumbercontent\fi
+      \begstrut\headtextcontent\endstrut
+      \blackrule[color=\headparameter\c!color,height=.1ex,width=.8\hsize]\par
+      \chapsubtitle{\headparameter{subtitle}}
+    }
+  \stopsetups
+
+  \definemargindata   [sideframe] [outer]
+  \definemarginframed [sideframe] [outer]
+  \setupmarginframed  [sideframe]
+    [margin=margin,
+    width=\outermarginwidth,
+    offset=1ex,
+    background=color,
+    backgroundcolor=softcyan,
+    foregroundstyle=\restoreglobalbodyfont\ss,
+    foregroundcolor=gray]
+
+  \setuphead[chapter]
+   [alternative=publish,
+    before=,
+    align=center,
+    background=color,
+    backgroundcolor=lightred,
+    issue=第 8 號,
+    date=\currentdate,
+    subtitle={ニュースレターの主要な語句},
+    color=white]
+\fi
+%\chapter{dddd}
+%\sideframe{\input knuth }
+\ifchap_sty_kaolike
+\definelayer[chapvrule][x=\dimexpr+\textwidth+.5\rightmargindistance-2pt\relax,
+                        y=\dimexpr-\baselineskip-\topspace
+                                  -\headerheight-\headerdistance\relax,
+                        width=\paperwidth,height=\paperheight]
+\newdimen\d_temp_chapheight
+\d_temp_chapheight=\dimexpr-\baselineskip+\topspace
+                           +\headerheight+\headerdistance
+                           +64pt\relax
+\setuphead[chapter]
+          [align=flushright,
+           alternative=inmargin,
+           location=inoutermargin,
+           numberstyle=\definedfont[SansBold at 64pt],
+           before=\setlayer[chapvrule][]{
+                  \blackrule[width=2pt,
+                             height=\d_temp_chapheight,
+                             depth=.3\baselineskip,
+                             color=themecolor]}
+                  \placelayer[chapvrule],
+            after=\vskip2\baselineskip\relax
+                  \marginlist[dy=-\baselineskip],]
+\startsectionblockenvironment[appendix]
+  \setuphead[chapter][numberstyle=\definedfont[SansBold at 42pt]]
+\stopsectionblockenvironment
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                    標題相關設置                    %%%%%%
@@ -1986,7 +2171,7 @@ StopPage ;
     textwidth  := .9*\overlaywidth ; textheight := .92*\overlayheight ;
     path paper_back ;%%% i
     paper_back  := fullsquare xscaled width yscaled height ;
-    fill paper_back withcolor \MPcolor{altcolori} ;
+    fill paper_back withcolor \MPcolor{softthemecolor} ;
     path text_back ;%%% ii
     text_back := fullsquare xscaled textwidth yscaled textheight cornered .5cm;
     fill text_back withcolor white ;
@@ -1995,32 +2180,7 @@ StopPage ;
 \defineoverlay    [olay:all] [\useMPgraphic{MP:all}]
 \setupbackgrounds [page]     [background=olay:all,state=repeat]
 \fi
-\ifchap_sty_kaolike
-\definelayer[chapvrule][x=\dimexpr+\textwidth+.5\rightmargindistance-2pt\relax,
-                        y=\dimexpr-\baselineskip-\topspace
-                                  -\headerheight-\headerdistance\relax,
-                        width=\paperwidth,height=\paperheight]
-\newdimen\d_temp_chapheight
-\d_temp_chapheight=\dimexpr-\baselineskip+\topspace
-                           +\headerheight+\headerdistance
-                           +64pt\relax
-\setuphead[chapter]
-          [align=flushright,
-           alternative=inmargin,
-           location=inoutermargin,
-           numberstyle=\definedfont[SansBold at 64pt],
-           before=\setlayer[chapvrule][]{
-                  \blackrule[width=2pt,
-                             height=\d_temp_chapheight,
-                             depth=.3\baselineskip,
-                             color=themecolor]}
-                  \placelayer[chapvrule],
-            after=\vskip2\baselineskip\relax
-                  \marginlist[dy=-\baselineskip],]
-\startsectionblockenvironment[appendix]
-  \setuphead[chapter][numberstyle=\definedfont[SansBold at 42pt]]
-\stopsectionblockenvironment
-\fi
+
 %%%%%%%%%%%%%%%%%%%%
 % \section {Header and Footer Style}
 % Pair 1: hdr:odd:sectionmark & hdr:even:chaptermark
@@ -2211,21 +2371,21 @@ StopPage ;
 
 \definefontsynonym[NotoSansSymbols2][file:NotoSansSymbols2-Regular]
 \def\notosymb#1{\getglyphstyled{NotoSansSymbols2}{\tochar{n:#1}}}
-\definesymbol[marksquare][\notosymb{☐}]
-\definesymbol[markcircle][\notosymb{○}]
-\definesymbol[marknotcheck][\notosymb{⍻}]
-\definesymbol[markcheck][\notosymb{🗸}]
-\definesymbol[marksquareheavycheck][\notosymb{✓}]
-\definesymbol[marksquarecheck][\notosymb{\hbox to 1em{☐\kern-.7em\relax\raise.2em\hbox{🗸}}}]
-\definesymbol[marksquareheavycheck][\notosymb{\hbox to 1em{☐\kern-.7em\relax\raise.2em\hbox{✓}}}]
-\definesymbol[markcirclecheck][\notosymb{\hbox to 1em{○\kern-.7em\relax\raise.2em\hbox{🗸}}}]
-\definesymbol[markcircleheavycheck][\notosymb{\hbox to 1em{○\kern-.7em\relax\raise.2em\hbox{✓}}}]
-\definesymbol[markcross][\notosymb{✗}]
-\definesymbol[marksquareheavycross][\notosymb{✘}]
-\definesymbol[marksquarecross][\notosymb{\hbox to 1em{☐\kern-.75em\relax\raise.1em\hbox{✗}}}]
-\definesymbol[marksquareheavycross][\notosymb{\hbox to 1em{☐\kern-.75em\relax\raise.1em\hbox{✘}}}]
-\definesymbol[markcircleccross][\notosymb{\hbox to 1em{○\kern-.75em\relax\raise.2em\hbox{✗}}}]
-\definesymbol[markcircleheavycross][\notosymb{\hbox to 1em{○\kern-.75em\relax\raise.2em\hbox{✘}}}]
+\definesymbol[marksquare]          [\notosymb{☐}]
+\definesymbol[markcircle]          [\notosymb{○}]
+\definesymbol[marknotcheck]        [\notosymb{⍻}]
+\definesymbol[markcheck]           [\notosymb{🗸}]
+\definesymbol[markheavycheck]      [\notosymb{✓}]
+\definesymbol[marksquarecheck]     [\notosymb{\rlap{☐}\,\raise.2em\hbox{🗸}}]
+\definesymbol[marksquareheavycheck][\notosymb{\rlap{☐}\,\raise.2em\hbox{✓}}]
+\definesymbol[markcirclecheck]     [\notosymb{\rlap{○}\,\raise.2em\hbox{🗸}}]
+\definesymbol[markcircleheavycheck][\notosymb{\rlap{○}\,\raise.2em\hbox{✓}}]
+\definesymbol[markcross]           [\notosymb{✗}]
+\definesymbol[markheavycross]      [\notosymb{✘}]
+\definesymbol[marksquarecross]     [\notosymb{\rlap{☐}\,\raise.1em\hbox{✗}}]
+\definesymbol[marksquareheavycross][\notosymb{\rlap{☐}\,\raise.1em\hbox{✘}}]
+\definesymbol[markcirclecross]     [\notosymb{\rlap{○}\,\raise.1em\hbox{✗}}]
+\definesymbol[markcircleheavycross][\notosymb{\rlap{○}\,\raise.1em\hbox{✘}}]
 %%%%%%%%%%%%%%%%%%%%
 \startuseMPgraphic{MPFrameX}%%% ---| left frame |----
      picture p ; numeric o ; path a, b ;
@@ -2332,7 +2492,7 @@ StopPage ;
 \defineoverlay[MPFrameShadow]  [\useMPgraphic{MPFrameShadow}]
 \defineframedtext[FrameText][frame=off,
                   background=MPFrameXX,
-                  framecolor=altcolorii,
+                  framecolor=lightthemecolor,
                   backgroundcolor=transparent,
                   rulethickness=1pt,
                   indenting={yes,2em},
@@ -2457,6 +2617,36 @@ endgroup;
 %  \placefigure[here,right,none]{}{\externalfigure[ctanlion]}
 %  \input knuth
 %\stoptheoremFrame
+
+\definebar
+[dotbar]
+[text=\lower\exheight\hbox to 1em{\hfil\darkred\infofont\cdot\hfil},repeat=no]
+
+% \underdot{orem ipsum dolor sit }
+% \dotbar{等級大家都 }
+
+\startuseMPgraphic{rules:under:round}{radius}
+    %draw ((0,RuleDepth) ... (RuleWidth,RuleDepth))
+  fill unitsquare
+      xyscaled (RuleWidth,RuleHeight+RuleDepth)
+      enlarged (ExHeight/4,ExHeight/8)
+      shifted  (0,RuleFactor*RuleOffset)
+      smoothed 1
+      withpen pencircle scaled RuleThickness
+      withcolor RuleColor ;
+  setbounds currentpicture to unitsquare xysized(RuleWidth,RuleHeight);
+\stopuseMPgraphic
+
+\definebar[underround] [undergraphic]
+  [mp=rules:under:round,
+   rulethickness=1.2,
+   offset=0,
+   order=background,
+   continue=yes,
+   foregroundcolor=softgray,
+   left={\hskip .5ex\relax},
+   right={\hskip .5ex\relax},
+   color=lightred]
 %%%%%%%%%%%%%%%%%%%%
 \defineitemgroup    [lists]  [levels=4]
 \setupitemgroup     [lists]  [each]
@@ -2500,20 +2690,19 @@ endgroup;
 %\setupnotation affects the text at the bottom of the page (footnote or endnote).
 % \note[fn:notei]\notesep\note[fn:noteii]
 \startsetups fn:hanzi
-  \setscript[hanzi]
+  \restoreglobalbodyfont
+  \setglobalscript [hanzi]
   \setuplocalinterlinespace[line=.9\baselineskip]
 \stopsetups
 \def\notesep    {{\useurlstyleandcolor\c!style\c!color\strc_notes_inject_separator}}
 \setupfootnotes [setups={fn:hanzi},]
 \setupnote      [textseparator=\textcomma,
-                 textstyle=\itx,
                  textcolor=footnotecolor,
-                 textseparator={,},
+                 textseparator={,},style=\restoreglobalbodyfont\hwx,
                  ]
 \setupnotation  [setups={fn:hanzi},
-                 style=\restoreglobalbodyfont\itx,
+                 style=\restoreglobalbodyfont\hwx,
                  color=footnotecolor,
-                 headstyle=\itx,
                  headcolor=footnotecolor,
                  way=bypage,
                  ]
@@ -2532,17 +2721,18 @@ endgroup;
 \setupmargindata  [inoutermargin][align={inner},width=\d_temp_margin]
 \setupmarginframed[inoutermargin][align={inner},width=\d_temp_margin]
 \defineconversion [sidenote][%
-    \hbox to 1.5em{\mathematics{\tfx\hfil\ast\hfil}},
-    \hbox to 1.5em{\mathematics{\tfx\hfil\ast\ast\hfil}},
+    \hbox to 1.5em{{\tfx\hfil\ast\hfil}},
+    \hbox to 1.5em{{\tfx\hfil\ast\ast\hfil}},
     \hbox to 1.5em{\hbox to 0em{\raise .5em%
-    \hbox to 1.5em{\mathematics{\tfx\hfil  \ast  \hfil}}}%
-    \hbox to 1.5em{\mathematics{\tfx\hfil\ast\ast\hfil}}}]
+    \hbox to 1.5em{{\tfx\hfil  \ast  \hfil}}}%
+    \hbox to 1.5em{{\tfx\hfil\ast\ast\hfil}}}]
 \tolerant\def\movesidenote[#1]{\gdef\move_sidenote{\doifsomethingelse{#1}{#1}{0em}}}
 \movesidenote[0em]
 \define\PlaceFootnote%
-  {\inoutermargin%
-    [stack=continue,dy=\move_sidenote]{\vtop{\setups{fn:hanzi}%
-      \placelocalnotes[sidenote][align=inner,before=,after=,]}}\movesidenote[0em]}
+  {\inoutermargin[stack=continue,dy=\move_sidenote]{%
+  \vtop{\setups{fn:hanzi}\placelocalnotes[sidenote]
+        [align={width,hyphenated,morehyphenation,tight},before=,after=,]\hfill}%
+  }\movesidenote[0em]}
 \definenote    [sidenote]
 \setupnote     [sidenote] [location=text,next=\PlaceFootnote]
 \setupnotation [sidenote] [numberconversion=sidenote,width=2mm,]
@@ -2697,18 +2887,23 @@ endgroup;
 % \setupexternalfigures[location={local,global,default},
 %                       directory={outFilms}]
 % usage of auto measure: https://wiki.contextgarden.net/Combinations
-\definemeasure        [spanmargin]  [\dimexpr\textwidth+\rightmargintotal\relax]
-\defineexternalfigure [automeasure] [width=\measure{combination}]
-\defineexternalfigure [text]        [width=\textwidth]
-\defineexternalfigure [margin]      [width=\rightmarginwidth]
-\defineexternalfigure [full]        [width=\dimexpr\textwidth+\rightmargintotal\relax]
+\definemeasure        [spanmargin]    [\dimexpr\textwidth+\rightmargintotal\relax]
+\defineexternalfigure [automeasure]   [width=\measure{combination}]
+\defineexternalfigure [textmeasure]   [width=\textwidth]
+\defineexternalfigure [marginmeasure] [width=\rightmarginwidth]
+\defineexternalfigure [fullmeasure]   [width=\dimexpr\textwidth+\rightmargintotal\relax]
 \setupexternalfigures [order={pdf,png,jpg},]
 \setupxtable [leftmargindistance=.5em,  offset=.2em,
               rightmargindistance=.5em, frame=off,
               framecolor=themecolor,    topframe=on,
-              bottomframe=on]
-\setupxtable [header][bottomframe=off,rulethickness=1.5pt]
-\setupxtable [footer][topframe=off,rulethickness=1.5pt]
+              bottomframe=on,align=lohi]
+\setupxtable [header] [bottomframe=off,rulethickness=1pt]
+\setupxtable [head]   [bottomframe=off,rulethickness=1pt]
+\setupxtable [body]   []
+\setupxtable [foot]   [topframe=off,   rulethickness=1pt]
+\setupxtable [footer] [topframe=off,   rulethickness=1pt]
+\setupxtable [lastrow][topframe=off,   rulethickness=1pt]
+
 \setupfloats [table]
              [%default={here,split,top,bottom,page},
               before=,after=,indentnext=yes,
@@ -2721,10 +2916,10 @@ endgroup;
               after=\vskip.5\baselineskip,
               indentnext=yes,
               setups={fn:hanzi},]
-\setupcaption[style=\hwx,
+\setupcaption[style=\notefont,
+              headstyle=\notefont,% 图 1.1
              % width=max,
              % width=\rightmarginwidth,
-             % headstyle=\normal,% 图 1.1
               color=captioncolor,
              % hang=yes,% 将使标题不居中且悬挂
              % align={last,width,hanging},
@@ -2761,19 +2956,22 @@ endgroup;
 \definefloat  [margintable]  [margintables]  [table]
 \definefloat  [texttable]    [texttables]    [table]
 
-\setupfloat   [fullfig,fulltab,fullfigure,fulltable]         [location=inner]
-\setupfloat   [marginfig,margintab,marginfigure,margintable] [default={margin,bottom}]
-\setupfloat   [textfig,texttab,textfigure,texttable]         [default=here,location=right]
+\setupfloat   [fullfig,fulltab,fullfigure,fulltable]         
+              [location=inner]
+\setupfloat   [marginfig,margintab,marginfigure,margintable] 
+              [default={margin,bottom}]
+\setupfloat   [textfig,texttab,textfigure,texttable] 
+              [default=here,location=right]
 
 \setupcaptions[fullfig,fulltab,fullfigure,fulltable]
-              [width=\rightmarginwidth,align=inner,location={bottom,overlay,outer}]
+              [width=\d_temp_margin,align=inner,location={outermargin,bottom}]
 \setupcaption [marginfig,margintab,marginfigure,margintable]
-              [location={bottom,overlay},align={inner}]
+              [width=\d_temp_margin,align=inner,location={bottom}]
 \setupcaption [textfig,texttab,textfigure,texttable]
-              [location={outermargin},align=inner,width=\d_temp_margin]
+              [width=\d_temp_margin,align=inner,location={outermargin,bottom}]
 
-\definecombinedlist[figures][marginfig,textfig,fullfig,figure,fullfigure,marginfigure,textfigure]
-\definecombinedlist[tables] [margintab,texttab,fulltab,table,fulltable,margintable,texttable]
+\definecombinedlist[listoffigures][marginfig,textfig,fullfig,figure,fullfigure,marginfigure,textfigure]
+\definecombinedlist[listoftables] [margintab,texttab,fulltab,table,fulltable,margintable,texttable]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%               創建一個居中的圖片，含有位置、引用、標題              %%%%%%
@@ -2881,11 +3079,23 @@ endgroup;
      ref=\symbol[fontawesome][circle_blank],
      suggest=\symbol[fontawesome][star]]
 
+% 链接断行规则
+\enabledirectives[hyphenators.urls.packslashes] % 避免连续斜杠分到不同行
+%\sethyphenatedurlnormal{:=?&}
+%\sethyphenatedurlbefore{?&}
+%\sethyphenatedurlafter{:=}
+\sethyphenatedurlbefore{/} % 设置在斜杠前断行
+\sethyphenatedurlafter{_}
+%% % 设置断行时显示的符号
+%\def\hyphenatedurlseparator{↩}
+%\def\href#1#2{\useURL[#2][{#2}][][{#1}]\goto{\url[#2]}[url(#1)]}
+%\href{o}{https://www.bilibili.com/video/}
+
 \let\from_bak\from
 \def\from[#1]{\from_bak[#1]\urlsymbol}
-\def\symbolstyle#1{\;\high{%
+\def\symbolstyle#1{\nobreak\high{%
     {\switchtobodyfont[5pt]%
-    #1}\;}}
+    #1}}}
 \def\urlsymbol{\symbolstyle{%
      \useurlstyleandcolor\c!style\c!color%
      \usrsymbolsparameter{from}}}
@@ -2897,10 +3107,30 @@ endgroup;
 \def\Mailto#1#2{\useURL[#1][mailto:#1][][#2]%
                 \from[{#1}]%
                 (\goto{#1}[url(mailto:#1)])}
+
+\lettonothing\defineurl
+\tolerant\def\defineurl[#1][#2]%
+ {\begingroup\ifarguments
+  \or\getdummyparameters[#1]
+  \or\getdummyparameters[reference={#1},#2]\fi
+  \edef\p_url_temp{\dummyparameter{url}}%
+  \edef\p_url{\ifempty\p_url_temp\dummyparameter{mail}\else\p_url_temp\fi}%
+  \edef\p_urlormail{\ifempty\p_url_temp mailto:\dummyparameter{mail}\else\p_url_temp\fi}
+  \edef\p_reference_temp{\dummyparameter\c!reference}%
+  \edef\p_reference{\ifempty\p_reference_temp\p_url\else\p_reference_temp\fi}%
+  \edef\p_text_temp{\dummyparameter\c!text}%
+  \edef\p_text{\ifempty\p_text_temp\p_reference\else\p_text_temp\fi}%
+  \expanded{\useURL[\p_reference][\p_urlormail][\dummyparameter\c!file][\p_text]}%
+  \endgroup}
+
+\def\linkto[#1]{{\doifinsetelse{\moduleparameter{memos}{mode}}{print}%
+        {\url[#1]}{\from[#1]}}}
+
+%\defineurl[url:reference][url={http://baidu.com},text=url:text]
+%\url[url:reference]
+%\from[url:reference]
 %\mailto{ai2472206007@yeah.net}
 %\Mailto{ai2472206007@yeah.net}{Mas}
-\def\linkto[#1]{{\;\doifinsetelse{\moduleparameter{memos}{mode}}{print}%
-        {\url[#1]}{\from[#1]}}}
 %%% font effect : inner outer both normal hidden stretch
 %%% CONTEXT already define followed command :
 %\defineeffect [inner]   [alternative=inner, rulethickness=.25pt]
@@ -3136,7 +3366,7 @@ end
  \relax\simplealignedbox{\autojustify_width}{flushleft}{\processisolatedchars{#2}\addhfil\unskip}%
 }
 \def\hiden#1{\hiddenbar{#1}}
-\def\rubyx#1#2{{#1{\low{\hwx#2}}}}
+\def\rubyx#1#2{{#1{\low{\notefont#2}}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Verse}
@@ -3273,8 +3503,7 @@ end
 \def\circledtext_indeed[#1]#2{\begingroup%
  \iffirstargument\setupcircledtext[#1]\fi% for circled number graphic(CNG)
     \setMPtext{framednum}{#2}% for framed number in CNG
-    \dontleavehmode\raise0.25em\relax%
-    \bbox{\useMPgraphic{circlednum}}%
+    \vbox{\useMPgraphic{circlednum}}%
     \endgroup}
 \def\setupcircledtext{\setupMPvariables[circlednum]}
 \setupcircledtext[frametype=square,% only one value
@@ -3284,9 +3513,9 @@ end
                   dashlinewidth=.1pt,
                   color=black, % change font color
                   radius=0.5,% if = 0 will be square,if = 0.5 will be circle
-                  fontsize=.7em,
+                  fontsize=\tfx,
                   effect=normal,
-                  scale=1,
+                  scale=.8,
                   dashskipwidth=.08BodyFontSize,% if = 0 ,will be undashed
                   ]
 \startuseMPgraphic{circlednum}%
@@ -3309,7 +3538,7 @@ end
                               dashed p withpen pencircle scaled \MPvar{dashlinewidth};
      draw   ix                withcolor \MPvar{dashcolor}
                               dashed p withpen pencircle scaled \MPvar{dashlinewidth};% x
-     label("\switchtobodyfont[\MPvar{fontsize}]%
+     label("\MPvar{fontsize}%
             \effect[\MPvar{effect}]{\MPtext{framednum}}",\MPvar{frametype})
                               withcolor \MPvar{color}      ;
                      );
@@ -3318,21 +3547,21 @@ end
 %%% autocircled will scale fontsize to fit circle
 \def\autocircled{\dosingleempty\autocircled_indeed}
 \def\autocircled_indeed[#1]#2{%
-  \ifnum#2 < 100\setupcircledtext[fontsize=.8em]\else%
-  \ifnum#2 > 99 \setupcircledtext[fontsize=.6em]\fi\fi%
+  \ifnum#2 < 100\setupcircledtext[fontsize=\tfx]\else%
+  \ifnum#2 > 99 \setupcircledtext[fontsize=\tfxx]\fi\fi%
   \circledtext[#1]{#2}}
-\def\negativecircledconversion#1{%
-  \setupcircledtext[framecolor=black,color=black,fillcolor=white,radius=0.5,]\circledtext{#1}}
-\def\circledconversion#1{%
-  \setupcircledtext[framecolor=black,fillcolor=black,color=white,radius=0.5,]\circledtext{#1}}
-\def\negativesquaredconversion#1{%
-  \setupcircledtext[framecolor=black,color=black,fillcolor=white,radius=0,]\circledtext{#1}}
-\def\squaredconversion#1{%
-  \setupcircledtext[framecolor=black,fillcolor=black,color=white,radius=0,]\circledtext{#1}}
-\def\negativeroundsquaredconversion#1{%
-  \setupcircledtext[framecolor=black,color=black,fillcolor=white,radius=0.2,]\circledtext{#1}}
-\def\roundsquaredconversion#1{%
-  \setupcircledtext[framecolor=black,fillcolor=black,color=white,radius=0.2,]\circledtext{#1}}
+\def\negativecircledconversion#1{{%
+  \setupcircledtext[framecolor=black,color=black,fillcolor=white,radius=0.5,scale=.5,]\circledtext{#1}}}
+\def\circledconversion#1{{%
+  \setupcircledtext[framecolor=black,fillcolor=black,color=white,radius=0.5,scale=.5,]\circledtext{#1}}}
+\def\negativesquaredconversion#1{{%
+  \setupcircledtext[framecolor=black,color=black,fillcolor=white,radius=0,scale=.5,  ]\circledtext{#1}}}
+\def\squaredconversion#1{{%
+  \setupcircledtext[framecolor=black,fillcolor=black,color=white,radius=0,scale=.5,  ]\circledtext{#1}}}
+\def\negativeroundsquaredconversion#1{{%
+  \setupcircledtext[framecolor=black,color=black,fillcolor=white,radius=0.2,scale=.5,]\circledtext{#1}}}
+\def\roundsquaredconversion#1{{%
+  \setupcircledtext[framecolor=black,fillcolor=black,color=white,radius=0.2,scale=.5,]\circledtext{#1}}}
 \defineconversion[circlednum][\circledconversion]
 \defineconversion[negativecirclednum][\negativecircledconversion]
 \defineconversion[roundsquarednum][\roundsquaredconversion]
@@ -3401,110 +3630,19 @@ end
 %  \input gray
 %\stopiconcard
 
-%C Copyright (C) 2011  Wolfgang Schuster
-%C
-%C This program is free software: you can redistribute it and/or modify
-%C it under the terms of the GNU General Public License as published by
-%C the Free Software Foundation, either version 3 of the License, or
-%C (at your option) any later version.
-%C
-%C This program is distributed in the hope that it will be useful,
-%C but WITHOUT ANY WARRANTY; without even the implied warranty of
-%C MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%C GNU General Public License for more details.
-%C
-%C You should have received a copy of the GNU General Public License
-%C along with this program.  If not, see <http://www.gnu.org/licenses/>.
-\installnamespace {title}
-\installnamespace {titlealternative}
-\installnamespace {titlerenderings}
-\installsimplecommandhandler \????title            {title}            \????title
-\installcommandhandler       \????titlealternative {titlealternative} \????titlealternative
-\unexpanded\def\title_place
-  {\begingroup
-   \dostarttagged\t!division\v!title
-   \dosingleempty\title_place_indeed}
-\def\title_place_indeed[#parameters]%
-  {\let\currenttitle\empty
-   \iffirstargument
-     \setupcurrenttitle[#parameters]%
-   \fi
-   \page[\roottitleparameter\c!page]
-   \edef\currenttitlealternative{\roottitleparameter\c!alternative}%
-   \edef\p_renderingsetup{\titlealternativeparameter\c!renderingsetup}%
-   \autosetups\p_renderingsetup
-   \dostoptagged
-   \doif{\roottitleparameter\c!pagestate}%
-   \v!stop{\aftergroup\noheaderandfooterlines}% why here and not after \endgroup?
-   \endgroup}
-\def\title_parameter#element%
-  {\begingroup
-   \def\currenttitle{#element}%
-   \usetitlestyleandcolor\c!style\c!color
-   \dostarttagged\t!construct\currenttitle
-   \setupinterlinespace\roottitleparameter\currenttitle\par
-   \dostoptagged
-   \endgroup}
-\let\placetitle  \title_place
-\let\titleelement\title_parameter
-\definemarking[title]
-\definemarking[author]
-\definemarking[date]
-\definetitlealternative[\s!default][\c!renderingsetup=\????titlerenderings:\s!default]
-\startsetups[\????titlerenderings:\s!default]
-    \blank[\roottitleparameter\c!spacebefore]
-    \startalignment[\roottitleparameter\c!align]
-        \titleelement\c!title \marking[title] {\roottitleparameter\c!title} \blank
-        \titleelement\c!author\marking[author]{\roottitleparameter\c!author}\blank
-        \titleelement\c!date  \marking[date]  {\roottitleparameter\c!date}
-    \stopalignment
-    \blank[\roottitleparameter\c!spaceafter]
-\stopsetups
-%\placetitle [..,.=.,..]
-%* inherits from \setuptitle
-%\setuptitle [..,.=.,..]
-%* author title date
-%* spacebefore spaceafter
-%* align
-%* pagestate(=start stop)
-%* KEY= VALUE
-%\setuptitle [...,...] [..,.=.,..]
-%1 IDENTIFIER
-%2 style = normal bold slanted boldslanted type cap small... COMMAND
-%  color = IDENTIFIER
-%\titleelement {...}
-%* CONTENT
-\setuptitle
-  [\c!spacebefore={\v!force,2em},
-    \c!spaceafter={1.5em},
-         \c!align=\v!middle,
-          \c!page=\v!yes,
-     \c!pagestate=\v!stop,
-   \c!alternative=\s!default]
-\setuptitle [\c!title]          [\c!style=\tfd,\c!color=]
-\setuptitle [\c!author,\c!date] [\c!style=\tfa,\c!color=]
-%\placetitle
-%  [author=Ben Lee User,
-%    title=How to write a \tex{placetitle} command,
-%    date=\currentdate\space\currenttime]
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%                               封面相關設置                             %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \installnamespace          {cover}
 \installcommandhandler \????cover  {cover}  \????cover
 
-\def\tophrule{
-    \vskip 2pt\relax
-    \hrule height  2pt depth .2pt width \textwidth
-    \vskip 2pt\relax
-    \hrule height .2pt depth .2pt width \textwidth
+\def\tophrule{%
+    \vskip 2pt\relax\hrule height  2pt depth .2pt width \textwidth
+    \vskip 2pt\relax\hrule height .2pt depth .2pt width \textwidth
     \vskip 2pt\relax}
-\def\bottomhrule{
-    \vskip 2pt\relax
-    \hrule height .2pt depth .2pt width \textwidth
-    \vskip 2pt\relax
-    \hrule height  2pt depth .2pt width \textwidth
+\def\bottomhrule{%
+    \vskip 2pt\relax\hrule height .2pt depth .2pt width \textwidth
+    \vskip 2pt\relax\hrule height  2pt depth .2pt width \textwidth
     \vskip 2pt\relax}
 \def\tophalfhrule{{
     \setuplocalinterlinespace[line=1pt]
@@ -3532,7 +3670,7 @@ end
     height = \overlayheight ;
     path paper_back ;%%% i
     paper_back  := fullsquare xscaled width yscaled height ;
-    fill paper_back withcolor \MPcolor{altcolori} ;
+    fill paper_back withcolor \MPcolor{softthemecolor} ;
     path text_back ;%%% ii
     text_back := fullsquare xscaled CoverWidth
                             yscaled CoverHeight
@@ -3550,10 +3688,10 @@ end
     botheight = .7*\overlayheight ;
     path paper_backi ;%%% i
     paper_backi  := fullsquare xscaled topwidth yscaled topheight shifted(0,.35*\overlayheight);
-    fill paper_backi withcolor \MPcolor{altcolori} ;
+    fill paper_backi withcolor \MPcolor{softthemecolor} ;
     path paper_backii ;%%% i
     paper_backii  := fullsquare xscaled botwidth yscaled botheight shifted(0,-.15*\overlayheight);
-    fill paper_backii withcolor \MPcolor{altcolorii} ;
+    fill paper_backii withcolor \MPcolor{lightthemecolor} ;
 \stopuseMPgraphic
 
 \definelayer   [lay:flyleaf]  [repeat=yes,width=\paperwidth, height=\paperheight]
@@ -3728,17 +3866,92 @@ end
 %\makecover[newbook]
 %\stopmakeup
 
-\writestatus{module mode}    {current mode     is "\p_mode".}
-\writestatus{module language}{current language is "\currentlanguage".}
-\writestatus{module layout}  {current layout   is "\currentlayout".}
-\writestatus{module font}    {font     "\p_latinfontname" and "\p_fontname" is loaded.}
+%D 特別的，draft 模式下會開啟字符缺失檢查
+%D 但可能會導致未知錯誤，包括目錄、引用等無法生成
+%D \type{\enabledirectives[logs.errors=missing characters]}
+%D 命令檢查字符是否缺失，如果有則停止繼續打印。
+%D 需要注意的是，開啟 draft 和 moresize 模式會拖慢生成文件的速度。
+\startmode[draft]
+  \overfullrule=10pt%
+  \let\infofont\relax
+  \let\infofont\ttxx
+  \version[temporary]
+  \enabletrackers[builders.hpack.quality]
+  \enabletrackers[builders.hpack.overflow]
+  \enabletrackers[fonts.missing]
+  \replacemissingcharacters
+\stopmode
+\startmode[print]
+%
+\stopmode
+\startmode[kindle]
+    \setupmodule   [fontsize=14pt,papersize=kindle,layout=kindle]
+\stopmode
+%\section{SCMD:fakesc}
+\def\fakesc{\begingroup%
+    \let\par=\space\obeylines\obeyspaces%
+    \let\myspace=\space\dosmallcaps}
+\def\dosmallcaps#1{\dosc#1\end\endgroup}
+\def\dosc#1{% assumes #1 is a sequence of characters
+    \ifx#1\end \let\next=\relax
+        \else\if#1\space \myspace\let\myspace=\relax% skip repeated spaces
+             \else\ifnum\lccode`#1=`#1{\csname\fontstyle x\endcsname \uppercase{#1}}%
+             % change \tfx to your desired size
+                  \else #1\fi
+                  \let\myspace=\space
+             \fi
+        \let\next=\dosc
+   \fi\next}
+%{\it Not everyone is a typographer to
+%produce the appropriate fine-typography glyphs
+%for their favourite font to cater to
+%a particular style. Why should the system impose
+%\fakesc{"super-duper" Typography}
+%on users when they are willing to settle for less?
+%\fakesc{Watch out  for returns.}}
+\def\reset_every_font_action{%
+   \redoconvertfont % just in case a pagebreak occurs
+   \the\everybodyfont
+   \the\everyglobalbodyfont
+   \saveinterlinespace}
+\let\resetfont\fullrestoreglobalbodyfont
+% reset font style, like rm to ss.
+\unexpanded\def\resetfontstyle
+  {\font_basics_switch_style\globalfontstyle
+   \reset_every_font_action}
+\unexpanded\def\resetfontalter
+  {\let\fontface\defaultfontface
+   \tf\reset_every_font_action}
+% reset font size, like 12pt to 11pt.
+\unexpanded\def\resetfontsize
+  {\let\fontsize\defaultfontsize
+  %  \let\fontbody\defaultfontbody
+  %  \let\fontface\defaultfontface
+   \currentxfontsize\zerocount
+   \font_basics_switch_points\normalizedglobalbodyfontsize
+   \reset_every_font_action}
+\def\resetfont[#1]{
+    \edef\currentfontclass{\defaultfontclass}
+    \edef\currentfontbody{\fontbody}
+    \edef\currentfontsize{\fontsize}
+    \edef\currentfontface{\fontface}
+    \edef\currentfontstyle{\defaultfontstyle}
+    \edef\currentfontalternative{\defaultfontalternative}
+    \doif{#1}{class}{\switchtobodyfont[\currentfontclass]}%???
+    \doif{#1}{style}{\csname \currentfontstyle\endcsname}
+    \doif{#1}{alternative}{\csname \currentfontalternative\endcsname}
+}
 
-\def\startlang[#1]{\begingroup
-   \edef\inheritfontstyle{\fontstyle}
-   \switchtobodyfont[kozukax]%
-   \csname\inheritfontstyle\endcsname}
-\def\stoplang{\endgroup}
-\def\lang[#1]#2{\startlang[#1]#2\stoplang}
+
+%https://tex.stackexchange.com/questions/159118/how-to-iterate-over-a-comma-separated-list?noredirect=1
+\def\apply#1#2{\applyA#1#2,\applyA,}
+\def\applyA#1#2,{\ifx\applyA#2\empty\else #1{#2}\afterfi{\applyA#1}\fi}
+\def\afterfi#1#2\fi{\fi#1}% #2 似乎没有必要
+
+%%test:
+%\def\p#1{(#1,}\removeunwantedspaces\removepunctuation
+%\apply\p{1,2,3}  % expands to (1)(2)(3)
+%%test if empty:\expandafter\doifemptyelse\expandafter{\@author}{\@authora}{\@author}
 \protect
 \stopmodule
 \endinput

@@ -1,4 +1,4 @@
-\startluacode
+
 local utfchar, utfbyte  = utf.char, utf.byte
 local sorters           = sorters
 local definitions       = sorters.definitions
@@ -7,6 +7,32 @@ local variables         = interfaces.variables
 
 definitions["cn-alpha"] = {
     entries = {
+          ["A"]   ="a",
+          ["B"]   ="b",
+          ["C"]   ="c",
+          ["D"]   ="d",
+          ["E"]   ="e",
+          ["F"]   ="f",
+          ["G"]   ="g",
+          ["H"]   ="h",
+          ["I"]   ="i",
+          ["J"]   ="j",
+          ["K"]   ="k",
+          ["L"]   ="l",
+          ["M"]   ="m",
+          ["N"]   ="n",
+          ["O"]   ="o",
+          ["P"]   ="p",
+          ["Q"]   ="q",
+          ["R"]   ="r",
+          ["S"]   ="s",
+          ["T"]   ="t",
+          ["U"]   ="u",
+          ["V"]   ="v",
+          ["W"]   ="w",
+          ["X"]   ="x",
+          ["Y"]   ="y",
+          ["Z"]   ="z",
           ["锕"]  ="a",  --  a  锕  0x9515
           ["阿"]  ="a",  --  a  阿  0x963f
           ["𠼞"]  ="a",  --  a  𠼞  0x20f1e
@@ -41235,7 +41261,7 @@ definitions["cn-alpha"] = {
           ["呣"]  ="ḿ",  --  ḿ  呣  0x5463
     },
     orders = {
-          "a",
+          "A","a",
           "锕", --  a1  锕  0x9515
           "阿", --  a1  阿  0x963f
           "𠼞", --  a1  𠼞  0x20f1e
@@ -82486,4 +82512,3 @@ definitions["cn-alpha"] = {
           "呣", --  ḿ5  呣  0x5463
     }
 }
-\stopluacode

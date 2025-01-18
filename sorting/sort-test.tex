@@ -1,187 +1,150 @@
+\usemodule[memos]
+\registerctxluafile{sort-alpha}{}
+\registerctxluafile{sort-hanzi}{}
+\registerctxluafile{sort-pinyin}{}
+\registerctxluafile{lang-imp-cn}{}
+\registerctxluafile{sort-imp-cn}{}
 
-\setupregister[index][
-  n=4,
-  language=cn-alpha,]
+\usetransliteration[cn]
 
+\definetransliteration
+    [MyChinese]
+    [color=blue,style=\definedfont[name:andika],
+     vector={hanyu to pinlu}]
+%\enabletrackers[languages.transliteration]
+%\enabletrackers[sorters.*]
 \starttext
 
 按照 alpha 排序，\\
 a ： 锕 啊 阿 …… \\
 b ： 巴 百 帮 …… \\
 
-not important\index{asetup}
+%    \starttransliteration[MyChinese]
+%     呦呦鹿鳴，食野之蘋。我有嘉賓，鼓瑟吹笙。\par
+%     吹笙鼓簧，承筐是將。人之好我，示我周行。\par
+%     呦呦鹿鳴，食野之蒿。我有嘉賓，德音孔昭。\par
+%     視民不恌，君子是則是效。我有旨酒，嘉賓式燕以敖。\par
+%     呦呦鹿鳴，食野之芩。我有嘉賓，鼓瑟鼓琴。\par
+%     鼓瑟鼓琴，和樂且湛。我有旨酒，以燕樂嘉賓之心。\par
+%    \stoptransliteration
 
-not important\index{敖}not important\index{傲}
-not important\index{骯}not important\index{啊}
-not important\index{愛wsaXX}not important\index{愛saXX}
-not important\index{愛XX}not important\index{愛xXX}
-not important\index{暗}not important\index{唉}
-not important\index{昂}not important\index{昂0123}
-not important\index{昂9123}not important\index{昂123}
-not important\index{昂a123}not important\index{昂ff678}
-not important\index{阿}not important\index{阿唉}
-not important\index{阿昂}not important\index{阿暗}
-not important\index{開}not important\index{楷}
-not important\index{愾}not important\index{愛 + 普暗}
-not important\index{愛 + 凹暗}not important\index{愛 + 阿暗}
+%    \starttransliteration[MyChinese]
+%        \tf
+%        \placeregister
+%          [index]
+%          [language=cn-hanzi,n=4,inbetween=]
+%    \stoptransliteration
 
-not important\index{a}not important\index{ai}
-not important\index{ang}not important\index{b}
-not important\index{c}not important\index{d}
-not important\index{e}not important\index{f}
-not important\index{g}not important\index{h}
-not important\index{i}not important\index{j}
-not important\index{k}not important\index{l}
-not important\index{m}not important\index{n}
-not important\index{o}not important\index{p}
-not important\index{q}not important\index{r}
-not important\index{s}not important\index{t}
-not important\index{u}not important\index{v}
-not important\index{w}not important\index{x}
-not important\index{y}not important\index{z}
+大寫在前，小寫在後
 
-not important\index{凹}not important\index{並}
-not important\index{藏}not important\index{定}
-not important\index{惡}not important\index{非}
-not important\index{古}not important\index{乎}
-not important\index{一}not important\index{將}
-not important\index{看}not important\index{裡}
-not important\index{麼}not important\index{男}
-not important\index{歐}not important\index{普}
-not important\index{其}not important\index{若}
-not important\index{四}not important\index{土}
-not important\index{五}not important\index{為}
-not important\index{網}not important\index{洗}
-not important\index{樣}not important\index{髒}
+西文在前，漢字在後
 
-not important\index[zhang]{長}not important\index[chang]{長}
+拼音在前，聲調在後
 
-not important\index{あ}not important\index{きゅう}
+not important \index{A         at 1}
+not important \index{A setup   at 2}
+not important \index{Ai        at 3}
+not important \index{An        at 4}
+not important \index{Ang       at 5}
+not important \index{As etup   at 6}
+not important \index{a         at 7}
+not important \index{a setup   at 8}
+not important \index{ai        at 9}
+not important \index{an        at 10}
+not important \index{ang       at 11}
+not important \index{as etup   at 12}
+not important \index{阿        at 13}
+not important \index{阿唉      at 14}
+not important \index{阿暗      at 15}
+not important \index{阿昂      at 16}
+not important \index{愛 SaXX   at 17}
+not important \index{愛 saXX   at 18}
+not important \index{愛 XX     at 19}
+not important \index{愛 xX     at 20}
+not important \index{愛 + 阿暗 at 1}
+not important \index{愛 + 凹暗 at 2}
+not important \index{愛 + 普暗 at 3}
+not important \index{昂 123    at 21}
+not important \index{昂 234    at 22}
+not important \index{昂 Abc    at 23}
+not important \index{昂 abc    at 24}
+not important \index{昂        at 25}
+not important \index{昂 at + Boom}
+
+not important \index{boom    at b2}
+not important \index{罷(ba4) at b9}
+not important \index{balance at b1}
+not important \index{把(ba3) at b7}
+not important \index{拔(ba2) at b5}
+not important \index{八(ba1) at b3}
+not important \index{霸(ba4) at b10}
+not important \index{靶(ba3) at b8}
+not important \index{魃(ba2) at b6}
+not important \index{巴(ba1) at b4}
+
+
+not important \index{caabron at c1}
+not important \index[ca3ron]{cǎron   at c9}U+01CE
+not important \index{caacron at c2}
+not important \index{ccaron   at c12}
+not important \index{cabron  at c3}
+not important \index[ca4ron]{càron   at c10}U+00E0
+not important \index{cacron  at c4}
+not important \index{cbron   at c11}
+not important \index{cadron  at c5}
+not important \index[ca2ron]{cáron   at c8}U+00E1
+not important \index{caron   at c6}
+not important \index[ca1ron]{cāron   at c7}U+0101
+
+\index{93} 
+\index{456} 
+\index{***} 
+\index{*} 
+\index{@}
+
+\index[kumihan]{組版}
+\index[kumihan]{組版 + 組版工}
+\index[kumihan]{組版 + 組版テクニック}
+\index[kumihan]{組版 + 組版工 + 組版工の技量}
+
+not important \index{あ}
+not important \index{きてん}
+not important \index{きゅう}
+not important \index{ドラえもん}
+
+\placeindex
+
+\chapter{alpha}
+\setupregister[index][
+  n=4,
+  alternative=A,
+  language=cn-alpha,]
+\placeindex
+
+\chapter{alphas}
+\setupregister[index][
+  n=4,
+  alternative=A,
+  language=cn-alphas,]
+\placeindex
+
+\chapter{hanzi}
+ \setupregister[index][
+   n=4,alternative=A,
+   language=cn-hanzi,]
+\placeindex
+
+\chapter{hanzis}
+ \setupregister[index][
+   n=4,alternative=A,
+   language=cn-hanzis,]
+\placeindex
+
+\chapter{}
+ \setupregister[index][
+   n=4,alternative=A,
+   language=cn-pinyin,]
 \placeindex
 
 \stoptext
 
-% \setupregister[index][
-%   n=4,
-%   language=cn-hanzi,]
-% \starttext
-% 
-% 按照 汉字发音 排序
-% 
-% 锕 巴 才 当 ……
-% 
-% not important\index{asetup}
-% 
-% not important\index{敖}not important\index{傲}
-% not important\index{骯}not important\index{啊}
-% not important\index{愛wsaXX}not important\index{愛saXX}
-% not important\index{愛XX}not important\index{愛xXX}
-% not important\index{暗}not important\index{唉}
-% not important\index{昂}not important\index{昂0123}
-% not important\index{昂9123}not important\index{昂123}
-% not important\index{昂a123}not important\index{昂ff678}
-% not important\index{阿}not important\index{阿唉}
-% not important\index{阿昂}not important\index{阿暗}
-% not important\index{開}not important\index{楷}
-% not important\index{愾}not important\index{愛 + 普暗}
-% not important\index{愛 + 凹暗}not important\index{愛 + 阿暗}
-% 
-% not important\index{a}not important\index{ai}
-% not important\index{ang}not important\index{b}
-% not important\index{c}not important\index{d}
-% not important\index{e}not important\index{f}
-% not important\index{g}not important\index{h}
-% not important\index{i}not important\index{j}
-% not important\index{k}not important\index{l}
-% not important\index{m}not important\index{n}
-% not important\index{o}not important\index{p}
-% not important\index{q}not important\index{r}
-% not important\index{s}not important\index{t}
-% not important\index{u}not important\index{v}
-% not important\index{w}not important\index{x}
-% not important\index{y}not important\index{z}
-% 
-% not important\index{凹}not important\index{並}
-% not important\index{藏}not important\index{定}
-% not important\index{惡}not important\index{非}
-% not important\index{古}not important\index{乎}
-% not important\index{一}not important\index{將}
-% not important\index{看}not important\index{裡}
-% not important\index{麼}not important\index{男}
-% not important\index{歐}not important\index{普}
-% not important\index{其}not important\index{若}
-% not important\index{四}not important\index{土}
-% not important\index{五}not important\index{為}
-% not important\index{網}not important\index{洗}
-% not important\index{樣}not important\index{髒}
-% 
-% not important\index[zhang]{長}not important\index[chang]{長}
-% 
-% not important\index{あ}not important\index{きゅう}
-% \placeindex
-% 
-% \stoptext
-
-% \setupregister[index][
-%   n=4,
-%   language=cn-pinyin,]
-% 
-% \starttext
-% 
-% 按照 汉字拼音 排序
-% 
-% a  ： 锕 阿 啊 ……\\
-% ai ： 爱 哎 艾 ……\\
-% an ： 按 安 暗 ……\\
-% 
-% not important\index{asetup}
-% 
-% not important\index{敖}not important\index{傲}
-% not important\index{骯}not important\index{啊}
-% not important\index{愛wsaXX}not important\index{愛saXX}
-% not important\index{愛XX}not important\index{愛xXX}
-% not important\index{暗}not important\index{唉}
-% not important\index{昂}not important\index{昂0123}
-% not important\index{昂9123}not important\index{昂123}
-% not important\index{昂a123}not important\index{昂ff678}
-% not important\index{阿}not important\index{阿唉}
-% not important\index{阿昂}not important\index{阿暗}
-% not important\index{開}not important\index{楷}
-% not important\index{愾}not important\index{愛 + 普暗}
-% not important\index{愛 + 凹暗}not important\index{愛 + 阿暗}
-% 
-% not important\index{a}not important\index{ai}
-% not important\index{ang}not important\index{b}
-% not important\index{c}not important\index{d}
-% not important\index{e}not important\index{f}
-% not important\index{g}not important\index{h}
-% not important\index{i}not important\index{j}
-% not important\index{k}not important\index{l}
-% not important\index{m}not important\index{n}
-% not important\index{o}not important\index{p}
-% not important\index{q}not important\index{r}
-% not important\index{s}not important\index{t}
-% not important\index{u}not important\index{v}
-% not important\index{w}not important\index{x}
-% not important\index{y}not important\index{z}
-% 
-% not important\index{凹}not important\index{並}
-% not important\index{藏}not important\index{定}
-% not important\index{惡}not important\index{非}
-% not important\index{古}not important\index{乎}
-% not important\index{一}not important\index{將}
-% not important\index{看}not important\index{裡}
-% not important\index{麼}not important\index{男}
-% not important\index{歐}not important\index{普}
-% not important\index{其}not important\index{若}
-% not important\index{四}not important\index{土}
-% not important\index{五}not important\index{為}
-% not important\index{網}not important\index{洗}
-% not important\index{樣}not important\index{髒}
-% 
-% not important\index[zhang]{長}not important\index[chang]{長}
-% 
-% not important\index{あ}not important\index{きゅう}
-% \placeindex
-% 
-% \stoptext
